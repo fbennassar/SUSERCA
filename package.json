@@ -1,0 +1,19 @@
+{
+  "name": "suserca",
+  "version": "1.0.0",
+  "description": "Sistema de inventario",
+  "main": "./app-electron/src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:styles": "npx @tailwindcss/cli -i ./app-electron/src/views/input.css -o ./app-electron/src/assets/output.css --watch"
+  },
+  "author": "URBE",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^36.3.1"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.8",
+    "tailwindcss": "^4.1.8"
+  }
+}
