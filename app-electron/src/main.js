@@ -6,7 +6,7 @@ const createWindow = () => {
     height: 600
   })
 
-  win.loadFile('./app-electron/src/views/index.html')
+  win.loadFile('./app-electron/src/views/login.html')
 }
 
 app.whenReady().then(() => {
