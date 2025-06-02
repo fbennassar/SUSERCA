@@ -2,15 +2,25 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>SUSERCA</title>
+        <title>SUSERCA LOGIN</title>
+        <link rel="stylesheet" href="../assets/output.css">
     </head>
-    <body>
-        <div>
-            <h1>Login</h1>
-            <input type="text" name="user" placeholder="Usuario" required>
-            <input type="password" name="password" placeholder="Clave" required>
-            <p><a href="https://www.google.com/?hl=es">Olvido su clave?</a></p>
-            <button>Iniciar Sesion</button>
+    <header class="bg-white">
+
+    </header>
+    <body class="bg-zinc-100">
+        <div class="bg-white rounded-lg m-12 pb-2 pt-2">
+            <h1 class="text-center text-3xl font-extrabold">Login</h1>
+                <div class="text-center pl-7 pr-7 pt-3 pb-1.5">
+                    <input class="bg-yellow-50 border border-black shadow-md rounded-md w-full pl-0.5" type="text" name="user" placeholder="Usuario" required>
+                </div>
+                <div class="text-center pl-7 pr-7 pt-1.5 pb-1.5">
+                    <input class="bg-yellow-50 border border-black shadow-md rounded-md w-full pl-0.5" type="password" name="password" placeholder="Contraseña" required>
+                </div>
+            <p class="pl-7 text-blue-800 underline"><a href="../views/recover.html">¿Olvidó su contraseña?</a></p>
+            <div class="text-xl text-center bg-green-800 text-white rounded-full ml-30 mr-30 mt-3 p-1.5">
+                <button type="submit" class="">Iniciar Sesion</button>
+            </div>
         </div>
     </body>
 </html>
