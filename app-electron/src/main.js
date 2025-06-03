@@ -1,4 +1,7 @@
 const { app, BrowserWindow } = require('electron/main')
+require('electron-reload')(process.cwd(), {
+  electron: require(`${process.cwd()}/node_modules/electron`)
+});
 
 const createWindow = () => {
   const win = new BrowserWindow({

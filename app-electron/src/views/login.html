@@ -5,20 +5,26 @@
         <title>SUSERCA LOGIN</title>
         <link rel="stylesheet" href="../assets/output.css">
     </head>
-    <header class="bg-white">
-
+    <header class="bg-white flex gap-2 min-w-screen justify-start">
+        <div class="">
+            <img src="../assets/icons/logo.jpg" alt="logo SUSERCA" height="90" width="90" class=" p-1">
+        </div>
+        <div>
+            <h1 class=" text-green-800 font-bold text-5xl">SUSERCA</h1>
+            <p class=" text-green-800  text-xs pl-2">Suministros y Servicios de Occidente</p>
+        </div>
     </header>
-    <body class="bg-zinc-100">
-        <div class="bg-white rounded-lg m-12 pb-2 pt-2">
-            <h1 class="text-center text-3xl font-extrabold">Login</h1>
+    <body class="grid place-content-center bg-zinc-200">
+        <div class="bg-white rounded-4xl ml-64 mr-64 mb-8 mt-32">
+            <h1 class="text-center text-6xl font-bold pb-2">Login</h1>
                 <div class="text-center pl-7 pr-7 pt-3 pb-1.5">
-                    <input class="bg-yellow-50 border border-black shadow-md rounded-md w-full pl-0.5" type="text" name="user" placeholder="Usuario" required>
+                    <input class="bg-amber-50 border border-black shadow-md rounded-md w-full pl-0.5 pb-3 pt-3" type="text" name="user" placeholder="Usuario" required>
                 </div>
                 <div class="text-center pl-7 pr-7 pt-1.5 pb-1.5">
-                    <input class="bg-yellow-50 border border-black shadow-md rounded-md w-full pl-0.5" type="password" name="password" placeholder="Contraseña" required>
+                    <input class=" bg-amber-50 border border-black shadow-md rounded-md w-full pl-0.5 pb-3 pt-3" type="password" name="password" placeholder="Contraseña" required>
                 </div>
             <p class="pl-7 text-blue-800 underline"><a href="../views/recover.html">¿Olvidó su contraseña?</a></p>
-            <div class="text-xl text-center bg-green-800 text-white rounded-full ml-30 mr-30 mt-3 p-1.5">
+            <div class="text-xl text-center bg-green-800 text-white rounded-full ml-30 mr-30 mt-3">
                 <button type="submit" class="">Iniciar Sesion</button>
             </div>
         </div>
