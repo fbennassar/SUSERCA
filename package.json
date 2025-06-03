@@ -5,12 +5,16 @@
   "main": "./app-electron/src/main.js",
   "scripts": {
     "start": "electron .",
-    "build:styles": "npx @tailwindcss/cli -i ./app-electron/src/views/input.css -o ./app-electron/src/assets/output.css --watch"
+    "build:styles": "npx @tailwindcss/cli -i ./app-electron/src/views/input.css -o ./app-electron/src/assets/output.css --watch",
+    "dev": "concurrently \"npm run start\" \"npm run build:styles\" "
   },
   "author": "URBE",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^36.3.1"
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
+    "electron": "^36.3.1",
+    "electron-reload": "^2.0.0-alpha.1"
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.1.8",
