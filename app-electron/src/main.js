@@ -6,7 +6,13 @@ require('electron-reload')(process.cwd(), {
 const createWindow = () => {
   const win = new BrowserWindow({
     width: 800,
-    height: 600
+    height: 600,
+    autoHideMenuBar: true,
+    frame: true,
+    minWidth: 800,
+    minHeight: 600,
+    maxWidth: 1920,
+    maxHeight: 1080
   })
 
   win.loadFile('./app-electron/src/views/login.html')
