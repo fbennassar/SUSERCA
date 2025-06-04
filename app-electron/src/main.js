@@ -3,6 +3,8 @@ require('electron-reload')(process.cwd(), {
   electron: require(`${process.cwd()}/node_modules/electron`)
 });
 
+const db = require('./backend/db/connection.js');
+
 const createWindow = () => {
   const win = new BrowserWindow({
     width: 800,
