@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.1.8",
+    "mysql2": "^3.14.1",
     "tailwindcss": "^4.1.8"
   }
 }
