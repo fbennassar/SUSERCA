@@ -4,14 +4,19 @@ require('electron-reload')(process.cwd(), {
 });
 
 const db = require('./backend/db/connection.js');
+const path = require('path');
 
 const createWindow = () => {
   const win = new BrowserWindow({
     width: 800,
-    height: 600
+    height: 600,
+    webPreferences: {
+      preload: require('path').join(process.cwd(), './app-electron/src/preload.js')
+    }
   })
 
-  win.loadFile('./app-electron/src/views/login.html')
+  // win.loadFile('./app-electron/src/views/login.html')
+  win.loadFile('./app-electron/src/views/prueba.html')
 }
 
 app.whenReady().then(() => {
