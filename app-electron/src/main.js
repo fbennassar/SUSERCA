@@ -1,7 +1,10 @@
 const { app, BrowserWindow } = require('electron/main')
+
 require('electron-reload')(process.cwd(), {
   electron: require(`${process.cwd()}/node_modules/electron`)
 });
+
+require('./backend/ipc/IPCusuarios.js')
 
 const db = require('./backend/db/connection.js');
 const path = require('path');

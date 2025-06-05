@@ -1,6 +1,5 @@
-// const { ipcRenderer } = require('electron');
+console.log('login.js cargado');
 
-console.log("oli")
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const username = document.getElementById('username').value;

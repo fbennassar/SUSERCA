@@ -2,10 +2,8 @@ const { ipcMain } = require('electron');
 const usuarios = require('../db/usuarios');
 
 ipcMain.handle('usuarios:login', async (event, { username, password }) => {
-  return new Promise((resolve, reject) => {
-    usuarios.login(username, password, (err, user) => {
-      if (err) reject(err);
-      else resolve(user); // null si no existe
-    });
-  });
+  console.log('IPCusuarios: login recibido', username, password);
+  const user = await usuarios.login(username, password);
+  console.log('Resultado de login:', user);
+  return user;
 });
