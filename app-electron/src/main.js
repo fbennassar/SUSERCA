@@ -13,7 +13,13 @@ const createWindow = () => {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
-    webPreferences: {
+    autoHideMenuBar: true,
+    frame: true,
+    minWidth: 800,
+    minHeight: 700,
+    maxWidth: 1920,
+    maxHeight: 1080,
+        webPreferences: {
       preload: require('path').join(process.cwd(), './app-electron/src/preload.js')
     }
   })
