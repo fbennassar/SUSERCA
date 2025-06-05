@@ -1,1 +1,19 @@
 @import "tailwindcss";
+
+@theme {
+
+    /* Breakpoints de anchura */
+    --breakpoint-pantallaSmW: 800px;
+    --breakpoint-pantallaMdW: 1080px;
+    --breakpoint-pantallaLgW: 1360px;
+    --breakpoint-pantallaXlW: 1640px;
+    --breakpoint-pantalla2xlW: 1920px;
+
+    /* Breakpoints de altura */
+    --breakpoint-pantallaSmH: 600px;
+    --breakpoint-pantallaMdH: 720px;
+    --breakpoint-pantallaLgH: 840px;
+    --breakpoint-pantallaXlH: 960px;
+    --breakpoint-pantalla2xlH: 1080px;
+
+}
