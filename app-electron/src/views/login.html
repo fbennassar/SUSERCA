@@ -9,7 +9,7 @@
 
     </head>
 
-    <body class=" min-h-screen bg-zinc-200 flex flex-col">
+    <body class="min-h-screen bg-zinc-200 flex flex-col">
 
         <header class="bg-white flex gap-2 min-w-full justify-start">
 
@@ -52,7 +52,7 @@
                 </form>
             </div>
             <button onclick="document.getElementById('logout-modal').classList.remove('hidden')"
-                    class="absolute bottom-2 right-2 hover:cursor-pointer">
+                    class="absolute bottom-0.5 right-0.5 hover:cursor-pointer">
                 <img class="size-15" src="../assets/icons/login/exit.png" alt="exit icon">
             </button>
 
@@ -64,7 +64,7 @@
                         <h1 class="pt-2 pl-2">Estas seguro de que deseas salir?</h1>
                         <div class="flex justify-center gap-4 pb-2 my-2">
                             <button onclick="document.getElementById('logout-modal').classList.add('hidden')" class="px-4 py-2 rounded-full bg-white hover:bg-gray-300 hover:cursor-pointer transition">Cancelar</button>
-                            <a href="../views/logout.html" class="px-4 py-2 rounded-full bg-red-600 text-white hover:bg-red-700 transition">Salir</a>
+                            <button onclick="window.electronAPI.closeApp()" class="px-4 py-2 rounded-full bg-red-600 text-white hover:bg-red-700 hover:cursor-pointer transition">Salir</button>
                         </div>
                     </div>
                 </div>
@@ -73,4 +73,5 @@
 
     </body>
 <script src="../scripts/login.js"></script>
+<script src="../libs/sweetalert2.all.min.js"></script>
 </html>

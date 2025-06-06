@@ -27,6 +27,11 @@ const createWindow = () => {
   win.loadFile('./app-electron/src/views/login.html')
 }
 
+const { ipcMain } = require('electron/main');
+ipcMain.on('close-app', () => {
+  app.quit();
+});
+
 app.whenReady().then(() => {
   createWindow()
 
