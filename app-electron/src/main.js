@@ -16,7 +16,7 @@ const createWindow = () => {
     autoHideMenuBar: true,
     frame: true,
     minWidth: 800,
-    minHeight: 700,
+    minHeight: 730,
     maxWidth: 1920,
     maxHeight: 1080,
         webPreferences: {
