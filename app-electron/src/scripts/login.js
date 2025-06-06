@@ -13,3 +13,10 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     console.log('Usuario o contraseña incorrectos');
   }
 });
+
+// Mostrar clave
+function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const showCheckbox = document.getElementById('show');
+    passwordInput.type = showCheckbox.checked ? 'text' : 'password';
+}
