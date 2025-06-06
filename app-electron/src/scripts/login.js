@@ -8,8 +8,18 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   // electronAPI es la API expuesta en preload.js
   const user = await window.electronAPI.login(username, password);
   if (user) {
-    console.log('Login exitoso');
+    Swal.fire('Login exitoso', '', 'success').then(() => {
+      window.location.href = '../views/dashboard.html';
+    });
   } else {
-    console.log('Usuario o contraseña incorrectos');
+    Swal.fire('Usuario o contraseña incorrectos', '', 'error');
   }
 });
+
+// Mostrar clave
+function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const showCheckbox = document.getElementById('show');
+    passwordInput.type = showCheckbox.checked ? 'text' : 'password';
+}
+
