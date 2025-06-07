@@ -19,8 +19,9 @@ const createWindow = () => {
     minHeight: 730,
     maxWidth: 1920,
     maxHeight: 1080,
-        webPreferences: {
-      preload: require('path').join(process.cwd(), './app-electron/src/preload.js')
+    icon: path.join(__dirname, '../assets/icons/general/icon.ico'), // Usa .ico para Windows
+    webPreferences: {
+      preload: path.join(process.cwd(), './app-electron/src/preload.js')
     }
   })
 
