@@ -17,3 +17,9 @@
     --breakpoint-pantalla2xlH: 1080px;
 
 }
+
+@layer components {
+    .card {
+        @apply bg-white rounded-lg text-black font-bold border-2 border-white text-3xl p-10 shadow-lg flex flex-col items-center justify-center;
+    }
+}

@@ -1,106 +1,183 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>SUSERCA USUARIOS</title>
+    <link rel="stylesheet" href="../assets/output.css" />
+    <link rel="stylesheet" href="../assets/custom.css" />
+    <script src="../scripts/sidebar.js"></script>
+  </head>
 
-    <head>
+  <body class="min-h-screen bg-zinc-200 flex flex-col">
+    <header class="bg-white flex flex-row gap-2 min-w-full justify-between">
+      <div class="flex flex-row">
+        <a href="../views/dashboard.html" class="flex flex-row">
+          <div>
+            <img
+              src="../assets/icons/general/logo.jpg"
+              alt="logo SUSERCA"
+              height="90"
+              width="90"
+              class="p-1"
+            />
+          </div>
+          <div>
+            <h1 class="text-green-800 font-bold text-5xl">SUSERCA</h1>
+            <p class="text-green-800 text-xs pl-2">
+              Suministros y Servicios de Occidente
+            </p>
+          </div>
+        </a>
+        <div class="flex items-center font-bold text-3xl pl-24">
+          <p>Usuarios</p>
+        </div>
+      </div>
+      <div class="flex flex-row gap-5">
+        <div class="flex items-center">
+          <img
+            src="../assets/icons/header/settings.png"
+            alt="settings engranaje"
+            height="50"
+            width="50"
+          />
+        </div>
+        <div class="flex items-center pr-2">
+          <img
+            src="../assets/icons/header/user.png"
+            alt="user icon"
+            height="50"
+            width="50"
+          />
+        </div>
+      </div>
+    </header>
 
-        <meta charset="UTF-8">
-        <title>SUSERCA USUARIOS</title>
-        <link rel="stylesheet" href="../assets/output.css">
-        <link rel="stylesheet" href="../assets/custom.css">
-        <script src="../scripts/sidebar.js"></script>
+    <main class="flex-1 flex">
+      <div
+        id="sidebar"
+        class="bg-green-800 flex flex-col gap-2.5 transition-all duration-300"
+      >
+        <button
+          type="button"
+          onclick="toggleSidebar()"
+          class="ml-2.5 mt-2.5 pl-1.25"
+        >
+          <div
+            class="p-2.5 w-16 border border-white rounded-xl shadow-lg hover:border-orange-400/90 hover:bg-orange-500/90 hover:cursor-pointer transition"
+          >
+            <img
+              src="../assets/icons/sideBar/toggle.png"
+              alt="toggle icon"
+              class="w-10 h-10 flex-shrink-0"
+            />
+          </div>
+        </button>
 
-    </head>
+        <button
+          onclick="window.location.href='../views/dashboard.html'"
+          target="_self"
+          class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition"
+        >
+          <div class="flex flex-row items-center">
+            <img
+              src="../assets/icons/sideBar/dashboard.png"
+              alt="dashboard icon"
+              class="ml-1.25 p-1.25 h-15 w-15"
+            />
+            <p class="pl-5 text-2xl pr-24 sidebar-text">Dashboard</p>
+          </div>
+        </button>
 
-    <body class="min-h-screen bg-zinc-200 flex flex-col">
+        <button
+          onclick="window.location.href='../views/inventario.html'"
+          target="_self"
+          class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition"
+        >
+          <div class="flex flex-row items-center">
+            <img
+              src="../assets/icons/sideBar/inventario.png"
+              alt="dashboard icon"
+              class="ml-1.25 p-1.25 h-15 w-15"
+            />
+            <p class="pl-5 text-2xl pr-24 sidebar-text">Inventario</p>
+          </div>
+        </button>
 
-        <header class="bg-white flex flex-row gap-2 min-w-full justify-between">
+        <button
+          onclick="window.location.href='../views/clientes.html'"
+          target="_self"
+          class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition"
+        >
+          <div class="flex flex-row items-center">
+            <img
+              src="../assets/icons/sideBar/clientes.png"
+              alt="dashboard icon"
+              class="ml-1.25 p-1.25 h-15 w-15"
+            />
+            <p class="pl-5 text-2xl sidebar-text">Clientes</p>
+          </div>
+        </button>
 
-            <div class="flex flex-row">
-                <a href="../views/dashboard.html" class="flex flex-row">
-                    <div>
-                        <img src="../assets/icons/general/logo.jpg" alt="logo SUSERCA" height="90" width="90" class=" p-1">
-                    </div>
-                    <div>
-                        <h1 class=" text-green-800 font-bold text-5xl">SUSERCA</h1>
-                        <p class=" text-green-800  text-xs pl-2">Suministros y Servicios de Occidente</p>
-                    </div>
-                </a>
-                <div class="flex items-center font-bold text-3xl pl-24">
-                    <p>Usuarios</p>
-                </div>
-            </div>
-            <div class="flex flex-row gap-5">
-                <div class="flex items-center">
-                    <img src="../assets/icons/header/settings.png" alt="settings engranaje" height="50" width="50">
-                </div>
-                <div class="flex items-center pr-2">
-                    <img src="../assets/icons/header/user.png" alt="user icon" height="50" width="50">
-                </div>
-            </div>
+        <button
+          onclick="window.location.href='../views/proveedores.html'"
+          target="_self"
+          class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition"
+        >
+          <div class="flex flex-row items-center">
+            <img
+              src="../assets/icons/sideBar/proveedores.png"
+              alt="dashboard icon"
+              class="ml-1.25 p-1.25 h-15 w-15"
+            />
+            <p class="pl-5 text-2xl pr-24 sidebar-text">Proveedores</p>
+          </div>
+        </button>
 
-        </header>
+        <button
+          onclick="window.location.href='../views/finanzas.html'"
+          target="_self"
+          class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition"
+        >
+          <div class="flex flex-row items-center">
+            <img
+              src="../assets/icons/sideBar/finanzas.png"
+              alt="dashboard icon"
+              class="ml-1.25 p-1.25 h-15 w-15"
+            />
+            <p class="pl-5 text-2xl pr-24 sidebar-text">Finanzas</p>
+          </div>
+        </button>
 
-        <main class="flex-1 flex">
-            <div id="sidebar" class="bg-green-800 flex flex-col gap-2.5 transition-all duration-300">
+        <button
+          onclick="window.location.href='../views/usuarios.html'"
+          target="_self"
+          class="border-4 border-orange-500 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition"
+        >
+          <div class="flex flex-row items-center">
+            <img
+              src="../assets/icons/sideBar/usuarios.png"
+              alt="dashboard icon"
+              class="ml-1.25 p-1.25 h-15 w-15"
+            />
+            <p class="pl-5 text-2xl pr-24 sidebar-text">Usuarios</p>
+          </div>
+        </button>
 
-                <button type="button" onclick="toggleSidebar()" class="ml-2.5 mt-2.5 pl-1.25">
-                    <div class="p-2.5 w-16 border border-white rounded-xl shadow-lg hover:border-orange-400/90 hover:bg-orange-500/90 hover:cursor-pointer transition">
-                        <img src="../assets/icons/dashboard/toggle.png" alt="toggle icon" class=" w-10 h-10 flex-shrink-0">
-                    </div>
-                </button>
-                
-                <button onclick="window.location.href='../views/dashboard.html'" target="_self" class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition">
-                    <div class="flex flex-row items-center">
-                        <img src="../assets/icons/dashboard/dashboard.png" alt="dashboard icon" class="ml-1.25 p-1.25 h-15 w-15">
-                        <p class="pl-5 text-2xl pr-24 sidebar-text">Dashboard</p>
-                    </div>
-                </button>
-
-                <button onclick="window.location.href='../views/inventario.html'" target="_self" class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition">
-                    <div class="flex flex-row items-center">
-                        <img src="../assets/icons/dashboard/inventario.png" alt="dashboard icon" class="ml-1.25 p-1.25 h-15 w-15">
-                        <p class="pl-5 text-2xl pr-24 sidebar-text">Inventario</p>
-                    </div>
-                </button>
-
-                <button onclick="window.location.href='../views/clientes.html'" target="_self" class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition">
-                    <div class="flex flex-row items-center">
-                        <img src="../assets/icons/dashboard/clientes.png" alt="dashboard icon" class="ml-1.25 p-1.25 h-15 w-15">
-                        <p class="pl-5 text-2xl sidebar-text">Clientes</p>
-                    </div>
-                </button>
-
-                <button onclick="window.location.href='../views/proveedores.html'" target="_self" class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition">
-                    <div class="flex flex-row items-center">
-                        <img src="../assets/icons/dashboard/proveedores.png" alt="dashboard icon" class="ml-1.25 p-1.25 h-15 w-15">
-                        <p class="pl-5 text-2xl pr-24 sidebar-text">Proveedores</p>
-                    </div>
-                </button>
-
-                <button onclick="window.location.href='../views/finanzas.html'" target="_self" class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition">
-                    <div class="flex flex-row items-center">
-                        <img src="../assets/icons/dashboard/finanzas.png" alt="dashboard icon" class="ml-1.25 p-1.25 h-15 w-15">
-                        <p class="pl-5 text-2xl pr-24 sidebar-text">Finanzas</p>
-                    </div>
-                </button>
-
-                <button onclick="window.location.href='../views/usuarios.html'" target="_self" class="border-4 border-orange-500 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition">
-                    <div class="flex flex-row items-center">
-                        <img src="../assets/icons/dashboard/usuarios.png" alt="dashboard icon" class="ml-1.25 p-1.25 h-15 w-15">
-                        <p class="pl-5 text-2xl pr-24 sidebar-text">Usuarios</p>
-                    </div>
-                </button>
-
-                <button onclick="window.location.href='../views/ayuda.html'" target="_self" class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition">
-                    <div class="flex flex-row items-center">
-                        <img src="../assets/icons/dashboard/ayuda.png" alt="dashboard icon" class="ml-1.25 p-1.25 h-15 w-15">
-                        <p class="pl-5 text-2xl pr-24 sidebar-text">Ayuda</p>
-                    </div>
-                </button>
-
-            </div>
-        </main>
-            
-    </body>
-
+        <button
+          onclick="window.location.href='../views/ayuda.html'"
+          target="_self"
+          class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition"
+        >
+          <div class="flex flex-row items-center">
+            <img
+              src="../assets/icons/sideBar/ayuda.png"
+              alt="dashboard icon"
+              class="ml-1.25 p-1.25 h-15 w-15"
+            />
+            <p class="pl-5 text-2xl pr-24 sidebar-text">Ayuda</p>
+          </div>
+        </button>
+      </div>
+    </main>
+  </body>
 </html>
