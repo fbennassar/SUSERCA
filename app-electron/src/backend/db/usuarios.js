@@ -1,4 +1,4 @@
-const supabase = require('./supabeClient.js');
+const supabase = require('./supabaseClient.js');
 
 // Las rows son un array de objetos, cada objeto representa una fila de la tabla
 exports.login = async (email, password) => {
