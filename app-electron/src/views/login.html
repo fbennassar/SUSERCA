@@ -9,7 +9,7 @@
 
     </head>
 
-    <body class=" min-h-screen bg-zinc-200 flex flex-col">
+    <body class="min-h-screen bg-zinc-200 flex flex-col">
 
         <header class="bg-white flex gap-2 min-w-full justify-start">
 
@@ -29,14 +29,18 @@
                 <h1 class="text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold pb-6 pt-2 sm:pb-8 sm:pt-4">Login</h1>
                 <form id="loginForm">
                     <div class="text-center text-base sm:text-xl md:text-2xl pt-2 pb-2 sm:pt-3 sm:pb-3">
-                        <input id="username" class="bg-gray-50 border-2 border-black shadow-md rounded-xl w-full h-10 sm:h-12 md:h-14 pl-2 sm:pl-3 pb-1 pt-1 sm:pb-2 sm:pt-2"
-                            type="text" name="user" placeholder="Usuario" required>
+                        <input id="email" class="bg-gray-50 border-2 border-black shadow-md rounded-xl w-full h-10 sm:h-12 md:h-14 pl-2 sm:pl-3 pb-1 pt-1 sm:pb-2 sm:pt-2"
+                            type="email" name="email" placeholder="Email" required>
                     </div>
                     <div class="text-center text-base sm:text-xl md:text-2xl pt-2 pb-2 sm:pt-3 sm:pb-3">
                         <input id="password" class="bg-gray-50 border-2 border-black shadow-md rounded-xl w-full h-10 sm:h-12 md:h-14 px-8 pl-2 sm:pl-3 pb-1 pt-1 sm:pb-2 sm:pt-2"
                             type="password" name="password" placeholder="Contraseña" required>
+                        <div class="flex items-center mt-4 ml-4">
+                            <input type="checkbox" id="show" class="size-4.5" onchange="togglePassword()">
+                            <label for="show" class="text-[17px] pl-1">Mostrar contraseña</label>
+                        </div>
                     </div>
-                    <p class="text-sm sm:text-base md:text-lg text-blue-800 underline pt-2 pb-2 sm:pt-4 sm:pb-4 text-left">
+                    <p class="text-sm sm:text-base md:text-lg text-blue-800 underline pt-1 pb-2 sm:pt-1 sm:pb-4 text-left">
                         <a href="../views/recover.html">¿Olvidó su contraseña?</a>
                     </p>
                     <div class="text-base sm:text-xl md:text-2xl text-center mt-4 mb-2 sm:mt-8 sm:mb-4">
@@ -48,7 +52,7 @@
                 </form>
             </div>
             <button onclick="document.getElementById('logout-modal').classList.remove('hidden')"
-                    class="absolute bottom-2 right-2 hover:cursor-pointer">
+                    class="absolute bottom-0.5 right-0.5 hover:cursor-pointer">
                 <img class="size-15" src="../assets/icons/login/exit.png" alt="exit icon">
             </button>
 
@@ -60,7 +64,7 @@
                         <h1 class="pt-2 pl-2">Estas seguro de que deseas salir?</h1>
                         <div class="flex justify-center gap-4 pb-2 my-2">
                             <button onclick="document.getElementById('logout-modal').classList.add('hidden')" class="px-4 py-2 rounded-full bg-white hover:bg-gray-300 hover:cursor-pointer transition">Cancelar</button>
-                            <a href="../views/logout.html" class="px-4 py-2 rounded-full bg-red-600 text-white hover:bg-red-700 transition">Salir</a>
+                            <button onclick="window.electronAPI.closeApp()" class="px-4 py-2 rounded-full bg-red-600 text-white hover:bg-red-700 hover:cursor-pointer transition">Salir</button>
                         </div>
                     </div>
                 </div>
@@ -69,4 +73,5 @@
 
     </body>
 <script src="../scripts/login.js"></script>
+<script src="../libs/sweetalert2.all.min.js"></script>
 </html>
