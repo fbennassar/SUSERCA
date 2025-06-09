@@ -9,7 +9,7 @@
   </head>
 
   <body class="min-h-screen bg-zinc-200 flex flex-col">
-    <header class="bg-white flex flex-row gap-2 min-w-full justify-between">
+    <header class="fixed top-0 left-0 w-full z-50 bg-white flex flex-row gap-2 min-w-full justify-between">
       <div class="flex flex-row">
         <a href="../views/dashboard.html" class="flex flex-row">
           <div>
@@ -52,10 +52,9 @@
       </div>
     </header>
 
-    <main class="flex-1 flex">
-      <div
+    <div
         id="sidebar"
-        class="bg-green-800 flex flex-col gap-2.5 transition-all duration-300"
+        class="fixed left-0 top-19 h-full bg-green-800 flex flex-col gap-2.5 transition-all duration-300"
       >
         <button
           type="button"
@@ -179,6 +178,7 @@
         </button>
       </div>
 
+    <main id="main-content" class="mt-24 h-full overflow-auto flex-1 flex transition-all duration-300">
       <!--Cartas del centro-->
       <div class="flex flex-1 justify-center items-center w-full">
         <div
