@@ -17,6 +17,7 @@
     "electron-reload": "^2.0.0-alpha.1"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.50.0",
     "@tailwindcss/cli": "^4.1.8",
     "mysql2": "^3.14.1",
     "tailwindcss": "^4.1.8"
