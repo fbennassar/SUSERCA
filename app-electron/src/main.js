@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { app, BrowserWindow } = require('electron/main')
 
 require('electron-reload')(process.cwd(), {
@@ -6,7 +7,7 @@ require('electron-reload')(process.cwd(), {
 
 require('./backend/ipc/IPCusuarios.js')
 
-const db = require('./backend/db/supabeClient.js');
+const db = require('./backend/db/supabaseClient.js');
 const path = require('path');
 
 const createWindow = () => {
