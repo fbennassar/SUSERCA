@@ -6,7 +6,7 @@ require('electron-reload')(process.cwd(), {
 
 require('./backend/ipc/IPCusuarios.js')
 
-const db = require('./backend/db/connection.js');
+const db = require('./backend/db/supabeClient.js');
 const path = require('path');
 
 const createWindow = () => {
