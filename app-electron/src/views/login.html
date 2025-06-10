@@ -45,8 +45,11 @@
                     </p>
                     <div class="text-base sm:text-xl md:text-2xl text-center mt-4 mb-2 sm:mt-8 sm:mb-4">
                         <button type="submit"
-                                class="bg-green-800 text-white rounded-full shadow-md pt-2 pb-2 px-6 sm:pt-3 sm:pb-3 sm:px-8 hover:bg-orange-500 hover:cursor-pointer transition">
-                            Iniciar Sesion
+                                class="bg-green-800 text-white rounded-full shadow-md pt-2 pb-2 px-6 sm:pt-3 sm:pb-3 sm:px-8 hover:bg-orange-500 hover:cursor-pointer transition relative">
+                            <span id="loginText">Iniciar Sesion</span>
+                            <span id="loadingIndicator" class="absolute inset-0 flex items-center justify-center opacity-0">
+                                <div class="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-white"></div>
+                            </span>
                         </button>
                     </div>
                 </form>

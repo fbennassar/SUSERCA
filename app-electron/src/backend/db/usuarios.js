@@ -1,27 +1,24 @@
 const supabase = require('./supabaseClient.js');
 
-// Las rows son un array de objetos, cada objeto representa una fila de la tabla
 exports.login = async (email, password) => {
-
-  if(!supabase) {
+  if (!supabase) {
     throw new Error('Cliente no inicializado por falta de credenciales.');
-    return null;
   }
 
   try {
-    const { data, error} = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: email,
-      password: password
+      password: password,
     });
 
     if (error) {
       console.error('Error al iniciar sesión:', error.message);
-      throw error;
+      throw new Error('Usuario o contraseña incorrectos'); // Lanza un error específico
     }
+
     return data.user;
-  }
-  catch (error) {
+  } catch (error) {
     console.error('Error al iniciar sesión:', error);
     throw error;
   }
-}
+};
