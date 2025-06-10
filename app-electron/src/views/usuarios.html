@@ -182,54 +182,171 @@
 
     <main
       id="main-content"
-      class="mt-18 h-full overflow-auto flex flex-col transition-all duration-300"
+      class="mt-16 h-full overflow-auto flex flex-col justify-center items-center transition-all duration-300 px-4 py-4"
     >
-      <h1 class="text-3xl font-bold pl-10 pt-5">Crear Nuevo Usuario</h1>
-      <div class="bg-white mx-8 rounded-xl px-3.5 pt-1.5 pb-3">
+      <h1 class="text-3xl font-bold pt-2 pb-1 text-center">
+        Crear Nuevo Usuario
+      </h1>
+      <div
+        class="bg-white w-full rounded-xl pt-4 pb-4 mb-3 px-4 max-w-6xl"
+        style="box-sizing: border-box"
+      >
         <form class="w-full">
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <h1 class="pl-2.5">Nombre</h1>
+              <h1 class="pl-2 text-base">Nombre</h1>
               <input
                 type="text"
                 placeholder="Ej: Jose"
-                class="border border-black rounded-full pl-2.5 align-middle w-full"
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
               />
             </div>
             <div>
-              <h1 class="pl-2.5">Correo</h1>
-              <input
-                type="text"
-                placeholder="Ej: Pérez"
-                class="border border-black rounded-full pl-2.5 align-middle w-full"
-              />
-            </div>
-            <div>
-              <h1 class="pl-2.5">Rol</h1>
+              <h1 class="pl-2 text-base">Correo</h1>
               <input
                 type="email"
-                placeholder="Ej: correo@ejemplo.com"
-                class="border border-black rounded-full pl-2.5 align-middle w-full"
+                placeholder="Ej: email@example.com"
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
               />
             </div>
             <div>
-              <h1 class="pl-2.5">Clave</h1>
+              <h1 class="pl-2 text-base">Rol</h1>
+              <select
+                name="rol"
+                id="rol"
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
+                onchange="
+              this.classList.toggle('text-gray-400', this.value === '');
+              this.classList.toggle('text-black', this.value !== '');
+            "
+              >
+                <option value="" disabled selected>Rol...</option>
+                <option value="rol1">Visualizador</option>
+                <option value="rol2">Moderador</option>
+                <option value="rol3">Gerente</option>
+                <option value="rol4">Administrador</option>
+              </select>
+            </div>
+            <div>
+              <h1 class="pl-2 text-base">Clave</h1>
               <input
                 type="password"
                 placeholder="Ej: Clave"
-                class="border border-black rounded-full pl-2.5 align-middle w-full"
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
               />
             </div>
-            <div class="col-span-2 flex justify-end mt-2">
+            <div class="col-span-1 sm:col-span-2 flex justify-end mt-1">
               <button
                 type="submit"
-                class="bg-green-700 text-white rounded-full px-6 py-1 font-bold hover:bg-green-800 transition"
+                class="bg-green-700 shadow-md text-white rounded-full px-4 py-1 font-bold hover:bg-green-800 hover:cursor-pointer transition"
               >
                 Crear usuario
               </button>
             </div>
           </div>
         </form>
+      </div>
+
+      <h1 class="text-3xl font-bold pt-2 pb-1 text-center">
+        Buscar y Filtrar Usuarios
+      </h1>
+      <div
+        class="bg-white w-full rounded-xl pt-4 pb-4 mb-3 px-4 max-w-6xl"
+        style="box-sizing: border-box"
+      >
+        <form class="w-full">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <h1 class="pl-2 text-base">Nombre</h1>
+              <input
+                type="text"
+                placeholder="Ej: Jose"
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
+              />
+            </div>
+            <div>
+              <h1 class="pl-2 text-base">Rol</h1>
+              <select
+                name="rol"
+                id="rol"
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
+                onchange="
+              this.classList.toggle('text-gray-400', this.value === '');
+              this.classList.toggle('text-black', this.value !== '');
+            "
+              >
+                <option value="" disabled selected>Rol...</option>
+                <option value="rol1">Visualizador</option>
+                <option value="rol2">Moderador</option>
+                <option value="rol3">Gerente</option>
+                <option value="rol4">Administrador</option>
+              </select>
+            </div>
+            <div class="col-span-1 sm:col-span-2 flex justify-end mt-1">
+              <button
+                type="reset"
+                class="bg-gray-500 shadow-md text-white rounded-full px-4 py-1 font-bold hover:bg-gray-700 hover:cursor-pointer transition"
+              >
+                Limpiar Filtros
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <h1 class="text-3xl font-bold pt-2 pb-1 text-center">
+        Lista de Usuarios
+      </h1>
+      <div
+        class="bg-white w-full rounded-xl pt-4 pb-4 mb-3 px-4 max-w-6xl"
+        style="box-sizing: border-box"
+      >
+        <div class="overflow-x-auto">
+          <table class="table-fixed w-full">
+            <thead>
+              <tr class="divide-x divide-gray-300 border-b border-gray-300">
+                <th class="text-left px-2 py-2">ID</th>
+                <th class="text-left px-2 py-2">Nombre</th>
+                <th class="text-left px-2 py-2">Email</th>
+                <th class="text-left px-2 py-2">Rol</th>
+                <th class="text-left px-2 py-2">Acciones</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr class="divide-x divide-gray-200">
+                <td class="text-left px-2 py-2 truncate max-w-[100px]">
+                  1234645
+                </td>
+                <td class="text-left px-2 py-2 truncate max-w-[120px]">Fran</td>
+                <td class="text-left px-2 py-2 truncate max-w-[180px]">
+                  aksjdfk@jaskdljfk.com
+                </td>
+                <td class="text-left px-2 py-2 truncate max-w-[100px]">
+                  Mamador
+                </td>
+                <td class="text-left px-2 py-2 truncate max-w-[100px]">
+                  <div class="flex gap-2 items-center justify-center">
+                    <button onclick="" class="hover:cursor-pointer">
+                      <img
+                        class="h-10 w-10"
+                        src="../assets/icons/general/edit.png"
+                        alt="edit"
+                      />
+                    </button>
+                    <button onclick="" class="hover:cursor-pointer">
+                      <img
+                        class="h-12 w-12"
+                        src="../assets/icons/general/delete.png"
+                        alt="delete"
+                      />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <!-- ...más filas aquí... -->
+            </tbody>
+          </table>
+        </div>
       </div>
     </main>
   </body>
