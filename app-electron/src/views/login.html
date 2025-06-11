@@ -1,77 +1,141 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>SUSERCA LOGIN</title>
+    <link rel="stylesheet" href="../assets/output.css" />
+  </head>
 
-    <head>
+  <body class="min-h-screen bg-zinc-200 flex flex-col">
+    <header class="bg-white flex gap-2 min-w-full justify-start">
+      <div class="">
+        <img
+          src="../assets/icons/general/logo.jpg"
+          alt="logo SUSERCA"
+          height="90"
+          width="90"
+          class="p-1"
+        />
+      </div>
+      <div>
+        <h1 class="text-green-800 font-bold text-5xl">SUSERCA</h1>
+        <p class="text-green-800 text-xs pl-2">
+          Suministros y Servicios de Occidente
+        </p>
+      </div>
+    </header>
 
-        <meta charset="UTF-8">
-        <title>SUSERCA LOGIN</title>
-        <link rel="stylesheet" href="../assets/output.css">
-
-    </head>
-
-    <body class="min-h-screen bg-zinc-200 flex flex-col">
-
-        <header class="bg-white flex gap-2 min-w-full justify-start">
-
-            <div class="">
-                <img src="../assets/icons/general/logo.jpg" alt="logo SUSERCA" height="90" width="90" class=" p-1">
+    <main class="flex flex-1 justify-center items-center relative">
+      <div
+        class="bg-white rounded-4xl shadow-lg w-full mx-auto px-2 sm:px-4 py-6 sm:py-8 max-w-md sm:max-w-lg md:max-w-2xl lg:max-w-3xl xl:max-w-5xl"
+      >
+        <h1
+          class="text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold pb-6 pt-2 sm:pb-8 sm:pt-4"
+        >
+          Bienvenido a SUSERCA
+        </h1>
+        <form id="loginForm">
+          <div
+            class="text-center text-base sm:text-xl md:text-2xl pt-2 pb-2 sm:pt-3 sm:pb-3"
+          >
+            <input
+              id="email"
+              class="bg-gray-50 border-2 border-black shadow-md rounded-xl w-full h-10 sm:h-12 md:h-14 pl-2 sm:pl-3 pb-1 pt-1 sm:pb-2 sm:pt-2"
+              type="email"
+              name="email"
+              placeholder="Email"
+              required
+            />
+          </div>
+          <div
+            class="text-center text-base sm:text-xl md:text-2xl pt-2 pb-2 sm:pt-3 sm:pb-3"
+          >
+            <input
+              id="password"
+              class="bg-gray-50 border-2 border-black shadow-md rounded-xl w-full h-10 sm:h-12 md:h-14 pl-2 sm:pl-3 pb-1 pt-1 sm:pb-2 sm:pt-2"
+              type="password"
+              name="password"
+              placeholder="Contraseña"
+              required
+            />
+            <div class="flex items-center mt-4 ml-4">
+              <input
+                type="checkbox"
+                id="show"
+                class="size-4.5"
+                onchange="togglePassword()"
+              />
+              <label for="show" class="text-[17px] pl-1"
+                >Mostrar contraseña</label
+              >
             </div>
-            <div>
-                <h1 class=" text-green-800 font-bold text-5xl">SUSERCA</h1>
-                <p class=" text-green-800  text-xs pl-2">Suministros y Servicios de Occidente</p>
-            </div>
-
-        </header>
-
-        <main class="flex flex-1 justify-center items-center relative">
-            <div class="bg-white rounded-4xl shadow-lg w-full mx-auto px-2 sm:px-4 py-6 sm:py-8
-                        max-w-md sm:max-w-lg md:max-w-2xl lg:max-w-3xl xl:max-w-5xl">
-                <h1 class="text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold pb-6 pt-2 sm:pb-8 sm:pt-4">Login</h1>
-                <form id="loginForm">
-                    <div class="text-center text-base sm:text-xl md:text-2xl pt-2 pb-2 sm:pt-3 sm:pb-3">
-                        <input id="username" class="bg-gray-50 border-2 border-black shadow-md rounded-xl w-full h-10 sm:h-12 md:h-14 pl-2 sm:pl-3 pb-1 pt-1 sm:pb-2 sm:pt-2"
-                            type="text" name="user" placeholder="Usuario" required>
-                    </div>
-                    <div class="text-center text-base sm:text-xl md:text-2xl pt-2 pb-2 sm:pt-3 sm:pb-3">
-                        <input id="password" class="bg-gray-50 border-2 border-black shadow-md rounded-xl w-full h-10 sm:h-12 md:h-14 pl-2 sm:pl-3 pb-1 pt-1 sm:pb-2 sm:pt-2"
-                            type="password" name="password" placeholder="Contraseña" required>
-                        <div class="flex items-center mt-4 ml-4">
-                            <input type="checkbox" id="show" class="size-4.5" onchange="togglePassword()">
-                            <label for="show" class="text-[17px] pl-1">Mostrar contraseña</label>
-                        </div>
-                    </div>
-                    <p class="text-sm sm:text-base md:text-lg text-blue-800 underline pt-1 pb-2 sm:pt-1 sm:pb-4 text-left">
-                        <a href="../views/recover.html">¿Olvidó su contraseña?</a>
-                    </p>
-                    <div class="text-base sm:text-xl md:text-2xl text-center mt-4 mb-2 sm:mt-8 sm:mb-4">
-                        <button type="submit"
-                                class="bg-green-800 text-white rounded-full shadow-md pt-2 pb-2 px-6 sm:pt-3 sm:pb-3 sm:px-8 hover:bg-orange-500 hover:cursor-pointer transition">
-                            Iniciar Sesion
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <button onclick="document.getElementById('logout-modal').classList.remove('hidden')"
-                    class="absolute bottom-0.5 right-0.5 hover:cursor-pointer">
-                <img class="size-15" src="../assets/icons/login/exit.png" alt="exit icon">
+          </div>
+          <p
+            class="text-sm sm:text-base md:text-lg text-blue-800 underline pt-1 pb-2 sm:pt-1 sm:pb-4 text-left"
+          >
+            <a href="../views/recover.html">¿Olvidó su contraseña?</a>
+          </p>
+          <div
+            class="text-base sm:text-xl md:text-2xl text-center mt-4 mb-2 sm:mt-8 sm:mb-4"
+          >
+            <button
+              type="submit"
+              class="bg-green-800 text-white rounded-full shadow-md pt-2 pb-2 px-6 sm:pt-3 sm:pb-3 sm:px-8 hover:bg-orange-500 hover:cursor-pointer transition relative"
+            >
+              <span id="loginText">Iniciar Sesion</span>
+              <span
+                id="loadingIndicator"
+                class="absolute inset-0 flex items-center justify-center opacity-0"
+              >
+                <div
+                  class="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-white"
+                ></div>
+              </span>
             </button>
+          </div>
+        </form>
+      </div>
+      <button
+        onclick="document.getElementById('logout-modal').classList.remove('hidden')"
+        class="absolute bottom-0.5 right-0.5 hover:cursor-pointer"
+      >
+        <img
+          class="size-15"
+          src="../assets/icons/login/exit.png"
+          alt="exit icon"
+        />
+      </button>
 
-            <!-- Popup/modal -->
-            <div id="logout-modal" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden">
-                <div class="bg-white rounded-xl px-4 pb-4 shadow-lg max-w-sm w-full relative">
-                    <h1 class="text-5xl font-bold my-4">Salir</h1>
-                    <div class=" bg-zinc-200 rounded-xl">
-                        <h1 class="pt-2 pl-2">Estas seguro de que deseas salir?</h1>
-                        <div class="flex justify-center gap-4 pb-2 my-2">
-                            <button onclick="document.getElementById('logout-modal').classList.add('hidden')" class="px-4 py-2 rounded-full bg-white hover:bg-gray-300 hover:cursor-pointer transition">Cancelar</button>
-                            <button onclick="window.electronAPI.closeApp()" class="px-4 py-2 rounded-full bg-red-600 text-white hover:bg-red-700 hover:cursor-pointer transition">Salir</button>
-                        </div>
-                    </div>
-                </div>
+      <!-- Popup/modal -->
+      <div
+        id="logout-modal"
+        class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden"
+      >
+        <div
+          class="bg-white rounded-xl px-4 pb-4 shadow-lg max-w-sm w-full relative"
+        >
+          <h1 class="text-5xl font-bold my-4">Salir</h1>
+          <div class="bg-zinc-200 rounded-xl">
+            <h1 class="pt-2 pl-2">Estas seguro de que deseas salir?</h1>
+            <div class="flex justify-center gap-4 pb-2 my-2">
+              <button
+                onclick="document.getElementById('logout-modal').classList.add('hidden')"
+                class="px-4 py-2 rounded-full bg-white hover:bg-gray-300 hover:cursor-pointer transition"
+              >
+                Cancelar
+              </button>
+              <button
+                onclick="window.electronAPI.closeApp()"
+                class="px-4 py-2 rounded-full bg-red-600 text-white hover:bg-red-700 hover:cursor-pointer transition"
+              >
+                Salir
+              </button>
             </div>
-        </main>
-
-    </body>
-<script src="../scripts/login.js"></script>
-<script src="../libs/sweetalert2.all.min.js"></script>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+  <script src="../scripts/login.js"></script>
+  <script src="../libs/sweetalert2.all.min.js"></script>
 </html>

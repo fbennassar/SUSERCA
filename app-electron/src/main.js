@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { app, BrowserWindow } = require('electron/main')
 
 require('electron-reload')(process.cwd(), {
@@ -6,7 +7,7 @@ require('electron-reload')(process.cwd(), {
 
 require('./backend/ipc/IPCusuarios.js')
 
-const db = require('./backend/db/connection.js');
+const db = require('./backend/db/supabaseClient.js');
 const path = require('path');
 
 const createWindow = () => {
@@ -15,7 +16,7 @@ const createWindow = () => {
     height: 600,
     autoHideMenuBar: true,
     frame: true,
-    minWidth: 800,
+    minWidth: 1000,
     minHeight: 730,
     maxWidth: 1920,
     maxHeight: 1080,
