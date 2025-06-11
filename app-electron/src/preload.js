@@ -3,6 +3,6 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('electronAPI', {
   login: (email, password) =>
     ipcRenderer.invoke('usuarios:login', { email, password }),
-  closeApp: () => ipcRenderer.send('close-app')
+  closeApp: () => ipcRenderer.send('close-app'),
+  getUser: () => ipcRenderer.invoke('auth:getUser')
 });
-

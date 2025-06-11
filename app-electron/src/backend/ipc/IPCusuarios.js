@@ -1,5 +1,6 @@
 const { ipcMain, net } = require('electron');
 const usuarios = require('../db/usuarios.js');
+const supabase = require('../db/supabaseClient.js');
 
 ipcMain.handle('usuarios:login', async (event, { email, password }) => {
   try {
@@ -29,3 +30,21 @@ ipcMain.handle('usuarios:login', async (event, { email, password }) => {
     return { user: null, error: error.message };
   }
 });
+
+ipcMain.handle('auth:getUser', async () => {
+  if(!supabase) {
+    console.error('El cliente no ha sido inicializado')
+    return null;
+  }
+  try {
+    const {data: { user }, error} = await supabase.auth.getUser();
+    if (error) {
+      console.error('Error al obtener el usuario:', error.message);
+      return null;
+    }
+    return user;
+  } catch(e) {
+    console.error('Error al obtener el usuario:'. e);
+    return null;
+  }
+})
