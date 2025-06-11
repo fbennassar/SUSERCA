@@ -53,6 +53,7 @@
     </header>
 
     <main class="flex-1 flex">
+      <!--Sidebar-->
       <div
         id="sidebar"
         class="bg-green-800 flex flex-col gap-2.5 transition-all duration-300"
@@ -179,99 +180,128 @@
         </button>
       </div>
 
-      <!--Cartas del centro-->
-      <div class="flex flex-1 justify-center items-center w-full">
-        <div
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 p-10 max-w-6xl w-full mx-auto"
-        >
-          <div class="card flex-row items-center justify-center gap-4">
-            <img
-              src="../assets/icons/dashboard/inventario.png"
-              alt="Inventario icon"
-              height="70"
-              width="70"
-            />
-            <div class="flex flex-col max-w-[180px]">
-              <span class="text-2xl">Inventario</span>
-              <span class="text-lg text-gray-600 font-bold mt-1 break-words"
-                >Gestione sus productos y stock</span
-              >
-            </div>
-          </div>
+      <div class="flex flex-col items-center justify-start w-full">
+        <!--Mensaje de Bienvenida-->
+        <div class="w-full flex flex-col mt-8 mb-4 px-10">
+          <h1 class="text-4xl font-bold text-black">¡Bienvenido, Usuario!</h1>
+          <p class="text-lg text-gray-700 font-bold mt-5 px-3">
+            Seleccione un módulo para empezar
+          </p>
+        </div>
 
-          <div class="card flex-row items-center justify-center gap-4">
-            <img
-              src="../assets/icons/dashboard/clientes.png"
-              alt="Clientes icon"
-              height="70"
-              width="70"
-            />
-            <div class="flex flex-col max-w-[180px]">
-              <span class="text-2xl">Clientes</span>
-              <span class="text-lg text-gray-600 font-bold mt-1"
-                >Administre la informacion de sus clientes</span
-              >
-            </div>
-          </div>
+        <!--Botones Centrales-->
+        <div class="flex flex-1 justify-center items-center w-full">
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 p-10 max-w-6xl w-full mx-auto"
+          >
+            <button
+              onclick="window.location.href='../views/inventario.html'"
+              class="card flex-row items-center justify-center gap-4 cursor-pointer"
+            >
+              <img
+                src="../assets/icons/dashboard/inventario.png"
+                alt="Inventario icon"
+                height="70"
+                width="70"
+              />
+              <div class="flex flex-col max-w-[180px]">
+                <span class="text-2xl text-left">Inventario</span>
+                <span
+                  class="text-lg text-gray-600 font-bold mt-1 break-words text-left"
+                  >Gestione sus productos y stock</span
+                >
+              </div>
+            </button>
 
-          <div class="card flex-row items-center justify-center gap-4">
-            <img
-              src="../assets/icons/dashboard/proveedores.png"
-              alt="Proveedores icon"
-              height="70"
-              width="70"
-            />
-            <div class="flex flex-col max-w-[180px]">
-              <span class="text-2xl">Proveedores</span>
-              <span class="text-lg text-gray-600 font-bold mt-1"
-                >Controle sus Proveedores</span
-              >
-            </div>
-          </div>
+            <button
+              onclick="window.location.href='../views/clientes.html'"
+              class="card flex-row items-center justify-center gap-4 cursor-pointer"
+            >
+              <img
+                src="../assets/icons/dashboard/clientes.png"
+                alt="Clientes icon"
+                height="70"
+                width="70"
+              />
+              <div class="flex flex-col max-w-[180px]">
+                <span class="text-2xl text-left">Clientes</span>
+                <span class="text-lg text-gray-600 font-bold mt-1 text-left"
+                  >Administre la informacion de sus clientes</span
+                >
+              </div>
+            </button>
 
-          <div class="card flex-row items-center justify-center gap-4">
-            <img
-              src="../assets/icons/dashboard/finanzas.png"
-              alt="Finanzas icon"
-              height="70"
-              width="70"
-            />
-            <div class="flex flex-col max-w-[180px]">
-              <span class="text-2xl">Finanzas</span>
-              <span class="text-lg text-gray-600 font-bold mt-1"
-                >Gestione ordenes de compra/venta</span
-              >
-            </div>
-          </div>
+            <button
+              onclick="window.location.href='../views/proveedores.html'"
+              class="card flex-row items-center justify-center gap-4 cursor-pointer"
+            >
+              <img
+                src="../assets/icons/dashboard/proveedores.png"
+                alt="Proveedores icon"
+                height="70"
+                width="70"
+              />
+              <div class="flex flex-col max-w-[180px]">
+                <span class="text-2xl text-left">Proveedores</span>
+                <span class="text-lg text-gray-600 font-bold mt-1 text-left"
+                  >Controle sus Proveedores</span
+                >
+              </div>
+            </button>
 
-          <div class="card flex-row items-center justify-center gap-4">
-            <img
-              src="../assets/icons/dashboard/usuarios.png"
-              alt="Usuarios icon"
-              height="70"
-              width="70"
-            />
-            <div class="flex flex-col max-w-[180px]">
-              <span class="text-2xl">Usuarios</span>
-              <span class="text-lg text-gray-600 font-bold mt-1"
-                >Gestione a los usuarios del sistema</span
-              >
-            </div>
-          </div>
+            <button
+              onclick="window.location.href='../views/finanzas.html'"
+              class="card flex-row items-center justify-center gap-4 cursor-pointer"
+            >
+              <img
+                src="../assets/icons/dashboard/finanzas.png"
+                alt="Finanzas icon"
+                height="70"
+                width="70"
+              />
+              <div class="flex flex-col max-w-[180px]">
+                <span class="text-2xl text-left">Finanzas</span>
+                <span class="text-lg text-gray-600 font-bold mt-1 text-left"
+                  >Gestione ordenes de compra/venta</span
+                >
+              </div>
+            </button>
 
-          <div class="card flex-row items-center justify-center gap-4">
-            <img
-              src="../assets/icons/dashboard/ayuda.png"
-              alt="Ayuda icon"
-              height="70"
-              width="70"
-            />
-            <div class="flex flex-col max-w-[180px]">
-              <span class="text-2xl">Ayuda</span>
-              <span class="text-lg text-gray-600 font-bold mt-1"
-                >Informacion y manual de usuarios</span
-              >
-            </div>
+            <button
+              onclick="window.location.href='../views/usuarios.html'"
+              class="card flex-row items-center justify-center gap-4 cursor-pointer"
+            >
+              <img
+                src="../assets/icons/dashboard/usuarios.png"
+                alt="Usuarios icon"
+                height="70"
+                width="70"
+              />
+              <div class="flex flex-col max-w-[180px]">
+                <span class="text-2xl text-left">Usuarios</span>
+                <span class="text-lg text-gray-600 font-bold mt-1 text-left"
+                  >Gestione a los usuarios del sistema</span
+                >
+              </div>
+            </button>
+
+            <button
+              onclick="window.location.href='../views/ayuda.html'"
+              class="card flex-row items-center justify-center gap-4 cursor-pointer"
+            >
+              <img
+                src="../assets/icons/dashboard/ayuda.png"
+                alt="Ayuda icon"
+                height="70"
+                width="70"
+              />
+              <div class="flex flex-col max-w-[180px]">
+                <span class="text-2xl text-left">Ayuda</span>
+                <span class="text-lg text-gray-600 font-bold mt-1 text-left"
+                  >Informacion y manual de usuarios</span
+                >
+              </div>
+            </button>
           </div>
         </div>
       </div>
