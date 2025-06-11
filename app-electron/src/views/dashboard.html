@@ -45,10 +45,7 @@
           />
         </div>
         <div class="flex items-center pr-2">
-          <button
-            id="usericon"
-            class="hover:cursor-pointer"
-          >
+          <button id="usericon" class="hover:cursor-pointer">
             <img
               src="../assets/icons/header/user.png"
               alt="user icon"
@@ -190,14 +187,22 @@
       id="main-content"
       class="mt-24 h-full overflow-auto flex-1 flex flex-col transition-all duration-300"
     >
-      <!--Cartas del centro-->
-      <div class="flex flex-1 flex-col justify-center items-center w-full">
-        <h1 class="text-4xl font-bold pl-13 pb-5">Bienvenido, {username}</h1>
-        <p class="text-xl font-bold pl-14">Seleccione un modulo para empezar</p>
+      <!--Cartas del centro y mensaje de bienvenida-->
+
+      <div class="flex flex-1 flex-col justify-center items-start w-full">
+        <h1 class="text-4xl font-bold pb-5 pl-7 text-left">
+          ¡Bienvenido, {username}!
+        </h1>
+        <p class="text-xl font-bold text-gray-600 text-left mt-1 pl-9">
+          Seleccione un modulo para empezar
+        </p>
         <div
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 p-10 max-w-6xl w-full mx-auto"
         >
-          <div class="card flex-row items-center justify-center gap-4">
+          <button
+            onclick="window.location.href='../views/inventario.html'"
+            class="card flex-row items-center justify-center gap-4 cursor-pointer"
+          >
             <img
               src="../assets/icons/dashboard/inventario.png"
               alt="Inventario icon"
@@ -205,14 +210,18 @@
               width="70"
             />
             <div class="flex flex-col max-w-[180px]">
-              <span class="text-2xl">Inventario</span>
-              <span class="text-lg text-gray-600 font-bold mt-1 break-words"
+              <span class="text-2xl text-left">Inventario</span>
+              <span
+                class="text-lg text-gray-600 font-bold mt-1 break-words text-left"
                 >Gestione sus productos y stock</span
               >
             </div>
-          </div>
+          </button>
 
-          <div class="card flex-row items-center justify-center gap-4">
+          <button
+            onclick="window.location.href='../views/clientes.html'"
+            class="card flex-row items-center justify-center gap-4 cursor-pointer"
+          >
             <img
               src="../assets/icons/dashboard/clientes.png"
               alt="Clientes icon"
@@ -220,14 +229,17 @@
               width="70"
             />
             <div class="flex flex-col max-w-[180px]">
-              <span class="text-2xl">Clientes</span>
-              <span class="text-lg text-gray-600 font-bold mt-1"
+              <span class="text-2xl text-left">Clientes</span>
+              <span class="text-lg text-gray-600 font-bold mt-1 text-left"
                 >Administre la informacion de sus clientes</span
               >
             </div>
-          </div>
+          </button>
 
-          <div class="card flex-row items-center justify-center gap-4">
+          <button
+            onclick="window.location.href='../views/proveedores.html'"
+            class="card flex-row items-center justify-center gap-4 cursor-pointer"
+          >
             <img
               src="../assets/icons/dashboard/proveedores.png"
               alt="Proveedores icon"
@@ -235,14 +247,17 @@
               width="70"
             />
             <div class="flex flex-col max-w-[180px]">
-              <span class="text-2xl">Proveedores</span>
-              <span class="text-lg text-gray-600 font-bold mt-1"
+              <span class="text-2xl text-left">Proveedores</span>
+              <span class="text-lg text-gray-600 font-bold mt-1 text-left"
                 >Controle sus Proveedores</span
               >
             </div>
-          </div>
+          </button>
 
-          <div class="card flex-row items-center justify-center gap-4">
+          <button
+            onclick="window.location.href='../views/finanzas.html'"
+            class="card flex-row items-center justify-center gap-4 cursor-pointer"
+          >
             <img
               src="../assets/icons/dashboard/finanzas.png"
               alt="Finanzas icon"
@@ -250,14 +265,17 @@
               width="70"
             />
             <div class="flex flex-col max-w-[180px]">
-              <span class="text-2xl">Finanzas</span>
-              <span class="text-lg text-gray-600 font-bold mt-1"
+              <span class="text-2xl text-left">Finanzas</span>
+              <span class="text-lg text-gray-600 font-bold mt-1 text-left"
                 >Gestione ordenes de compra/venta</span
               >
             </div>
-          </div>
+          </button>
 
-          <div class="card flex-row items-center justify-center gap-4">
+          <button
+            onclick="window.location.href='../views/usuarios.html'"
+            class="card flex-row items-center justify-center gap-4 cursor-pointer"
+          >
             <img
               src="../assets/icons/dashboard/usuarios.png"
               alt="Usuarios icon"
@@ -265,14 +283,17 @@
               width="70"
             />
             <div class="flex flex-col max-w-[180px]">
-              <span class="text-2xl">Usuarios</span>
-              <span class="text-lg text-gray-600 font-bold mt-1"
+              <span class="text-2xl text-left">Usuarios</span>
+              <span class="text-lg text-gray-600 font-bold mt-1 text-left"
                 >Gestione a los usuarios del sistema</span
               >
             </div>
-          </div>
+          </button>
 
-          <div class="card flex-row items-center justify-center gap-4">
+          <button
+            onclick="window.location.href='../views/ayuda.html'"
+            class="card flex-row items-center justify-center gap-4 cursor-pointer"
+          >
             <img
               src="../assets/icons/dashboard/ayuda.png"
               alt="Ayuda icon"
@@ -280,36 +301,37 @@
               width="70"
             />
             <div class="flex flex-col max-w-[180px]">
-              <span class="text-2xl">Ayuda</span>
-              <span class="text-lg text-gray-600 font-bold mt-1"
+              <span class="text-2xl text-left">Ayuda</span>
+              <span class="text-lg text-gray-600 font-bold mt-1 text-left"
                 >Informacion y manual de usuarios</span
               >
             </div>
-          </div>
+          </button>
         </div>
       </div>
 
+      <!--Pop up de usuario-->
       <div id="logout-modal" class="absolute right-3.5 top-20 hidden">
-          <div class="bg-zinc-400 rounded-xl flex flex-col gap-2 p-2 text-xl">
-            <button
-              class=" text-white px-4 py-2 rounded-full bg-green-800 border border-green-700 hover:bg-orange-400 hover:cursor-pointer transition"
-            >
-              Informacion de Usuario
-            </button>
-            <button
-              onclick="window.location.href='../views/login.html'"
-              target="_self"
-              class=" text-white px-4 py-2 rounded-full bg-green-800 border border-green-700 hover:bg-orange-400 hover:cursor-pointer transition"
-            >
-              Cerrar Sesion
-            </button>
-            <button
-              onclick="window.electronAPI.closeApp()"
-              class=" text-white px-4 py-2 rounded-full bg-green-800 border border-green-700 hover:bg-orange-400 hover:cursor-pointer transition"
-            >
-              Salir
-            </button>
-          </div>
+        <div class="bg-zinc-400 rounded-xl flex flex-col gap-2 p-2 text-xl">
+          <button
+            class="text-white px-4 py-2 rounded-full bg-green-800 border border-green-700 hover:bg-orange-400 hover:cursor-pointer transition"
+          >
+            Informacion de Usuario
+          </button>
+          <button
+            onclick="window.location.href='../views/login.html'"
+            target="_self"
+            class="text-white px-4 py-2 rounded-full bg-green-800 border border-green-700 hover:bg-orange-400 hover:cursor-pointer transition"
+          >
+            Cerrar Sesion
+          </button>
+          <button
+            onclick="window.electronAPI.closeApp()"
+            class="text-white px-4 py-2 rounded-full bg-green-800 border border-green-700 hover:bg-orange-400 hover:cursor-pointer transition"
+          >
+            Salir
+          </button>
+        </div>
       </div>
     </main>
   </body>
