@@ -326,14 +326,20 @@
                 </td>
                 <td class="text-left px-2 py-2 truncate max-w-[100px]">
                   <div class="flex gap-2 items-center justify-center">
-                    <button onclick="" class="hover:cursor-pointer">
+                    <button
+                      onclick="document.getElementById('edit-popup').classList.remove('hidden')"
+                      class="hover:cursor-pointer"
+                    >
                       <img
                         class="h-10 w-10"
                         src="../assets/icons/general/edit.png"
                         alt="edit"
                       />
                     </button>
-                    <button onclick="" class="hover:cursor-pointer">
+                    <button
+                      onclick="document.getElementById('delete-popup').classList.remove('hidden')"
+                      class="hover:cursor-pointer"
+                    >
                       <img
                         class="h-12 w-12"
                         src="../assets/icons/general/delete.png"
@@ -346,6 +352,106 @@
               <!-- ...más filas aquí... -->
             </tbody>
           </table>
+        </div>
+      </div>
+      <div
+        id="edit-popup"
+        class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden"
+      >
+        <div
+          class="bg-zinc-200 w-full rounded-xl pt-4 pb-4 ml-44 mx-25 mb-3 px-4 max-w-6xl relative"
+          style="box-sizing: border-box"
+        >
+          <button
+            onclick="document.getElementById('edit-popup').classList.add('hidden')"
+            class="absolute text-2xl font-extrabold hover:cursor-pointer right-5 top-3"
+          >
+            X
+          </button>
+          <h1 class="text-3xl text-center font-bold mb-2.5">Editar Usuario</h1>
+          <div class="bg-white p-5 rounded-2xl">
+            <form class="w-full">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <h1 class="pl-2 text-base">Nombre</h1>
+                  <input
+                    type="text"
+                    placeholder="Ej: Jose"
+                    class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
+                  />
+                </div>
+                <div>
+                  <h1 class="pl-2 text-base">Correo</h1>
+                  <input
+                    type="email"
+                    placeholder="Ej: email@example.com"
+                    class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
+                  />
+                </div>
+                <div>
+                  <h1 class="pl-2 text-base">Rol</h1>
+                  <select
+                    name="rol"
+                    id="rol"
+                    class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
+                    onchange="
+                      this.classList.toggle('text-gray-400', this.value === '');
+                      this.classList.toggle('text-black', this.value !== '');
+                    "
+                  >
+                    <option value="" disabled selected>Rol...</option>
+                    <option value="rol1">Visualizador</option>
+                    <option value="rol2">Moderador</option>
+                    <option value="rol3">Gerente</option>
+                    <option value="rol4">Administrador</option>
+                  </select>
+                </div>
+                <div>
+                  <h1 class="pl-2 text-base">Clave</h1>
+                  <input
+                    type="password"
+                    placeholder="Ej: Clave"
+                    class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
+                  />
+                </div>
+                <div class="col-span-1 sm:col-span-2 flex justify-end mt-1">
+                  <button
+                    type="submit"
+                    class="bg-green-700 shadow-md text-white rounded-full px-4 py-1 font-bold hover:bg-green-800 hover:cursor-pointer transition"
+                  >
+                    Guardar Cambios
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div
+        id="delete-popup"
+        class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden"
+      >
+        <div
+          class="bg-white rounded-xl px-4 pb-4 shadow-lg max-w-sm w-full relative"
+        >
+          <h1 class="text-3xl text-center font-bold my-4">Eliminar Usuario</h1>
+          <div class="bg-zinc-200 rounded-xl">
+            <h1 class="pt-2 pl-2 text-center text-xl">Estas seguro de que deseas eliminar este usuario?</h1>
+            <div class="flex justify-center gap-4 pb-2 my-2">
+              <button
+                onclick="document.getElementById('delete-popup').classList.add('hidden')"
+                class="px-4 py-2 rounded-full bg-white hover:bg-gray-300 hover:cursor-pointer transition"
+              >
+                Cancelar
+              </button>
+              <button
+                onclick=""
+                class="px-4 py-2 rounded-full bg-red-600 text-white hover:bg-red-700 hover:cursor-pointer transition"
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </main>
