@@ -26,7 +26,7 @@ const createWindow = () => {
     }
   })
 
-  win.loadFile('./app-electron/src/views/dashboard.html')
+  win.loadFile('./app-electron/src/views/login.html')
 }
 
 const { ipcMain } = require('electron/main');
