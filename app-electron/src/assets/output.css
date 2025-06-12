@@ -239,6 +239,9 @@
   .top-20 {
     top: calc(var(--spacing) * 20);
   }
+  .top-21 {
+    top: calc(var(--spacing) * 21);
+  }
   .right-0\.5 {
     right: calc(var(--spacing) * 0.5);
   }
@@ -247,6 +250,18 @@
   }
   .right-5 {
     right: calc(var(--spacing) * 5);
+  }
+  .right-7 {
+    right: calc(var(--spacing) * 7);
+  }
+  .right-20 {
+    right: calc(var(--spacing) * 20);
+  }
+  .right-21 {
+    right: calc(var(--spacing) * 21);
+  }
+  .right-22 {
+    right: calc(var(--spacing) * 22);
   }
   .bottom-0\.5 {
     bottom: calc(var(--spacing) * 0.5);
@@ -825,6 +840,50 @@
     --tw-duration: 300ms;
     transition-duration: 300ms;
   }
+  .hover\:size-6 {
+    &:hover {
+      @media (hover: hover) {
+        width: calc(var(--spacing) * 6);
+        height: calc(var(--spacing) * 6);
+      }
+    }
+  }
+  .hover\:size-75 {
+    &:hover {
+      @media (hover: hover) {
+        width: calc(var(--spacing) * 75);
+        height: calc(var(--spacing) * 75);
+      }
+    }
+  }
+  .hover\:size-100 {
+    &:hover {
+      @media (hover: hover) {
+        width: calc(var(--spacing) * 100);
+        height: calc(var(--spacing) * 100);
+      }
+    }
+  }
+  .hover\:scale-110 {
+    &:hover {
+      @media (hover: hover) {
+        --tw-scale-x: 110%;
+        --tw-scale-y: 110%;
+        --tw-scale-z: 110%;
+        scale: var(--tw-scale-x) var(--tw-scale-y);
+      }
+    }
+  }
+  .hover\:scale-120 {
+    &:hover {
+      @media (hover: hover) {
+        --tw-scale-x: 120%;
+        --tw-scale-y: 120%;
+        --tw-scale-z: 120%;
+        scale: var(--tw-scale-x) var(--tw-scale-y);
+      }
+    }
+  }
   .hover\:cursor-pointer {
     &:hover {
       @media (hover: hover) {
@@ -1163,9 +1222,40 @@
   inherits: false;
   initial-value: 0 0 #0000;
 }
+@property --tw-outline-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
 @property --tw-duration {
   syntax: "*";
   inherits: false;
+  initial-value: 1;
+}
+@property --tw-scale-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-scale-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-scale-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-scale-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-scale-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
 }
 @keyframes spin {
   to {
@@ -1194,6 +1284,9 @@
       --tw-ring-offset-color: #fff;
       --tw-ring-offset-shadow: 0 0 #0000;
       --tw-duration: initial;
+      --tw-scale-x: 1;
+      --tw-scale-y: 1;
+      --tw-scale-z: 1;
     }
   }
 }
