@@ -1,20 +1,38 @@
 document.addEventListener('DOMContentLoaded', function () {
   const userBtn = document.getElementById('usericon');
-  const popup = document.getElementById('logout-modal');
+  const settingsBtn = document.getElementById('settingsicon');
+  const popupUser = document.getElementById('user-modal');
+  const popupSettings = document.getElementById('settings-modal');
 
-  if (userBtn && popup) {
+  if (userBtn && popupUser && popupSettings) {
     userBtn.addEventListener('click', function (e) {
       e.stopPropagation();
-      popup.classList.toggle('hidden');
+      // Cierra el otro popup antes de abrir este
+      popupSettings.classList.add('hidden');
+      popupUser.classList.toggle('hidden');
     });
 
-    // Opcional: cerrar el popup si haces clic fuera de él
-    document.addEventListener('click', function () {
-      popup.classList.add('hidden');
-    });
-
-    popup.addEventListener('click', function (e) {
+    popupUser.addEventListener('click', function (e) {
       e.stopPropagation();
     });
   }
+
+  if (settingsBtn && popupSettings && popupUser) {
+    settingsBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      // Cierra el otro popup antes de abrir este
+      popupUser.classList.add('hidden');
+      popupSettings.classList.toggle('hidden');
+    });
+
+    popupSettings.addEventListener('click', function (e) {
+      e.stopPropagation();
+    });
+  }
+
+  // Cierra ambos popups si haces clic fuera
+  document.addEventListener('click', function () {
+    popupUser.classList.add('hidden');
+    popupSettings.classList.add('hidden');
+  });
 });
