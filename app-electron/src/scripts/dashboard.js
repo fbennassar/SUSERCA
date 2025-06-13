@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
   const btn = document.getElementById('dropdownUserAvatarButton');
   const menu = document.getElementById('dropdownAvatar');
   if (btn && menu) {
@@ -13,4 +13,21 @@ document.addEventListener('DOMContentLoaded', function () {
       e.stopPropagation();
     });
   }
+
+  try {
+    const user = await window.electronAPI.getUser();
+    if (user && user.id) {
+      const { profile, error } = await window.electronAPI.getProfile(user.id);
+      if (profile && profile.nombre) {
+        document.getElementById('dashboard-username').textContent = profile.nombre + '!';
+        console.log('Perfil cargado:', profile);
+      } else {
+        document.getElementById('dashboard-username').textContent = user.email + '!'|| 'Usuario';
+      }
+    }
+  } catch (e) {
+    const el = document.getElementById('dashboard-username');
+    if (el) el.textContent = 'Usuario';
+  }
 });
+

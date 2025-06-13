@@ -22,3 +22,21 @@ exports.login = async (email, password) => {
     throw error;
   }
 };
+
+exports.getProfile = async (userId) => {
+  if (!supabase) {
+    throw new Error('Cliente no inicializado por falta de credenciales.');
+  }
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single();
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error('Error al obtener el perfil:', error);
+    throw error;
+  }
+};
