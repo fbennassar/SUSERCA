@@ -15,14 +15,19 @@ document.addEventListener('DOMContentLoaded', async function () {
   }
 
   try {
-    const user = await window.electronAPI.getUser();
-    if (user && user.id) {
-      const { profile, error } = await window.electronAPI.getProfile(user.id);
-      if (profile && profile.nombre) {
-        document.getElementById('dashboard-username').textContent = profile.nombre + '!';
-        console.log('Perfil cargado:', profile);
-      } else {
-        document.getElementById('dashboard-username').textContent = user.email + '!'|| 'Usuario';
+    let nombre = localStorage.getItem('user');
+    if (nombre) {
+      document.getElementById('dashboard-username').textContent = nombre + '!';
+    } else{
+      const user = await window.electronAPI.getUser();
+      if (user && user.id) {
+        const { profile, error } = await window.electronAPI.getProfile(user.id);
+        if (profile && profile.nombre) {
+          document.getElementById('dashboard-username').textContent = profile.nombre + '!';
+          console.log('Perfil cargado:', profile);
+        } else {
+          document.getElementById('dashboard-username').textContent = user.email + '!'|| 'Usuario';
+        }
       }
     }
   } catch (e) {

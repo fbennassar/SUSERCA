@@ -219,7 +219,7 @@
               <h1 class="pl-2 text-base">Rol</h1>
               <select
                 name="rol"
-                id="rol"
+                id="selectRol"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
                 onchange="
               this.classList.toggle('text-gray-400', this.value === '');
@@ -227,10 +227,6 @@
             "
               >
                 <option value="" disabled selected>Rol...</option>
-                <option value="rol1">Visualizador</option>
-                <option value="rol2">Moderador</option>
-                <option value="rol3">Gerente</option>
-                <option value="rol4">Administrador</option>
               </select>
             </div>
             <div>
@@ -274,7 +270,7 @@
               <h1 class="pl-2 text-base">Rol</h1>
               <select
                 name="rol"
-                id="rol"
+                id="selectRolFilter"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
                 onchange="
               this.classList.toggle('text-gray-400', this.value === '');
@@ -282,10 +278,6 @@
             "
               >
                 <option value="" disabled selected>Rol...</option>
-                <option value="rol1">Visualizador</option>
-                <option value="rol2">Moderador</option>
-                <option value="rol3">Gerente</option>
-                <option value="rol4">Administrador</option>
               </select>
             </div>
             <div class="col-span-1 sm:col-span-2 flex justify-end mt-1">
@@ -398,7 +390,7 @@
                   <h1 class="pl-2 text-base">Rol</h1>
                   <select
                     name="rol"
-                    id="rol"
+                    id="selectRol"
                     class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
                     onchange="
                       this.classList.toggle('text-gray-400', this.value === '');
@@ -406,10 +398,6 @@
                     "
                   >
                     <option value="" disabled selected>Rol...</option>
-                    <option value="rol1">Visualizador</option>
-                    <option value="rol2">Moderador</option>
-                    <option value="rol3">Gerente</option>
-                    <option value="rol4">Administrador</option>
                   </select>
                 </div>
                 <div>
@@ -471,7 +459,7 @@
             Informacion de Usuario
           </button>
           <button
-            onclick="window.location.href='../views/login.html'"
+            onclick="window.logout()"
             target="_self"
             class="text-white px-4 py-2 rounded-full bg-green-800 border border-green-700 hover:bg-orange-400 hover:cursor-pointer transition"
           >
@@ -506,4 +494,5 @@
       </div>
     </main>
   </body>
+  <script src="../scripts/usuarios.js" defer></script>
 </html>
