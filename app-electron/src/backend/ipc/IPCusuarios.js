@@ -25,8 +25,13 @@ ipcMain.handle('usuarios:login', async (event, { email, password }) => {
     });
 
     const user = await usuarios.login(email, password);
+    const profile = await usuarios.getProfile(user.id);
 
-    return { user: user, error: null };
+    if (!profile) {
+      return { user: user, profile: null, error: null };
+    }
+
+    return { user: user, profile: profile, error: null };
   } catch (error) {
     console.error('Error en IPC usuarios:login', error);
     return { user: null, error: error.message };
@@ -60,5 +65,23 @@ ipcMain.handle('auth:getProfile', async (event, userId) => {
   } catch (error) {
     console.error('Error al obtener el perfil:', error);
     return { profile: null, error: error.message };
+  }
+});
+
+ipcMain.handle('auth:signOut', async () => {
+  if (!supabase) {
+    console.error('El cliente Supabase no ha sido inicializado');
+    return { error: 'Cliente Supabase no inicializado' };
+  }
+  try {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error('Error al cerrar sesión en Supabase:', error.message);
+      return { error: error.message };
+    }
+    return { error: null };
+  } catch (e) {
+    console.error('Error durante el signOut:', e);
+    return { error: e.message };
   }
 });
