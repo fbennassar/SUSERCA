@@ -1,6 +1,7 @@
 const { ipcMain, net } = require('electron');
 const usuarios = require('../db/usuarios.js');
 const supabase = require('../db/supabaseClient.js');
+const session = require('../session/session.js');
 
 
 // Handle para el inicio de sesión de usuarios
@@ -26,39 +27,32 @@ ipcMain.handle('usuarios:login', async (event, { email, password }) => {
 
     const user = await usuarios.login(email, password);
 
-    return { user: user, error: null };
+    // Obtener el perfil del usuario
+    const profile = await usuarios.getProfile(user.id);
+
+    // Guardar usuario y perfil en la sesión
+    session.setUser(user);
+    session.setProfile(profile);
+
+    return { user, profile, error: null };
   } catch (error) {
     console.error('Error en IPC usuarios:login', error);
-    return { user: null, error: error.message };
+    return { user: null, profile: null, error: error.message };
   }
 });
 
 
-// Handle para saber si el usuario está autenticado
 ipcMain.handle('auth:getUser', async () => {
-  if(!supabase) {
-    console.error('El cliente no ha sido inicializado')
-    return null;
-  }
-  try {
-    const {data: { user }, error} = await supabase.auth.getUser();
-    if (error) {
-      console.error('Error al obtener el usuario:', error.message);
-      return null;
-    }
-    return user;
-  } catch(e) {
-    console.error('Error al obtener el usuario:'. e);
-    return null;
-  }
-})
+  return session.getUser();
+});
 
-ipcMain.handle('auth:getProfile', async (event, userId) => {
-  try {
-    const profile = await usuarios.getProfile(userId);
-    return { profile, error: null };
-  } catch (error) {
-    console.error('Error al obtener el perfil:', error);
-    return { profile: null, error: error.message };
-  }
+ipcMain.handle('auth:getProfile', async () => {
+  const profile = session.getProfile();
+  return profile ? { profile, error: null } : { profile: null, error: 'No hay perfil en sesión' };
+});
+
+ipcMain.handle('usuarios:logout', async () => {
+  session.clear();
+  await supabase.auth.signOut();
+  return true;
 });
