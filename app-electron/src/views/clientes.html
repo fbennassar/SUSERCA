@@ -5,6 +5,7 @@
     <title>SUSERCA CLIENTES</title>
     <link rel="stylesheet" href="../assets/output.css" />
     <link rel="stylesheet" href="../assets/custom.css" />
+    <script src="../scripts/authGuard.js" defer></script>
     <script src="../scripts/sidebar.js" defer></script>
     <script src="../scripts/header.js"></script>
   </head>
@@ -80,7 +81,7 @@
       </button>
 
       <button
-        onclick="window.location.href='../views/dashboard.html'"
+        onclick="window.logout()"
         target="_self"
         class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition"
       >
@@ -466,4 +467,5 @@
       </div>
     </main>
   </body>
+  <!-- <script src="../libs/sweetalert2.all.min.js"></script> -->
 </html>

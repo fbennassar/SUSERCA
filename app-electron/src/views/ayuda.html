@@ -5,6 +5,7 @@
     <title>SUSERCA AYUDA</title>
     <link rel="stylesheet" href="../assets/output.css" />
     <link rel="stylesheet" href="../assets/custom.css" />
+    <script src="../scripts/authGuard.js" defer></script>
     <script src="../scripts/sidebar.js" defer></script>
     <script src="../scripts/header.js"></script>
   </head>
@@ -263,7 +264,7 @@
             Informacion de Usuario
           </button>
           <button
-            onclick="window.location.href='../views/login.html'"
+            onclick="window.logout()"
             target="_self"
             class="text-white px-4 py-2 rounded-full bg-green-800 border border-green-700 hover:bg-orange-400 hover:cursor-pointer transition"
           >
@@ -298,4 +299,5 @@
       </div>
     </main>
   </body>
+  <!-- <script src="../libs/sweetalert2.all.min.js"></script> -->
 </html>
