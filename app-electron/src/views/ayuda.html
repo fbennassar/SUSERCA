@@ -188,8 +188,73 @@
 
     <main
       id="main-content"
-      class="mt-24 h-full overflow-auto flex-1 flex transition-all duration-300"
+      class="mt-19 h-full p-15 overflow-auto flex-1 flex transition-all duration-300 justify-center content-center"
     >
+      <div
+        class="bg-white w-full rounded-3xl max-w-6xl flex flex-row justify-between items-center"
+      >
+        <!-- Botones alineados a la izquierda, ancho fijo y texto centrado -->
+        <div class="flex flex-col gap-15 pl-10 justify-center w-full">
+          <button
+            class="border border-black flex items-center md:text-xs lg:text-lg xl:text-xl p-2 rounded-xl hover:cursor-pointer w-full"
+          >
+            <img
+              class="md:size-6 lg:size-8 xl:size-10 mr-5"
+              src="../assets/icons/ayuda/pdf.png"
+              alt="pdf"
+            />
+            <span class="text-center break-words flex-1"
+              >Manual de Usuarios</span
+            >
+          </button>
+          <button
+            class="border border-black flex items-center md:text-xs lg:text-lg xl:text-xl p-2 rounded-xl hover:cursor-pointer w-full"
+          >
+            <img
+              class="md:size-6 lg:size-8 xl:size-10 mr-5"
+              src="../assets/icons/ayuda/pdf.png"
+              alt="pdf"
+            />
+            <span class="text-center break-words flex-1">Acerca De</span>
+          </button>
+          <button
+            class="border border-black flex items-center md:text-xs lg:text-lg xl:text-xl p-2 pr-8 rounded-xl hover:cursor-pointer w-full"
+          >
+            <img
+              class="md:size-6 lg:size-8 xl:size-10 mr-5"
+              src="../assets/icons/ayuda/pdf.png"
+              alt="pdf"
+            />
+            <span class="text-center break-words flex-1"
+              >Preguntas Frecuentes</span
+            >
+          </button>
+        </div>
+        <!-- Grid de imágenes alineado a la derecha -->
+        <div
+          class="grid grid-cols-2 grid-rows-2 gap-0.5 size-100 lg:size-125 xl:size-150 mr-12 p-5 min-w-100 lg:min-w-125 xl:min-w-150"
+        >
+          <!-- Imagen grande a la izquierda (ocupa dos filas) -->
+          <img
+            src="../assets/img/almacen-1.jpg"
+            alt="Foto SUSERCA"
+            class="row-span-2 col-span-1 w-full h-full object-cover rounded-l-2xl"
+          />
+          <!-- Imagen pequeña arriba derecha -->
+          <img
+            src="../assets/img/industria-1.jpeg"
+            alt="Foto SUSERCA"
+            class="row-span-1 col-span-1 w-full h-full object-cover rounded-tr-2xl"
+          />
+          <!-- Imagen pequeña abajo derecha -->
+          <img
+            src="../assets/img/oficina-1.jpg"
+            alt="Foto SUSERCA"
+            class="row-span-1 col-span-1 w-full h-full object-cover rounded-br-2xl"
+          />
+        </div>
+      </div>
+
       <!--Pop up de usuario-->
       <div id="user-modal" class="absolute right-3.5 top-20 hidden">
         <div class="bg-zinc-400 rounded-xl flex flex-col gap-2 p-2 text-xl">
