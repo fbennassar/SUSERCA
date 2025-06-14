@@ -1,15 +1,19 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="UTF-8" />
     <title>SUSERCA DASHBOARD</title>
     <link rel="stylesheet" href="../assets/output.css" />
     <link rel="stylesheet" href="../assets/custom.css" />
+    <script src="../scripts/authGuard.js" defer></script>
     <script src="../scripts/sidebar.js" defer></script>
+    <script src="../scripts/header.js"></script>
   </head>
 
   <body class="min-h-screen bg-zinc-200 flex flex-col">
-    <header class="bg-white flex flex-row gap-2 min-w-full justify-between">
+    <header
+      class="fixed top-0 left-0 w-full z-50 bg-white flex flex-row gap-2 min-w-full justify-between"
+    >
       <div class="flex flex-row">
         <a href="../views/dashboard.html" class="flex flex-row">
           <div>
@@ -33,158 +37,175 @@
         </div>
       </div>
       <div class="flex flex-row gap-5">
-        <div class="flex items-center">
-          <img
-            src="../assets/icons/header/settings.png"
-            alt="settings engranaje"
-            height="50"
-            width="50"
-          />
-        </div>
+        <button id="settingsicon" class="hover:cursor-pointer">
+          <div class="flex items-center">
+            <img
+              src="../assets/icons/header/settings.png"
+              alt="settings engranaje"
+              height="50"
+              width="50"
+            />
+          </div>
+        </button>
         <div class="flex items-center pr-2">
-          <img
-            src="../assets/icons/header/user.png"
-            alt="user icon"
-            height="50"
-            width="50"
-          />
+          <button id="usericon" class="hover:cursor-pointer">
+            <img
+              src="../assets/icons/header/user.png"
+              alt="user icon"
+              height="50"
+              width="50"
+            />
+          </button>
         </div>
       </div>
     </header>
 
-    <main class="flex-1 flex">
-      <div
-        id="sidebar"
-        class="bg-green-800 flex flex-col gap-2.5 transition-all duration-300"
+    <div
+      id="sidebar"
+      class="fixed left-0 top-19 h-full bg-green-800 flex flex-col gap-2.5 transition-all duration-300"
+    >
+      <button
+        type="button"
+        onclick="toggleSidebar()"
+        class="ml-2.5 mt-2.5 pl-1.25"
       >
-        <button
-          type="button"
-          onclick="toggleSidebar()"
-          class="ml-2.5 mt-2.5 pl-1.25"
+        <div
+          class="p-2.5 w-16 border border-white rounded-xl shadow-lg hover:border-orange-400/90 hover:bg-orange-500/90 hover:cursor-pointer transition"
         >
-          <div
-            class="p-2.5 w-16 border border-white rounded-xl shadow-lg hover:border-orange-400/90 hover:bg-orange-500/90 hover:cursor-pointer transition"
-          >
-            <img
-              src="../assets/icons/sideBar/toggle.png"
-              alt="toggle icon"
-              class="w-10 h-10 flex-shrink-0"
-            />
-          </div>
-        </button>
+          <img
+            src="../assets/icons/sideBar/toggle.png"
+            alt="toggle icon"
+            class="w-10 h-10 flex-shrink-0"
+          />
+        </div>
+      </button>
 
-        <button
-          onclick="window.location.href='../views/dashboard.html'"
-          target="_self"
-          class="border-4 border-orange-500 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition"
-        >
-          <div class="flex flex-row items-center">
-            <img
-              src="../assets/icons/sideBar/dashboard.png"
-              alt="dashboard icon"
-              class="ml-1.25 p-1.25 h-15 w-15"
-            />
-            <p class="pl-5 text-2xl pr-24 sidebar-text">Dashboard</p>
-          </div>
-        </button>
+      <button
+        onclick="window.location.href='../views/dashboard.html'"
+        target="_self"
+        class="border-4 border-orange-500 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition"
+      >
+        <div class="flex flex-row items-center">
+          <img
+            src="../assets/icons/sideBar/dashboard.png"
+            alt="dashboard icon"
+            class="ml-1.25 p-1.25 h-15 w-15"
+          />
+          <p class="pl-5 text-2xl pr-24 sidebar-text">Dashboard</p>
+        </div>
+      </button>
 
-        <button
-          onclick="window.location.href='../views/inventario.html'"
-          target="_self"
-          class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition"
-        >
-          <div class="flex flex-row items-center">
-            <img
-              src="../assets/icons/sideBar/inventario.png"
-              alt="dashboard icon"
-              class="ml-1.25 p-1.25 h-15 w-15"
-            />
-            <p class="pl-5 text-2xl pr-24 sidebar-text">Inventario</p>
-          </div>
-        </button>
+      <button
+        onclick="window.location.href='../views/inventario.html'"
+        target="_self"
+        class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition"
+      >
+        <div class="flex flex-row items-center">
+          <img
+            src="../assets/icons/sideBar/inventario.png"
+            alt="dashboard icon"
+            class="ml-1.25 p-1.25 h-15 w-15"
+          />
+          <p class="pl-5 text-2xl pr-24 sidebar-text">Inventario</p>
+        </div>
+      </button>
 
-        <button
-          onclick="window.location.href='../views/clientes.html'"
-          target="_self"
-          class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition"
-        >
-          <div class="flex flex-row items-center">
-            <img
-              src="../assets/icons/SideBar/clientes.png"
-              alt="dashboard icon"
-              class="ml-1.25 p-1.25 h-15 w-15"
-            />
-            <p class="pl-5 text-2xl sidebar-text">Clientes</p>
-          </div>
-        </button>
+      <button
+        onclick="window.location.href='../views/clientes.html'"
+        target="_self"
+        class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition"
+      >
+        <div class="flex flex-row items-center">
+          <img
+            src="../assets/icons/SideBar/clientes.png"
+            alt="dashboard icon"
+            class="ml-1.25 p-1.25 h-15 w-15"
+          />
+          <p class="pl-5 text-2xl sidebar-text">Clientes</p>
+        </div>
+      </button>
 
-        <button
-          onclick="window.location.href='../views/proveedores.html'"
-          target="_self"
-          class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition"
-        >
-          <div class="flex flex-row items-center">
-            <img
-              src="../assets/icons/sideBar/proveedores.png"
-              alt="dashboard icon"
-              class="ml-1.25 p-1.25 h-15 w-15"
-            />
-            <p class="pl-5 text-2xl pr-24 sidebar-text">Proveedores</p>
-          </div>
-        </button>
+      <button
+        onclick="window.location.href='../views/proveedores.html'"
+        target="_self"
+        class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition"
+      >
+        <div class="flex flex-row items-center">
+          <img
+            src="../assets/icons/sideBar/proveedores.png"
+            alt="dashboard icon"
+            class="ml-1.25 p-1.25 h-15 w-15"
+          />
+          <p class="pl-5 text-2xl pr-24 sidebar-text">Proveedores</p>
+        </div>
+      </button>
 
-        <button
-          onclick="window.location.href='../views/finanzas.html'"
-          target="_self"
-          class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition"
-        >
-          <div class="flex flex-row items-center">
-            <img
-              src="../assets/icons/sideBar/finanzas.png"
-              alt="dashboard icon"
-              class="ml-1.25 p-1.25 h-15 w-15"
-            />
-            <p class="pl-5 text-2xl pr-24 sidebar-text">Finanzas</p>
-          </div>
-        </button>
+      <button
+        onclick="window.location.href='../views/finanzas.html'"
+        target="_self"
+        class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition"
+      >
+        <div class="flex flex-row items-center">
+          <img
+            src="../assets/icons/sideBar/finanzas.png"
+            alt="dashboard icon"
+            class="ml-1.25 p-1.25 h-15 w-15"
+          />
+          <p class="pl-5 text-2xl pr-24 sidebar-text">Finanzas</p>
+        </div>
+      </button>
 
-        <button
-          onclick="window.location.href='../views/usuarios.html'"
-          target="_self"
-          class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition"
-        >
-          <div class="flex flex-row items-center">
-            <img
-              src="../assets/icons/sideBar/usuarios.png"
-              alt="dashboard icon"
-              class="ml-1.25 p-1.25 h-15 w-15"
-            />
-            <p class="pl-5 text-2xl pr-24 sidebar-text">Usuarios</p>
-          </div>
-        </button>
+      <button
+        onclick="window.location.href='../views/usuarios.html'"
+        target="_self"
+        class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition"
+      >
+        <div class="flex flex-row items-center">
+          <img
+            src="../assets/icons/sideBar/usuarios.png"
+            alt="dashboard icon"
+            class="ml-1.25 p-1.25 h-15 w-15"
+          />
+          <p class="pl-5 text-2xl pr-24 sidebar-text">Usuarios</p>
+        </div>
+      </button>
 
-        <button
-          onclick="window.location.href='../views/ayuda.html'"
-          target="_self"
-          class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition"
-        >
-          <div class="flex flex-row items-center">
-            <img
-              src="../assets/icons/sideBar/ayuda.png"
-              alt="dashboard icon"
-              class="ml-1.25 p-1.25 h-15 w-15"
-            />
-            <p class="pl-5 text-2xl pr-24 sidebar-text">Ayuda</p>
-          </div>
-        </button>
-      </div>
+      <button
+        onclick="window.location.href='../views/ayuda.html'"
+        target="_self"
+        class="border-2 border-green-700 rounded-xl mx-2.5 text-white font-bold shadow-lg hover:bg-orange-500/90 hover:border-orange-400/90 hover:cursor-pointer transition"
+      >
+        <div class="flex flex-row items-center">
+          <img
+            src="../assets/icons/sideBar/ayuda.png"
+            alt="dashboard icon"
+            class="ml-1.25 p-1.25 h-15 w-15"
+          />
+          <p class="pl-5 text-2xl pr-24 sidebar-text">Ayuda</p>
+        </div>
+      </button>
+    </div>
 
-      <!--Cartas del centro-->
-      <div class="flex flex-1 justify-center items-center w-full">
+    <main
+      id="main-content"
+      class="mt-24 h-full overflow-auto flex-1 flex flex-col transition-all duration-300"
+    >
+      <!--Cartas del centro y mensaje de bienvenida-->
+
+      <div class="flex flex-1 flex-col justify-center items-start w-full">
+        <h1 class="text-4xl font-bold pb-5 text-center w-full">
+          ¡Bienvenido, <span id="dashboard-username"></span>
+        </h1>
+        <p class="text-xl font-bold text-gray-600 text-center mt-1 w-full">
+          Seleccione un modulo para empezar
+        </p>
         <div
           class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 p-10 max-w-6xl w-full mx-auto"
         >
-          <div class="card flex-row items-center justify-center gap-4">
+          <button
+            onclick="window.location.href='../views/inventario.html'"
+            class="card flex-row items-center justify-center gap-4 cursor-pointer hover:scale-110 transition"
+          >
             <img
               src="../assets/icons/dashboard/inventario.png"
               alt="Inventario icon"
@@ -192,14 +213,18 @@
               width="70"
             />
             <div class="flex flex-col max-w-[180px]">
-              <span class="text-2xl">Inventario</span>
-              <span class="text-lg text-gray-600 font-bold mt-1 break-words"
+              <span class="text-2xl text-left">Inventario</span>
+              <span
+                class="text-lg text-gray-600 font-bold mt-1 break-words text-left"
                 >Gestione sus productos y stock</span
               >
             </div>
-          </div>
+          </button>
 
-          <div class="card flex-row items-center justify-center gap-4">
+          <button
+            onclick="window.location.href='../views/clientes.html'"
+            class="card flex-row items-center justify-center gap-4 cursor-pointer hover:scale-110 transition"
+          >
             <img
               src="../assets/icons/dashboard/clientes.png"
               alt="Clientes icon"
@@ -207,14 +232,17 @@
               width="70"
             />
             <div class="flex flex-col max-w-[180px]">
-              <span class="text-2xl">Clientes</span>
-              <span class="text-lg text-gray-600 font-bold mt-1"
+              <span class="text-2xl text-left">Clientes</span>
+              <span class="text-lg text-gray-600 font-bold mt-1 text-left"
                 >Administre la informacion de sus clientes</span
               >
             </div>
-          </div>
+          </button>
 
-          <div class="card flex-row items-center justify-center gap-4">
+          <button
+            onclick="window.location.href='../views/proveedores.html'"
+            class="card flex-row items-center justify-center gap-4 cursor-pointer hover:scale-110 transition"
+          >
             <img
               src="../assets/icons/dashboard/proveedores.png"
               alt="Proveedores icon"
@@ -222,14 +250,17 @@
               width="70"
             />
             <div class="flex flex-col max-w-[180px]">
-              <span class="text-2xl">Proveedores</span>
-              <span class="text-lg text-gray-600 font-bold mt-1"
+              <span class="text-2xl text-left">Proveedores</span>
+              <span class="text-lg text-gray-600 font-bold mt-1 text-left"
                 >Controle sus Proveedores</span
               >
             </div>
-          </div>
+          </button>
 
-          <div class="card flex-row items-center justify-center gap-4">
+          <button
+            onclick="window.location.href='../views/finanzas.html'"
+            class="card flex-row items-center justify-center gap-4 cursor-pointer hover:scale-110 transition"
+          >
             <img
               src="../assets/icons/dashboard/finanzas.png"
               alt="Finanzas icon"
@@ -237,14 +268,17 @@
               width="70"
             />
             <div class="flex flex-col max-w-[180px]">
-              <span class="text-2xl">Finanzas</span>
-              <span class="text-lg text-gray-600 font-bold mt-1"
+              <span class="text-2xl text-left">Finanzas</span>
+              <span class="text-lg text-gray-600 font-bold mt-1 text-left"
                 >Gestione ordenes de compra/venta</span
               >
             </div>
-          </div>
+          </button>
 
-          <div class="card flex-row items-center justify-center gap-4">
+          <button
+            onclick="window.location.href='../views/usuarios.html'"
+            class="card flex-row items-center justify-center gap-4 cursor-pointer hover:scale-110 transition"
+          >
             <img
               src="../assets/icons/dashboard/usuarios.png"
               alt="Usuarios icon"
@@ -252,14 +286,17 @@
               width="70"
             />
             <div class="flex flex-col max-w-[180px]">
-              <span class="text-2xl">Usuarios</span>
-              <span class="text-lg text-gray-600 font-bold mt-1"
+              <span class="text-2xl text-left">Usuarios</span>
+              <span class="text-lg text-gray-600 font-bold mt-1 text-left"
                 >Gestione a los usuarios del sistema</span
               >
             </div>
-          </div>
+          </button>
 
-          <div class="card flex-row items-center justify-center gap-4">
+          <button
+            onclick="window.location.href='../views/ayuda.html'"
+            class="card flex-row items-center justify-center gap-4 cursor-pointer hover:scale-110 transition"
+          >
             <img
               src="../assets/icons/dashboard/ayuda.png"
               alt="Ayuda icon"
@@ -267,14 +304,59 @@
               width="70"
             />
             <div class="flex flex-col max-w-[180px]">
-              <span class="text-2xl">Ayuda</span>
-              <span class="text-lg text-gray-600 font-bold mt-1"
+              <span class="text-2xl text-left">Ayuda</span>
+              <span class="text-lg text-gray-600 font-bold mt-1 text-left"
                 >Informacion y manual de usuarios</span
               >
             </div>
-          </div>
+          </button>
+        </div>
+      </div>
+
+      <!--Pop up de usuario-->
+      <div id="user-modal" class="absolute right-3.5 top-20 hidden">
+        <div class="bg-zinc-400 rounded-xl flex flex-col gap-2 p-2 text-xl">
+          <button
+            class="text-white px-4 py-2 rounded-full bg-green-800 border border-green-700 hover:bg-orange-400 hover:cursor-pointer transition"
+          >
+            Informacion de Usuario
+          </button>
+          <button
+            onclick="window.location.href='../views/login.html'"
+            target="_self"
+            class="text-white px-4 py-2 rounded-full bg-green-800 border border-green-700 hover:bg-orange-400 hover:cursor-pointer transition"
+          >
+            Cerrar Sesion
+          </button>
+          <button
+            onclick="window.electronAPI.closeApp()"
+            class="text-white px-4 py-2 rounded-full bg-green-800 border border-green-700 hover:bg-orange-400 hover:cursor-pointer transition"
+          >
+            Salir
+          </button>
+        </div>
+      </div>
+
+      <!--Pop up de settings-->
+      <div id="settings-modal" class="absolute right-21 top-20 hidden">
+        <div class="bg-zinc-400 rounded-xl flex flex-col gap-2 p-2 text-xl">
+          <button
+            onclick=""
+            class="text-white px-4 py-2 rounded-full bg-green-800 border border-green-700 hover:bg-orange-400 hover:cursor-pointer transition"
+          >
+            Generar Reporte
+          </button>
+          <button
+            onclick=""
+            target="_self"
+            class="text-white px-4 py-2 rounded-full bg-green-800 border border-green-700 hover:bg-orange-400 hover:cursor-pointer transition"
+          >
+            Cambiar Contraseña
+          </button>
         </div>
       </div>
     </main>
   </body>
+  <script src="../scripts/dashboard.js"></script>
+  <!-- <script src="../libs/sweetalert2.all.min.js"></script> -->
 </html>
