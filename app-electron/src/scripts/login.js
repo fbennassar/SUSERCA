@@ -23,6 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
         Swal.fire('Error', result.error, 'error');
       } else {
         Swal.fire('Login exitoso', '', 'success').then(() => {
+          if (result.profile) {
+            localStorage.setItem('user', result.profile.nombre);
+          } else {
+            localStorage.setItem('user', result.user.email);
+          }
           window.location.href = '../views/dashboard.html';
         });
       }
