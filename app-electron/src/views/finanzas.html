@@ -59,6 +59,7 @@
       </div>
     </header>
 
+    <!--SideBar-->
     <div
       id="sidebar"
       class="fixed left-0 top-19 h-full bg-green-800 flex flex-col gap-2.5 transition-all duration-300"
@@ -187,8 +188,679 @@
 
     <main
       id="main-content"
-      class="mt-24 h-full overflow-auto flex-1 flex transition-all duration-300"
+      class="mt-16 h-full overflow-auto flex flex-col justify-center items-center transition-all duration-300 px-4 py-4"
     >
+      <!--Crear orden-->
+      <h1 class="text-3xl font-bold pt-2 pb-1 text-center">Crear orden</h1>
+      <div
+        class="bg-white w-full rounded-xl pt-4 pb-4 mb-3 px-4 max-w-6xl"
+        style="box-sizing: border-box"
+      >
+        <form class="w-full">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <h1 class="pl-2 text-base">Tipo de orden</h1>
+              <select
+                name="TipoOrden"
+                id="TipoOrden"
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
+                onchange="
+              this.classList.toggle('text-gray-400', this.value === '');
+              this.classList.toggle('text-black', this.value !== '');
+            "
+              >
+                <option class="text-black font-bold" value="" disabled selected>
+                  Seleccione un tipo de orden
+                </option>
+
+                <option class="text-black" value="">Venta</option>
+                <option class="text-black" value="">Compra</option>
+              </select>
+            </div>
+
+            <div>
+              <h1 class="pl-2 text-base">RIF</h1>
+              <input
+                type="text"
+                placeholder="J-12345678-0"
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
+              />
+            </div>
+
+            <div>
+              <h1 class="pl-2 text-base">Razon social</h1>
+              <input
+                type="text"
+                placeholder="Razon social"
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
+              />
+            </div>
+
+            <div>
+              <h1 class="pl-2 text-base">Fecha de orden</h1>
+              <input
+                type="date"
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
+              />
+            </div>
+
+            <div class="col-span-1 sm:col-span-2 flex justify-end mt-1">
+              <button
+                type="submit"
+                class="bg-green-700 shadow-md text-white rounded-md px-4 py-1 font-bold hover:bg-green-800 hover:cursor-pointer transition"
+              >
+                Guardar orden
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!--Productos de la orden-->
+      <h1 class="text-3xl font-bold pt-2 pb-1 text-center">
+        Productos de la orden
+      </h1>
+
+      <div
+        class="bg-white w-full rounded-xl pt-4 pb-4 mb-3 px-4 max-w-6xl"
+        styles="box-sizing: border-box"
+      >
+        <form class="w-full">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <h1 class="pl-2 text-base">Seleccionar Productos</h1>
+              <select
+                name="Productos"
+                id="Productos"
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
+                onchange="              
+                this.classList.toggle('text-gray-400', this.value === '');
+                this.classList.toggle('text-black', this.value !== '');
+                "
+              >
+                <option class="text-black font-bold" value="" disabled selected>
+                  Seleccione un producto
+                </option>
+
+                <option class="text-black" value="">Producto 1</option>
+                <option class="text-black" value="">Producto 2</option>
+                <option class="text-black" value="">Producto 3</option>
+                <option class="text-black" value="">Producto 4</option>
+                <option class="text-black" value="">Producto 5</option>
+              </select>
+            </div>
+
+            <div>
+              <h1 class="pl-2 text-base">Cantidad</h1>
+              <input
+                type="text"
+                placeholder="Ej: 20"
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
+              />
+            </div>
+
+            <div>
+              <h1 class="invisible text-base">.</h1>
+              <div class="flex justify-end items-start h-full">
+                <button
+                  type="submit"
+                  class="bg-green-700 shadow-md text-white rounded-md px-4 py-1 font-bold hover:bg-green-800 hover:cursor-pointer transition"
+                >
+                  Añadir a orden
+                </button>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto mt-4 w-full col-span-3">
+              <table class="w-full border border-gray-300 rounded-lg bg-white">
+                <thead>
+                  <tr class="divide-x divide-gray-300 border-b border-gray-300">
+                    <th class="w-1/5 px-4 py-2">Producto</th>
+                    <th class="w-1/5 px-4 py-2">Cantidad</th>
+                    <th class="w-1/5 px-4 py-2">Precio Unitario</th>
+                    <th class="w-1/5 px-4 py-2">Sub-Total</th>
+                    <th class="w-1/5 px-4 py-2">Acciones</th>
+                  </tr>
+                </thead>
+
+                <tbody class="divide-y divide-gray-200">
+                  <tr class="divide-x divide-gray-200">
+                    <td class="text-left px-2 py-2 truncate max-w-[100px]">
+                      Producto 1
+                    </td>
+                    <td class="text-left px-2 py-2 truncate max-w-[100px]">
+                      20
+                    </td>
+                    <td class="text-left px-2 py-2 truncate max-w-[100px]">
+                      100
+                    </td>
+                    <td class="text-left px-2 py-2 truncate max-w-[100px]">
+                      2000
+                    </td>
+                    <td class="text-left px-2 py-2 truncate max-w-[100px]">
+                      si
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!--Buscar y filtrar ordenes-->
+
+      <h1 class="text-3xl font-bold pt-2 pb-1 text-center">
+        Buscar y filtrar ordenes
+      </h1>
+
+      <div
+        class="bg-white w-full rounded-xl pt-4 pb-4 mb-3 px-4 max-w-6xl"
+        styles="box-sizing: border-box"
+      >
+        <form class="w-full">
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+            <div>
+              <h1 class="pl-2 text-base">Filtrar por ID</h1>
+              <select
+                name="FiltroID"
+                id="filtro"
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
+                onchange="              
+              this.classList.toggle('text-gray-400', this.value === '');
+              this.classList.toggle('text-black', this.value !== '');"
+              >
+                <option class="font-bold text-black" disabled selected>
+                  Seleccione un ID
+                </option>
+                <option class="text-black" value="">Compra</option>
+                <option class="text-black" value="">Venta</option>
+              </select>
+            </div>
+
+            <div>
+              <h1 class="pl-2 text-base">Filtrar por tipos</h1>
+              <input
+                type="text"
+                placeholder="Ej: ......"
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
+              />
+            </div>
+
+            <div>
+              <h1 class="pl-2 text-base">Filtrar por RIF</h1>
+              <input
+                type="text"
+                placeholder="Ej: J-12345678-0"
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
+              />
+            </div>
+
+            <div>
+              <h1 class="pl-2 text-base">Filtrar por Razon social</h1>
+              <input
+                type="text"
+                placeholder="Ej: Alpeca"
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
+              />
+            </div>
+
+            <div>
+              <h1 class="pl-2 text-base">Filtrar por estatus</h1>
+              <select
+                name="Estatus"
+                id="estatus"
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
+                onchange="              
+              this.classList.toggle('text-gray-400', this.value === '');
+              this.classList.toggle('text-black', this.value !== '');"
+              >
+                <option class="text-black font-bold" value="" disabled selected>
+                  Seleccione un estatus
+                </option>
+
+                <option class="text-black" value="">.</option>
+                <option class="text-black" value="">.</option>
+              </select>
+            </div>
+
+            <div class="col-span-2 flex items-center gap-2">
+              <div class="w-full">
+                <h1 class="pl-2 text-base">Filtrar por fecha</h1>
+                <input
+                  type="date"
+                  class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
+                />
+              </div>
+              <div class="flex items-center h-full pt-4">
+                <span
+                  class="mx-2 block h-0.5 w-6 bg-gray-400 rounded-full"
+                ></span>
+              </div>
+              <div class="w-full">
+                <h1 class="invisible text-base">.</h1>
+                <input
+                  type="date"
+                  class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
+                />
+              </div>
+            </div>
+
+            <div class="flex justify-end mt-2">
+              <button
+                type="button"
+                class="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full shadow transition w-full"
+                onclick="
+                "
+              >
+                Limpiar filtro
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!--Lista de Ordenes-->
+
+      <h1 class="text-3xl font-bold pt-2 pb-1 text-center">Lista de ordenes</h1>
+
+      <div
+        class="bg-white w-full rounded-xl pt-4 pb-4 mb-3 px-4 max-w-6xl"
+        styles="box-sizing: border-box"
+      >
+        <div class="overflow-x-auto mt-4 w-full col-span-3">
+          <table class="w-full border border-gray-300 rounded-lg bg-white">
+            <thead>
+              <tr class="divide-x divide-gray-300 border-b border-gray-300">
+                <th class="w-1/5 px-4 py-2">ID</th>
+                <th class="w-1/5 px-4 py-2">Tipo</th>
+                <th class="w-1/5 px-4 py-2">RIF</th>
+                <th class="w-1/5 px-4 py-2">Razon social</th>
+                <th class="w-1/5 px-4 py-2">Monto total</th>
+                <th class="w-1/5 px-4 py-2">Monto Pagado</th>
+                <th class="w-1/5 px-4 py-2">Monto restante</th>
+                <th class="w-1/5 px-4 py-2">Fecha</th>
+                <th class="w-1/5 px-4 py-2">Estatus</th>
+                <th class="w-1/5 px-4 py-2">Acciones</th>
+              </tr>
+            </thead>
+
+            <tbody class="divide-y divide-gray-200">
+              <tr class="divide-x divide-gray-200">
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">
+                  <div class="flex gap-2 items-center justify-center">
+                    <button
+                      onclick="document.getElementById('edit-popup').classList.remove('hidden')"
+                      class="hover:cursor-pointer"
+                      title="Editar"
+                    >
+                      <img
+                        src="../assets/icons/general/edit.png"
+                        alt="edit"
+                        class="w-6 h-6"
+                      />
+                    </button>
+
+                    <button
+                      onclick="document.getElementById('delete-popup').classList.remove('hidden')"
+                      class="hover:cursor-pointer"
+                    >
+                      <img
+                        src="../assets/icons/general/delete.png"
+                        alt="delete"
+                        class="w-6 h-6"
+                      />
+                    </button>
+
+                    <button
+                      onclick="document.getElementById('pagos-popup').classList.remove('hidden')"
+                      class="hover:cursor-pointer"
+                    >
+                      <img
+                        src="../assets/icons/finanzas/pagos.png"
+                        alt="view"
+                        class="w-8 h-8"
+                      />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!--Pop up de editar orden-->
+      <div
+        id="edit-popup"
+        class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden"
+      >
+        <div
+          class="bg-white rounded-xl px-6 py-6 shadow-lg max-w-xl w-full relative"
+        >
+          <button
+            onclick="document.getElementById('edit-popup').classList.add('hidden')"
+            class="absolute top-2 right-2 text-2xl font-bold text-gray-500 hover:text-red-600"
+          >
+            &times;
+          </button>
+
+          <h1 class="text-2xl font-bold mb-4 text-start">Editar Orden</h1>
+          <form>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="flex flex-col gap-4">
+                <div>
+                  <label class="text-base pl-2" for="edit-rif">RIF</label>
+                  <input
+                    id="edit-rif"
+                    type="text"
+                    placeholder="J-12345678-0"
+                    class="bg-gray-100 w-full rounded-xl px-4 py-2 mt-1 border border-gray-300"
+                  />
+                </div>
+                <div>
+                  <label class="text-base pl-2" for="edit-razon"
+                    >Razón social</label
+                  >
+                  <input
+                    id="edit-razon"
+                    type="text"
+                    placeholder="Razón social"
+                    class="bg-gray-100 w-full rounded-xl px-4 py-2 mt-1 border border-gray-300"
+                  />
+                </div>
+                <div>
+                  <label class="text-base pl-2" for="edit-fecha"
+                    >Fecha de orden</label
+                  >
+                  <input
+                    id="edit-fecha"
+                    type="date"
+                    class="bg-gray-100 w-full rounded-xl px-4 py-2 mt-1 border border-gray-300"
+                  />
+                </div>
+              </div>
+              <div class="flex flex-col h-full">
+                <label class="text-base pl-2" for="edit-descripcion"
+                  >Descripcion (opcional)</label
+                >
+                <textarea
+                  id="edit-descripcion"
+                  type="text"
+                  placeholder="Descripción de la orden"
+                  class="bg-gray-100 w-full rounded-xl px-4 py-2 mt-1 border border-gray-300"
+                ></textarea>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-4">
+              <div class="flex flex-col sm:flex-row gap-3 items-end">
+                <div class="w-full">
+                  <label class="text-base pl-2" for="producto"
+                    >Seleccionar producto</label
+                  >
+                  <select
+                    id="producto"
+                    name="producto"
+                    class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
+                    onchange="
+                this.classList.toggle('text-gray-400', this.value === '');
+                this.classList.toggle('text-black', this.value !== '');
+                "
+                    required
+                  >
+                    <option
+                      class="text-black font-bold"
+                      value=""
+                      disabled
+                      selected
+                    >
+                      Seleccione un producto
+                    </option>
+                    <option class="text-black" value="prod1">Producto 1</option>
+                    <option class="text-black" value="prod2">Producto 2</option>
+                    <option class="text-black" value="prod3">Producto 3</option>
+                  </select>
+                </div>
+
+                <div class="w-full">
+                  <label class="text-base pl-2" for="cantidad">Cantidad</label>
+                  <input
+                    id="cantidad"
+                    type="number"
+                    min="1"
+                    placeholder="Ej: 20"
+                    class="bg-gray-100 w-full rounded-xl px-4 py-2 mt-1 border border-gray-300"
+                    required
+                  />
+                </div>
+
+                <div class="w-full flex items-end">
+                  <button
+                    type="button"
+                    class="bg-green-700 shadow-md text-white rounded-md px-4 py-2 font-bold hover:bg-green-800 hover:cursor-pointer transition w-full"
+                  >
+                    Añadir orden
+                  </button>
+                </div>
+              </div>
+
+              <div class="overflow-x-auto mt-4">
+                <table
+                  class="w-full border border-gray-300 rounded-lg bg-white"
+                >
+                  <thead>
+                    <tr
+                      class="bg-gray-100 divide-x divide-gray-300 border-b border-gray-300"
+                    >
+                      <th class="w-1/5 px-4 py-2">Producto</th>
+                      <th class="w-1/5 px-4 py-2">Cantidad</th>
+                      <th class="w-1/5 px-4 py-2">Precio Unitario</th>
+                      <th class="w-1/5 px-4 py-2">Sub-Total</th>
+                      <th class="w-1/5 px-4 py-2">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="divide-x divide-gray-200">
+                      <td class="px-4 py-2">Producto 1</td>
+                      <td class="px-4 py-2">5</td>
+                      <td class="px-4 py-2">$100</td>
+                      <td class="px-4 py-2">$500</td>
+                      <td class="px-4 py-2">.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="flex flex-col sm:flex-row justify-between gap-3 mt-4">
+                <button
+                  type="button"
+                  class="bg-green-700 shadow-md text-white rounded-md px-4 py-2 font-bold hover:bg-green-800 hover:cursor-pointer transition w-full sm:w-auto"
+                >
+                  Actualizar orden
+                </button>
+
+                <button
+                  type="button"
+                  onclick="document.getElementById('edit-popup').classList.add('hidden')"
+                  class="bg-gray-500 text-white px-4 py-2 rounded-full hover:bg-red-700 transition"
+                >
+                  Cancelar edición
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!--Pop up de Agregar pagos-->
+
+      <div
+        id="pagos-popup"
+        class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden"
+      >
+        <div
+          class="bg-white rounded-xl px-6 py-6 shadow-lg max-w-xl w-full relative"
+        >
+          <button
+            onclick="document.getElementById('pagos-popup').classList.add('hidden')"
+            class="absolute top-2 right-2 text-2xl font-bold text-gray-500 hover:text-red-600"
+          >
+            &times;
+          </button>
+
+          <h1 class="text-2xl font-bold mb-4 text-start">
+            Agregar pago a orden: {id de orden}
+          </h1>
+          <div
+            class="bg-gray-400 rounded-xl px-6 py-6 shadow-lg max-w-xl w-full relative grid grid-cols-1"
+          >
+            <label class="text-black font-bold mt-1"
+              >Razon social: {razon social}</label
+            >
+            <label class="text-black font-bold mt-1"
+              >Monto total: {monto total orden}</label
+            >
+            <label class="text-black font-bold mt-1"
+              >Monto pagado: {monto pagado orden}</label
+            >
+            <label class="text-black font-bold mt-1"
+              >Monto restante: {total - monto pagado}</label
+            >
+          </div>
+          <div class="mt-4">
+            <label class="text-base pl-2 mt-2 font-bold" for="pago-monto"
+              >Monto del pago</label
+            >
+
+            <input
+              id="pago-monto"
+              type="number"
+              min="1"
+              placeholder="Monto del pago"
+              class="bg-gray-100 w-full rounded-xl px-4 py-2 mt-1 border border-gray-300"
+            />
+          </div>
+          <div class="mt-4">
+            <label class="text-base pl-2 mt-2 font-bold">Fecha del pago</label>
+            <input
+              id="pago-fecha"
+              type="date"
+              class="bg-gray-100 w-full rounded-xl px-4 py-2 mt-1 border border-gray-300"
+            />
+          </div>
+
+          <div class="mt-4">
+            <label class="text-base pl-2 mt-2 font-bold">Tipo de Pago</label>
+            <select
+              id="pago-tipo"
+              class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
+              onchange="
+              this.classList.toggle('text-gray-400', this.value === '');
+              this.classList.toggle('text-black', this.value !== '');
+              "
+            >
+              <option class="text-black font-bold" value="" disabled selected>
+                Seleccione un tipo de pago
+              </option>
+
+              <option class="text-base text-black">Cuota</option>
+              <option class="text-base text-black">Pago completo</option>
+            </select>
+          </div>
+
+          <div>
+            <button
+              type="button"
+              class="bg-gray-400 shadow-md text-white rounded-md px-4 py-2 font-bold hover:bg-gray-700 hover:cursor-pointer transition mt-4"
+            >
+              Cancelar
+            </button>
+
+            <button
+              type="button"
+              class="bg-green-700 shadow-md text-white rounded-md px-4 py-2 font-bold hover:bg-green-800 hover:cursor-pointer transition mt-4"
+            >
+              Registrar pago
+            </button>
+          </div>
+
+          <div class="mt-4">
+            <h1 class="text-2xl font-bold mb-4 text-start">
+              Historial de Pago
+            </h1>
+
+            <table class="w-full border border-gray-300 rounded-lg bg-white">
+              <thead>
+                <tr class="bg-gray-100 border-b border-gray-300">
+                  <th class="px-4 py-2 text-left">Fecha</th>
+                  <th class="px-4 py-2 text-left">Monto</th>
+                  <th class="px-4 py-2 text-left">Método</th>
+                </tr>
+              </thead>
+              <tbody id="historial-pagos-body">
+                <tr>
+                  <td class="px-4 py-2">2024-06-15</td>
+                  <td class="px-4 py-2">$100</td>
+                  <td class="px-4 py-2">Cuota</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!--Pop up de Eliminar-->
+
+      <div
+        id="delete-popup"
+        class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden"
+      >
+        <div
+          class="bg-white rounded-xl px-6 py-6 shadow-lg max-w-xl w-full relative"
+        >
+          <button
+            onclick="document.getElementById('delete-popup').classList.add('hidden')"
+            class="absolute top-2 right-2 text-2xl font-bold text-gray-500 hover:text-red-600"
+          >
+            &times;
+          </button>
+
+          <h1 class="text-2xl font-bold mb-4 text-start">Eliminar Orden</h1>
+          <div
+            class="bg-gray-400 rounded-xl px-6 py-6 shadow-lg max-w-xl w-full relative grid grid-cols-1"
+          >
+            <label class="text-black mt-1 text-start text-2xl"
+              >¿Estas seguro de que deseas eliminar la orden {ID orden}?</label
+            >
+            <div class="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                class="bg-white shadow-md text-black rounded-md px-4 py-2 font-bold hover:bg-gray-300 hover:cursor-pointer transition mt-4"
+              >
+                Cancelar
+              </button>
+
+              <button
+                type="button"
+                class="bg-red-600 shadow-md text-white rounded-md px-4 py-2 font-bold hover:bg-red-700 hover:cursor-pointer transition mt-4"
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!--Pop up de usuario-->
       <div id="user-modal" class="absolute right-3.5 top-20 hidden">
         <div class="bg-zinc-400 rounded-xl flex flex-col gap-2 p-2 text-xl">

@@ -225,11 +225,13 @@
               this.classList.toggle('text-black', this.value !== '');
             "
               >
-                <option value="" disabled selected>Rol...</option>
-                <option value="rol1">Visualizador</option>
-                <option value="rol2">Moderador</option>
-                <option value="rol3">Gerente</option>
-                <option value="rol4">Administrador</option>
+                <option class="text-black font-bold" value="" disabled selected>
+                  Rol...
+                </option>
+                <option class="text-black" value="rol1">Visualizador</option>
+                <option class="text-black" value="rol2">Moderador</option>
+                <option class="text-black" value="rol3">Gerente</option>
+                <option class="text-black" value="rol4">Administrador</option>
               </select>
             </div>
             <div>
@@ -306,7 +308,7 @@
         class="bg-white w-full rounded-xl pt-4 pb-4 mb-3 px-4 max-w-6xl"
         style="box-sizing: border-box"
       >
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto mt-4 w-full col-span-3">
           <table class="table-fixed w-full">
             <thead>
               <tr class="divide-x divide-gray-300 border-b border-gray-300">
