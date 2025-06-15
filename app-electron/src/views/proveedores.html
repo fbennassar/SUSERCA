@@ -188,8 +188,94 @@
 
     <main
       id="main-content"
-      class="mt-24 h-full overflow-auto flex-1 flex transition-all duration-300"
+      class="mt-16 h-full overflow-auto flex flex-col justify-center items-center transition-all duration-300 px-4 py-4"
     >
+      <div
+        class="bg-white w-full rounded-xl mt-4 pt-4 pb-4 mb-3 px-4 max-w-6xl"
+        style="box-sizing: border-box"
+      >
+        <form class="w-full">
+          <div class="flex items-end gap-2">
+            <div class="flex-1">
+              <h1 class="pl-2 text-base">Buscar Proveedor</h1>
+              <input
+                type="text"
+                placeholder="Razon Social, RIF..."
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
+              />
+            </div>
+            <button
+              type="reset"
+              class="bg-gray-500 shadow-md text-white rounded-full px-4 py-1 font-bold hover:bg-gray-700 hover:cursor-pointer transition"
+            >
+              Limpiar Filtros
+            </button>
+            <button
+              onclick="document.getElementById('add-modal').classList.remove('hidden')"
+              type="button"
+              class="bg-green-700 shadow-md text-white rounded-full px-4 py-1 font-bold hover:bg-green-800 hover:cursor-pointer transition"
+            >
+              + Agregar Proveedor
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="w-full max-w-6xl mx-auto flex justify-start mt-2">
+        <button
+          class="bg-green-700 border border-green-700 text-white rounded-full px-15 py-1 font-bold shadow-md hover:bg-green-800 hover:cursor-pointer transition"
+        >
+          Imprimir Reporte
+        </button>
+      </div>
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 py-6 max-w-6xl w-full mx-auto"
+      >
+        <div
+          class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
+        >
+          <!-- Contenedor de Imagen -->
+          <div
+            class="w-full h-35 bg-gray-200 flex items-center justify-center border-b border-gray-300"
+          >
+            <img
+              src="../assets/img/proveedores/proveedor.jpg"
+              alt="Inventario icon"
+              class="w-full h-full object-fill rounded-t-lg"
+            />
+          </div>
+          <!-- Información del producto -->
+          <div class="p-4">
+            <h3 class="text-lg font-medium text-gray-800 mb-1">Razon Social</h3>
+            <p class="text-base font-semibold text-gray-900 mt-2">RIF</p>
+
+            <!-- Acciones abajo a la derecha -->
+            <div class="flex justify-end gap-3 mt-4">
+              <!-- Icono de Editar -->
+              <button
+                class="hover:cursor-pointer"
+                onclick="document.getElementById('edit-modal').classList.remove('hidden')"
+              >
+                <img
+                  class="size-6"
+                  src="../assets/icons/general/edit.png"
+                  alt="edit"
+                />
+              </button>
+              <!-- Icono de Eliminar -->
+              <button
+                class="hover:cursor-pointer"
+                onclick="document.getElementById('delete-popup').classList.remove('hidden')"
+              >
+                <img
+                  class="size-7"
+                  src="../assets/icons/general/delete.png"
+                  alt="delete"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       <!--Pop up de usuario-->
       <div id="user-modal" class="absolute right-3.5 top-20 hidden">
         <div class="bg-zinc-400 rounded-xl flex flex-col gap-2 p-2 text-xl">
@@ -230,6 +316,151 @@
           >
             Cambiar Contraseña
           </button>
+        </div>
+      </div>
+
+      <div
+        id="add-modal"
+        class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden"
+      >
+        <div
+          class="bg-white rounded-xl px-4 pb-4 shadow-lg max-w-sm w-full relative"
+        >
+          <h1 class="text-3xl font-bold my-4">Agregar Proveedor</h1>
+          <div class="bg-zinc-200 rounded-xl py-3 px-1.5">
+            <form class="flex flex-col gap-4">
+              <div>
+                <h1 class="pl-1">Nombre del Proveedor</h1>
+                <input
+                  type="text"
+                  class="border border-black shadow-md rounded-full bg-white w-70"
+                />
+              </div>
+              <div>
+                <h1 class="pl-1">RIF</h1>
+                <input
+                  type="text"
+                  class="border border-black shadow-md rounded-full bg-white w-60"
+                />
+              </div>
+              <div>
+                <div class="pl-1 flex flex-row">
+                  <h1>Cargar Imagen</h1>
+                  <button class="hover:cursor-pointer">
+                    <img
+                      class="size-6 ml-5 mb-1"
+                      src="../assets/icons/general/folder.png"
+                      alt="folder"
+                    />
+                  </button>
+                </div>
+                <input
+                  type="text"
+                  class="border border-black shadow-md rounded-full bg-white w-full"
+                />
+              </div>
+              <div class="flex justify-center gap-4 pb-2 my-2">
+                <button
+                  onclick="document.getElementById('add-modal').classList.add('hidden')"
+                  class="px-4 py-2 rounded-full bg-white shadow-md hover:bg-gray-300 hover:cursor-pointer transition"
+                >
+                  Cancelar
+                </button>
+                <button
+                  class="px-4 py-2 rounded-full bg-green-700 text-white shadow-md hover:bg-green-800 hover:cursor-pointer transition"
+                >
+                  Aceptar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="edit-modal"
+        class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden"
+      >
+        <div
+          class="bg-white rounded-xl px-4 pb-4 shadow-lg max-w-sm w-full relative"
+        >
+          <h1 class="text-3xl font-bold my-4">Editar Proveedor</h1>
+          <div class="bg-zinc-200 rounded-xl py-3 px-1.5">
+            <form class="flex flex-col gap-4">
+              <div>
+                <h1 class="pl-1">Nombre del Proveedor</h1>
+                <input
+                  type="text"
+                  class="border border-black shadow-md rounded-full bg-white w-70"
+                />
+              </div>
+              <div>
+                <h1 class="pl-1">RIF</h1>
+                <input
+                  type="text"
+                  class="border border-black shadow-md rounded-full bg-white w-60"
+                />
+              </div>
+              <div>
+                <div class="pl-1 flex flex-row">
+                  <h1>Cargar Imagen</h1>
+                  <button class="hover:cursor-pointer">
+                    <img
+                      class="size-6 ml-5 mb-1"
+                      src="../assets/icons/general/folder.png"
+                      alt="folder"
+                    />
+                  </button>
+                </div>
+                <input
+                  type="text"
+                  class="border border-black shadow-md rounded-full bg-white w-full"
+                />
+              </div>
+              <div class="flex justify-center gap-4 pb-2 my-2">
+                <button
+                  onclick="document.getElementById('edit-modal').classList.add('hidden')"
+                  class="px-4 py-2 rounded-full bg-white shadow-md hover:bg-gray-300 hover:cursor-pointer transition"
+                >
+                  Cancelar
+                </button>
+                <button
+                  class="px-4 py-2 rounded-full bg-green-700 text-white shadow-md hover:bg-green-800 hover:cursor-pointer transition"
+                >
+                  Aceptar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div
+        id="delete-popup"
+        class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden"
+      >
+        <div
+          class="bg-white rounded-xl px-4 pb-4 shadow-lg max-w-sm w-full relative"
+        >
+          <h1 class="text-3xl text-center font-bold my-4">Eliminar Proveedor</h1>
+          <div class="bg-zinc-200 rounded-xl">
+            <h1 class="pt-2 pl-2 text-center text-xl">
+              Estas seguro de que deseas eliminar este proveedor?
+            </h1>
+            <div class="flex justify-center gap-4 pb-2 my-2">
+              <button
+                onclick="document.getElementById('delete-popup').classList.add('hidden')"
+                class="px-4 py-2 rounded-full bg-white hover:bg-gray-300 hover:cursor-pointer transition"
+              >
+                Cancelar
+              </button>
+              <button
+                onclick=""
+                class="px-4 py-2 rounded-full bg-red-600 text-white hover:bg-red-700 hover:cursor-pointer transition"
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </main>
