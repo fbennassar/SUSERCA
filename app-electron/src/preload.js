@@ -8,4 +8,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getProfile: (userId) => ipcRenderer.invoke('auth:getProfile', userId),
   getRol: () => ipcRenderer.invoke('rol:getRol'),
   signOut: () => ipcRenderer.invoke('auth:signOut'),
+  signOutAndClear: () => ipcRenderer.invoke('usuarios:logout'),
 });

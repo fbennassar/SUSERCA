@@ -40,3 +40,19 @@ exports.getProfile = async (userId) => {
     throw error;
   }
 };
+
+exports.getAllProfiles = async () => {
+  if (!supabase) {
+    throw new Error('Cliente no inicializado por falta de credenciales.');
+  }
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*');
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error('Error al obtener todos los perfiles:', error);
+    throw error;
+  }
+}

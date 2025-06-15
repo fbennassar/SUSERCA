@@ -67,6 +67,13 @@ ipcMain.handle('auth:getProfile', async () => {
   return profile ? { profile, error: null } : { profile: null, error: 'No hay perfil en sesión' };
 });
 
+ipcMain.handle('users:getAllProfiles', async () => {
+  if (!supabase) {
+    console.error('El cliente Supabase no ha sido inicializado');
+    return { error: 'Cliente Supabase no inicializado' };
+  }
+});
+
 ipcMain.handle('usuarios:logout', async () => {
   session.clear();
   await supabase.auth.signOut();
