@@ -261,6 +261,7 @@
             <div>
               <h1 class="pl-2 text-base">Nombre</h1>
               <input
+                id="filterNombre"
                 type="text"
                 placeholder="Ej: Jose"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
@@ -282,6 +283,7 @@
             </div>
             <div class="col-span-1 sm:col-span-2 flex justify-end mt-1">
               <button
+                id="limpiarFiltros"
                 type="reset"
                 class="bg-gray-500 shadow-md text-white rounded-full px-4 py-1 font-bold hover:bg-gray-700 hover:cursor-pointer transition"
               >
@@ -303,51 +305,15 @@
           <table class="table-fixed w-full">
             <thead>
               <tr class="divide-x divide-gray-300 border-b border-gray-300">
-                <th class="text-left px-2 py-2">ID</th>
+                <!-- <th class="text-left px-2 py-2">ID</th> -->
                 <th class="text-left px-2 py-2">Nombre</th>
                 <th class="text-left px-2 py-2">Email</th>
                 <th class="text-left px-2 py-2">Rol</th>
                 <th class="text-left px-2 py-2">Acciones</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-gray-200">
-              <tr class="divide-x divide-gray-200">
-                <td class="text-left px-2 py-2 truncate max-w-[100px]">
-                  1234645
-                </td>
-                <td class="text-left px-2 py-2 truncate max-w-[120px]">Fran</td>
-                <td class="text-left px-2 py-2 truncate max-w-[180px]">
-                  aksjdfk@jaskdljfk.com
-                </td>
-                <td class="text-left px-2 py-2 truncate max-w-[100px]">
-                  Mamador
-                </td>
-                <td class="text-left px-2 py-2 truncate max-w-[100px]">
-                  <div class="flex gap-2 items-center justify-center">
-                    <button
-                      onclick="document.getElementById('edit-popup').classList.remove('hidden')"
-                      class="hover:cursor-pointer"
-                    >
-                      <img
-                        class="h-10 w-10"
-                        src="../assets/icons/general/edit.png"
-                        alt="edit"
-                      />
-                    </button>
-                    <button
-                      onclick="document.getElementById('delete-popup').classList.remove('hidden')"
-                      class="hover:cursor-pointer"
-                    >
-                      <img
-                        class="h-12 w-12"
-                        src="../assets/icons/general/delete.png"
-                        alt="delete"
-                      />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <!-- ...más filas aquí... -->
+            <tbody id="user-list-body" class="divide-y divide-gray-200">
+              
             </tbody>
           </table>
         </div>
@@ -390,7 +356,7 @@
                   <h1 class="pl-2 text-base">Rol</h1>
                   <select
                     name="rol"
-                    id="selectRol"
+                    id="selectRolEdit"
                     class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
                     onchange="
                       this.classList.toggle('text-gray-400', this.value === '');
@@ -492,6 +458,14 @@
           </button>
         </div>
       </div>
+      <div id="modalCorreo" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden">
+        <div class="bg-zinc-200 rounded-xl pt-4 pb-4 ml-44 mx-25 mb-3 px-4 max-w-xl relative">
+            <button onclick="document.getElementById('modalCorreo').classList.add('hidden')" class="absolute text-2xl font-extrabold hover:cursor-pointer right-5 top-3">X</button>
+            <div class="bg-white p-5 rounded-2xl">
+                <p id="correoCompleto" class="text-xl"></p>
+            </div>
+        </div>
+    </div>
     </main>
   </body>
   <script src="../scripts/usuarios.js" defer></script>

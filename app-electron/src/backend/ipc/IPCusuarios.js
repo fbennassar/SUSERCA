@@ -67,10 +67,17 @@ ipcMain.handle('auth:getProfile', async () => {
   return profile ? { profile, error: null } : { profile: null, error: 'No hay perfil en sesión' };
 });
 
-ipcMain.handle('users:getAllProfiles', async () => {
+ipcMain.handle('users:getAllProfiles', async (event, nombreFilter, rolFilter) => {
   if (!supabase) {
     console.error('El cliente Supabase no ha sido inicializado');
     return { error: 'Cliente Supabase no inicializado' };
+  }
+   try {
+    const usersList = await usuarios.getAllProfiles(nombreFilter, rolFilter);
+    return { users: usersList, error: null };
+  } catch (error) {
+    console.error('Error en IPC usuarios:getAllProfiles:', error);
+    return { users: null, error: error.message };
   }
 });
 
