@@ -45,22 +45,9 @@ ipcMain.handle('usuarios:login', async (event, { email, password }) => {
 
 
 ipcMain.handle('auth:getUser', async () => {
-  if(!supabase) {
-    console.error('El cliente no ha sido inicializado')
-    return null;
-  }
-  try {
-    const {data: { user }, error} = await supabase.auth.getUser();
-    if (error) {
-      console.error('Error al obtener el usuario:', error.message);
-      return null;
-    }
-    return user;
-  } catch(e) {
-    console.error('Error al obtener el usuario:'. e);
-    return null;
-  }
-})
+  // Devuelve el usuario guardado en la sesión
+  return session.getUser();
+});
 
 ipcMain.handle('auth:getProfile', async () => {
   const profile = session.getProfile();
