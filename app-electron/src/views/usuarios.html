@@ -190,6 +190,56 @@
       id="main-content"
       class="mt-16 h-full overflow-auto flex flex-col justify-center items-center transition-all duration-300 px-4 py-4"
     >
+      <!-- Sección de Invitación de Usuario -->
+      <h1 class="text-3xl font-bold pt-2 pb-1 text-center">
+        Invitar Nuevo Usuario
+      </h1>
+      <div
+        class="bg-white w-full rounded-xl pt-4 pb-4 mb-3 px-4 max-w-6xl"
+        style="box-sizing: border-box"
+      >
+        <form id="inviteUserForm" class="w-full">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <h1 class="pl-2 text-base">Correo</h1>
+              <input
+                id="inviteEmail"
+                type="email"
+                placeholder="Ej: email@example.com"
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
+                required
+              />
+            </div>
+            <div>
+              <h1 class="pl-2 text-base">Rol</h1>
+              <select
+                name="rol"
+                id="selectRol"
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
+                onchange="
+                  this.classList.toggle('text-gray-400', this.value === '');
+                  this.classList.toggle('text-black', this.value !== '');
+                "
+                required
+              >
+                <option class="text-black font-bold" value="" disabled selected>
+                  Rol...
+                </option>
+              </select>
+            </div>
+            <div class="col-span-1 sm:col-span-2 flex justify-end mt-1">
+              <button
+                type="submit"
+                class="bg-green-700 shadow-md text-white rounded-full px-4 py-1 font-bold hover:bg-green-800 hover:cursor-pointer transition"
+              >
+                Enviar Invitación
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!--
       <h1 class="text-3xl font-bold pt-2 pb-1 text-center">
         Crear Nuevo Usuario
       </h1>
@@ -256,6 +306,7 @@
           </div>
         </form>
       </div>
+      -->
 
       <h1 class="text-3xl font-bold pt-2 pb-1 text-center">
         Buscar y Filtrar Usuarios
