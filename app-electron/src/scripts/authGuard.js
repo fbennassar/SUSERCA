@@ -14,7 +14,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     window.logout = async function() {
     try {
-      const { error } = await window.electronAPI.signOut(); // Llama al IPC handler
+      const { error } = await window.electronAPI.signOutAndClear(); // Llama al IPC handler
       if (error) {
         console.error('Error al cerrar sesión en Supabase:', error);
         // Queda pendiente motsrar un mensaje de error al usuario
