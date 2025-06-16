@@ -1,49 +1,113 @@
 window.addEventListener('DOMContentLoaded', async () => {
+    const selectRolForm = document.getElementById('selectRol'); // Select para el formulario de invitación
+    const filterNombreInput = document.getElementById('filterNombre');
+    const selectRolFilter = document.getElementById('selectRolFilter'); // Select para el filtro de la tabla
 
-    const selectRol = document.getElementById('selectRol');
-     const filterNombreInput = document.getElementById('filterNombre'); // Obtener el input del nombre
-    const selectRolFilter = document.getElementById('selectRolFilter');
+    // --- GESTIONAR VISIBILIDAD DEL FORMULARIO DE INVITACIÓN ---
+    const inviteUserSection = document.getElementById('inviteUserSection'); // Asegúrate que este ID exista en tu HTML
+    if (inviteUserSection) {
+        try {
+            const currentUserData = await window.electronAPI.getProfile(); // Llama a auth:getProfile
+            if (currentUserData && currentUserData.profile && currentUserData.profile.rol && currentUserData.profile.rol.nombre === 'Gerente') {
+                inviteUserSection.classList.remove('hidden');
+            } else {
+                inviteUserSection.classList.add('hidden');
+                console.log('Usuario no es Gerente o no se pudo obtener el perfil. Ocultando sección de invitación.');
+            }
+        } catch (error) {
+            console.error('Error al obtener el perfil del usuario para gestionar la invitación:', error);
+            inviteUserSection.classList.add('hidden');
+        }
+    }
+    // --- FIN GESTIÓN VISIBILIDAD ---
+
+    // Carga de roles en los selects
     try {
-        const { rol, error } = await window.electronAPI.getRol();
-        console.log('Roles obtenidos:', rol);
+        const { rol: rolesArray, error } = await window.electronAPI.getRol(); // 'rolesArray' es el array aquí
+        console.log('Roles obtenidos:', rolesArray);
         if (error) {
             console.error('Error al obtener los roles:', error);
             const option = document.createElement('option');
             option.textContent = 'Error al cargar roles';
-            selectRol.appendChild(option);
-            return;
-        }
-        if (rol && rol.length > 0) {
-            rol.forEach(rol => {
+            if (selectRolForm) selectRolForm.appendChild(option.cloneNode(true));
+            if (selectRolFilter) selectRolFilter.appendChild(option);
+            // Considera no continuar si los roles no se cargan
+        } else if (rolesArray && rolesArray.length > 0) {
+            rolesArray.forEach(rolItem => { // Corregido: usar rolItem para evitar shadowing
                 const option = document.createElement('option');
-                option.value = rol.id;
-                option.textContent = rol.nombre;
-                selectRol.appendChild(option);
-                selectRolFilter.appendChild(option.cloneNode(true));
+                option.value = rolItem.id;
+                option.textContent = rolItem.nombre;
+                if (selectRolForm) selectRolForm.appendChild(option.cloneNode(true));
+                if (selectRolFilter) selectRolFilter.appendChild(option.cloneNode(true)); // Clonar también para el filtro
             });
         } else {
             const option = document.createElement('option');
             option.textContent = 'No hay roles disponibles';
-            selectRol.appendChild(option);
-            selectRolFilter.appendChild(option.cloneNode(true));
+            if (selectRolForm) selectRolForm.appendChild(option.cloneNode(true));
+            if (selectRolFilter) selectRolFilter.appendChild(option);
         }
     } catch (error) {
-        console.error('Error al cargar los roles:', error);
+        console.error('Error catastrófico al cargar los roles:', error);
         const option = document.createElement('option');
-        option.textContent = 'Error al cargar roles';
-        selectRol.appendChild(option);
-        selectRolFilter.appendChild(option.cloneNode(true));
+        option.textContent = 'Error crítico al cargar roles';
+        if (selectRolForm) selectRolForm.appendChild(option.cloneNode(true));
+        if (selectRolFilter) selectRolFilter.appendChild(option);
     }
 
-     const limpiarFiltrosBtn = document.getElementById('limpiarFiltros');
+    const inviteUserForm = document.getElementById('inviteUserForm');
+    if (inviteUserForm) {
+        inviteUserForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const emailInput = document.getElementById('inviteEmail');
+            // const rolSelectForm = document.getElementById('selectRol'); // Ya definido como selectRolForm
+
+            const email = emailInput.value.trim();
+            const rolId = selectRolForm.value; // Usar selectRolForm
+
+            if (!email || !rolId) {
+                alert('Por favor, ingrese el correo y seleccione un rol.');
+                return;
+            }
+
+            const redirectTo = `${window.location.origin}/src/views/login.html`;
+            const submitButton = inviteUserForm.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.textContent;
+
+            try {
+                submitButton.disabled = true;
+                submitButton.textContent = 'Enviando...';
+                const { data, error } = await window.electronAPI.inviteUser({ email, rolId, redirectTo });
+                if (error) {
+                    console.error('Error al enviar invitación:', error);
+                    alert(`Error al enviar invitación: ${error}`);
+                } else {
+                    console.log('Invitación enviada:', data);
+                    alert('Invitación enviada exitosamente.');
+                    emailInput.value = '';
+                    selectRolForm.value = ''; // Resetear el select del formulario
+                    selectRolForm.classList.add('text-gray-400');
+                    selectRolForm.classList.remove('text-black');
+                }
+            } catch (e) {
+                console.error('Error inesperado al enviar invitación:', e);
+                alert('Ocurrió un error inesperado. Por favor, intente de nuevo.');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
+            }
+        });
+    }
+
+    const limpiarFiltrosBtn = document.getElementById('limpiarFiltros');
     if (limpiarFiltrosBtn) {
         limpiarFiltrosBtn.addEventListener('click', async () => {
-            document.getElementById('filterNombre').value = '';
-            document.getElementById('selectRolFilter').value = '';
-            // Forzar el estilo del select a gris si no hay valor seleccionado
-            const selectRolFilter = document.getElementById('selectRolFilter');
-            selectRolFilter.classList.add('text-gray-400');
-            selectRolFilter.classList.remove('text-black');
+            if(filterNombreInput) filterNombreInput.value = '';
+            if(selectRolFilter) {
+                selectRolFilter.value = '';
+                selectRolFilter.classList.add('text-gray-400');
+                selectRolFilter.classList.remove('text-black');
+            }
             await loadUsersTable();
         });
     }
@@ -56,11 +120,17 @@ window.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // Event listener para el filtro de rol
     if (selectRolFilter) {
         selectRolFilter.addEventListener('change', async () => {
             const nombre = filterNombreInput ? filterNombreInput.value : '';
             const rol = selectRolFilter.value;
+            if (rol) { // Cambiar estilo si se selecciona un rol
+                selectRolFilter.classList.remove('text-gray-400');
+                selectRolFilter.classList.add('text-black');
+            } else { // Volver al estilo por defecto si se deselecciona
+                selectRolFilter.classList.add('text-gray-400');
+                selectRolFilter.classList.remove('text-black');
+            }
             await loadUsersTable(nombre, rol);
         });
     }
@@ -79,11 +149,11 @@ async function loadUsersTable(nombreFilter = '', rolFilter = '') {
 
         if (error) {
             console.error('Error al obtener los usuarios:', error);
-            userListBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-red-500">Error al cargar usuarios: ${error}</td></tr>`;
+            userListBody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-red-500">Error al cargar usuarios: ${error}</td></tr>`; // Ajustar colspan
             return;
         }
 
-        userListBody.innerHTML = ''; // Limpiar contenido previo
+        userListBody.innerHTML = ''; 
 
         if (users && users.length > 0) {
             users.forEach(user => {
@@ -91,39 +161,29 @@ async function loadUsersTable(nombreFilter = '', rolFilter = '') {
                 tr.classList.add('divide-x', 'divide-gray-200');
                 tr.setAttribute('data-user-id', user.id);
 
-                // ID (UUID)
-                // const tdId = document.createElement('td');
-                // tdId.classList.add('text-left', 'px-2', 'py-2', 'truncate');
-                // tdId.style.maxWidth = '100px';
-                // tdId.textContent = user.id;
-                // tdId.title = user.id; // Tooltip para ver el ID completo
-
-                // Nombre
                 const tdNombre = document.createElement('td');
                 tdNombre.classList.add('text-left', 'px-2', 'py-2', 'truncate');
                 tdNombre.style.maxWidth = '120px';
                 tdNombre.textContent = user.nombre || 'N/A';
 
-                // Email
                 const tdEmail = document.createElement('td');
                 tdEmail.classList.add('text-left', 'px-2', 'py-2', 'truncate');
                 tdEmail.style.maxWidth = '250px';
-                tdEmail.innerHTML = `<a href="#" onclick="mostrarCorreoCompleto('${user.email || 'N/A'}')">${(user.email || 'N/A').substring(0, 30)}</a>`;
+                // Corregido para mostrar puntos suspensivos si el correo es largo
+                tdEmail.innerHTML = `<a href="#" onclick="mostrarCorreoCompleto('${user.email || 'N/A'}')">${(user.email || 'N/A').substring(0, 30)}${(user.email && user.email.length > 30) ? '...' : ''}</a>`;
 
-                // Rol
                 const tdRol = document.createElement('td');
                 tdRol.classList.add('text-left', 'px-2', 'py-2', 'truncate');
                 tdRol.style.maxWidth = '100px';
                 tdRol.textContent = user.rol || 'Sin rol';
 
-                // Acciones
                 const tdAcciones = document.createElement('td');
                 tdAcciones.classList.add('text-left', 'px-2', 'py-2');
-                tdAcciones.style.minWidth = '100px'; // Asegurar espacio para botones
+                tdAcciones.style.minWidth = '100px'; 
                 tdAcciones.innerHTML = `
                     <div class="flex gap-2 items-center justify-center">
                         <button
-                            onclick="openEditUserPopup('${user.id}', '${user.nombre || ''}', '${user.email || ''}', '${user.rol_nombre || ''}')"
+                            onclick="openEditUserPopup('${user.id}', '${user.nombre || ''}', '${user.email || ''}', '${user.rol || ''}')" 
                             class="hover:cursor-pointer"
                             title="Editar Usuario"
                         >
@@ -147,7 +207,6 @@ async function loadUsersTable(nombreFilter = '', rolFilter = '') {
                     </div>
                 `;
 
-                // tr.appendChild(tdId);
                 tr.appendChild(tdNombre);
                 tr.appendChild(tdEmail);
                 tr.appendChild(tdRol);
@@ -156,15 +215,25 @@ async function loadUsersTable(nombreFilter = '', rolFilter = '') {
                 userListBody.appendChild(tr);
             });
         } else {
-            userListBody.innerHTML = '<tr><td colspan="5" class="text-center py-4">No hay usuarios registrados.</td></tr>';
+            userListBody.innerHTML = '<tr><td colspan="4" class="text-center py-4">No hay usuarios registrados.</td></tr>'; // Ajustar colspan
         }
     } catch (apiError) {
         console.error('Error en la API al cargar los usuarios:', apiError);
-        userListBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-red-500">Error crítico al cargar usuarios.</td></tr>`;
+        userListBody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-red-500">Error crítico al cargar usuarios.</td></tr>`; // Ajustar colspan
     }
 }
 
 window.mostrarCorreoCompleto = function(correo) {
     document.getElementById('correoCompleto').innerText = correo;
     document.getElementById('modalCorreo').classList.remove('hidden');
+};
+
+// Definiciones de ejemplo para las funciones de popup (debes tener las tuyas)
+window.openEditUserPopup = function(id, nombre, email, rol) { 
+    console.log('Abrir popup de edición para:', id, nombre, email, rol);
+    // Aquí iría la lógica para mostrar tu modal/popup de edición
+};
+window.openDeleteUserPopup = function(id) { 
+    console.log('Abrir popup de eliminación para:', id);
+    // Aquí iría la lógica para mostrar tu modal/popup de eliminación
 };
