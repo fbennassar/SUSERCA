@@ -53,7 +53,7 @@ ipcMain.handle('auth:getProfile', async () => {
 });
 
 ipcMain.handle('users:getAllProfiles', async (event, nombreFilter, rolFilter) => {
-  // 'supabase' aquí ya es el cliente desestructurado y correcto
+
   if (!supabase) {
     console.error('El cliente Supabase (anónimo) no ha sido inicializado');
     return { error: 'Cliente Supabase (anónimo) no inicializado' };
@@ -69,7 +69,7 @@ ipcMain.handle('users:getAllProfiles', async (event, nombreFilter, rolFilter) =>
 
 ipcMain.handle('usuarios:logout', async () => {
   session.clear();
-  // 'supabase' aquí ya es el cliente desestructurado y correcto
+
   if (supabase) {
     await supabase.auth.signOut();
   } else {
@@ -79,7 +79,7 @@ ipcMain.handle('usuarios:logout', async () => {
 });
 
 ipcMain.handle('auth:signOut', async () => {
-  // 'supabase' aquí ya es el cliente desestructurado y correcto
+
   if (!supabase) {
     console.error('El cliente Supabase (anónimo) no ha sido inicializado');
     return { error: 'Cliente Supabase (anónimo) no inicializado' };
@@ -99,31 +99,48 @@ ipcMain.handle('auth:signOut', async () => {
 });
 
 ipcMain.handle('usuarios:invite', async (event, { email, rolId, redirectTo }) => {
-  console.log('[IPCusuarios.js] usuarios:invite: Solicitud recibida.');
-  console.log(`[IPCusuarios.js] usuarios:invite: Parámetros - Email: ${email}, RolID: ${rolId}, RedirectTo: ${redirectTo}`);
 
   const currentProfile = session.getProfile();
 
   if (!currentProfile) {
-    console.warn('[IPCusuarios.js] usuarios:invite: Acción no autorizada - No hay perfil de usuario en sesión.');
     return { data: null, error: 'No hay perfil de usuario en sesión. Acción no autorizada.' };
   }
-  console.log(`[IPCusuarios.js] usuarios:invite: Perfil del solicitante - Email: ${currentProfile.email}, Rol: ${currentProfile.rol ? currentProfile.rol.nombre : 'No definido'}`);
+
 
   if (!currentProfile.rol || currentProfile.rol.nombre !== 'Gerente') {
-    console.warn(`[IPCusuarios.js] usuarios:invite: Acción no autorizada - Intento de invitación por usuario no Gerente: ${currentProfile.email || currentProfile.id}, Rol: ${currentProfile.rol ? currentProfile.rol.nombre : 'No definido'}`);
     return { data: null, error: 'Acción no autorizada. Solo los Gerentes pueden invitar usuarios.' };
   }
 
   try {
-    console.log(`[IPCusuarios.js] usuarios:invite: Usuario Gerente ${currentProfile.email} está procediendo a invitar a ${email}. Llamando a usuarios.inviteUser...`);
     const result = await usuarios.inviteUser(email, rolId, redirectTo);
-    console.log('[IPCusuarios.js] usuarios:invite: Llamada a usuarios.inviteUser completada. Resultado:', result);
+
     return { data: result, error: null };
   } catch (error) {
-    console.error('[IPCusuarios.js] usuarios:invite: Error capturado al llamar a usuarios.inviteUser:', error.message);
-    console.error('[IPCusuarios.js] usuarios:invite: Stack trace del error:', error.stack); // Log del stack trace
     // Devolver el mensaje de error al frontend
     return { data: null, error: error.message || 'Ocurrió un error en el servidor al procesar la invitación.' };
+  }
+});
+
+
+ipcMain.handle('usuarios:create', async (event, { nombre, email, rolId, password }) => {
+
+  const currentProfile = session.getProfile();
+
+  if (!currentProfile) {
+    return { data: null, error: 'No hay perfil de usuario en sesión. Acción no autorizada.' };
+  }
+
+
+  if (!currentProfile.rol || currentProfile.rol.nombre !== 'Gerente') {
+    return { data: null, error: 'Acción no autorizada. Solo los Gerentes pueden crear usuarios.' };
+  }
+
+  try {
+    const result = await usuarios.createUser(nombre, email, rolId, password);
+
+    return { data: result, error: null };
+  } catch (error) {
+    // Devolver el mensaje de error al frontend
+    return { data: null, error: error.message || 'Ocurrió un error en el servidor al procesar la creacion.' };
   }
 });

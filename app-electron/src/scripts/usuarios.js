@@ -1,27 +1,9 @@
 window.addEventListener('DOMContentLoaded', async () => {
-    const selectRolForm = document.getElementById('selectRol'); // Select para el formulario de invitación
+    const selectRolForm = document.getElementById('selectRol');
+    const createSelectRol = document.getElementById('createSelectRol'); // Asegúrate de que este ID coincida con el del formulario de creación
     const filterNombreInput = document.getElementById('filterNombre');
-    const selectRolFilter = document.getElementById('selectRolFilter'); // Select para el filtro de la tabla
+    const selectRolFilter = document.getElementById('selectRolFilter');
 
-    // --- GESTIONAR VISIBILIDAD DEL FORMULARIO DE INVITACIÓN ---
-    const inviteUserSection = document.getElementById('inviteUserSection'); // Asegúrate que este ID exista en tu HTML
-    if (inviteUserSection) {
-        try {
-            const currentUserData = await window.electronAPI.getProfile(); // Llama a auth:getProfile
-            if (currentUserData && currentUserData.profile && currentUserData.profile.rol && currentUserData.profile.rol.nombre === 'Gerente') {
-                inviteUserSection.classList.remove('hidden');
-            } else {
-                inviteUserSection.classList.add('hidden');
-                console.log('Usuario no es Gerente o no se pudo obtener el perfil. Ocultando sección de invitación.');
-            }
-        } catch (error) {
-            console.error('Error al obtener el perfil del usuario para gestionar la invitación:', error);
-            inviteUserSection.classList.add('hidden');
-        }
-    }
-    // --- FIN GESTIÓN VISIBILIDAD ---
-
-    // Carga de roles en los selects
     try {
         const { rol: rolesArray, error } = await window.electronAPI.getRol(); // 'rolesArray' es el array aquí
         console.log('Roles obtenidos:', rolesArray);
@@ -31,6 +13,7 @@ window.addEventListener('DOMContentLoaded', async () => {
             option.textContent = 'Error al cargar roles';
             if (selectRolForm) selectRolForm.appendChild(option.cloneNode(true));
             if (selectRolFilter) selectRolFilter.appendChild(option);
+            if (createSelectRol) createSelectRol.appendChild(option.cloneNode(true)); // Clonar también para el formulario de creación
             // Considera no continuar si los roles no se cargan
         } else if (rolesArray && rolesArray.length > 0) {
             rolesArray.forEach(rolItem => { // Corregido: usar rolItem para evitar shadowing
@@ -39,6 +22,7 @@ window.addEventListener('DOMContentLoaded', async () => {
                 option.textContent = rolItem.nombre;
                 if (selectRolForm) selectRolForm.appendChild(option.cloneNode(true));
                 if (selectRolFilter) selectRolFilter.appendChild(option.cloneNode(true)); // Clonar también para el filtro
+                if (createSelectRol) createSelectRol.appendChild(option.cloneNode(true)); // Clonar también para el formulario de creación
             });
         } else {
             const option = document.createElement('option');
@@ -60,7 +44,6 @@ window.addEventListener('DOMContentLoaded', async () => {
             event.preventDefault();
 
             const emailInput = document.getElementById('inviteEmail');
-            // const rolSelectForm = document.getElementById('selectRol'); // Ya definido como selectRolForm
 
             const email = emailInput.value.trim();
             const rolId = selectRolForm.value; // Usar selectRolForm
@@ -74,27 +57,65 @@ window.addEventListener('DOMContentLoaded', async () => {
             const submitButton = inviteUserForm.querySelector('button[type="submit"]');
             const originalButtonText = submitButton.textContent;
 
+
+
             try {
-                submitButton.disabled = true;
-                submitButton.textContent = 'Enviando...';
                 const { data, error } = await window.electronAPI.inviteUser({ email, rolId, redirectTo });
                 if (error) {
                     console.error('Error al enviar invitación:', error);
-                    alert(`Error al enviar invitación: ${error}`);
+                    mostrarMensaje(`Error al enviar invitación: ${error}`, 'error');
                 } else {
                     console.log('Invitación enviada:', data);
-                    alert('Invitación enviada exitosamente.');
+                    mostrarMensaje('Invitación enviada exitosamente.', 'success');
                     emailInput.value = '';
-                    selectRolForm.value = ''; // Resetear el select del formulario
+                    selectRolForm.value = '';
                     selectRolForm.classList.add('text-gray-400');
                     selectRolForm.classList.remove('text-black');
                 }
             } catch (e) {
                 console.error('Error inesperado al enviar invitación:', e);
-                alert('Ocurrió un error inesperado. Por favor, intente de nuevo.');
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = originalButtonText;
+                mostrarMensaje('Ocurrió un error inesperado. Por favor, intente de nuevo.', 'error');
+            }
+        });
+    }
+
+    const createUserForm = document.getElementById('createUserForm');
+    if (createUserForm) {
+        createUserForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const nombreInput = document.getElementById('createNombre');
+            const emailInput = document.getElementById('createEmail');
+            const rolId = createSelectRol.value;
+            const passwordInput = document.getElementById('createPassword');
+
+            const nombre = nombreInput.value.trim();
+            const email = emailInput.value.trim();
+            const password = passwordInput;
+
+            if (!nombre || !email || !rolId || !password) {
+                alert('Por favor, complete todos los campos.');
+                return;
+            }
+
+            try {
+                const { data, error } = await window.electronAPI.createUser({ nombre, email, rolId, password });
+                if (error) {
+                    console.error('Error al crear usuario:', error);
+                    mostrarMensaje(`Error al crear usuario: ${error}`, 'error');
+                } else {
+                    console.log('Usuario creado:', data);
+                    mostrarMensaje('Usuario creado exitosamente.', 'success');
+                    nombreInput.value = '';
+                    emailInput.value = '';
+                    passwordInput.value = '';
+                    selectRolForm.value = '';
+                    selectRolForm.classList.add('text-gray-400');
+                    selectRolForm.classList.remove('text-black');
+                }
+            } catch (e) {
+                console.error('Error inesperado al crear usuario:', e);
+                mostrarMensaje('Ocurrió un error inesperado. Por favor, intente de nuevo.', 'error');
             }
         });
     }
@@ -136,6 +157,28 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
     await loadUsersTable();
 });
+
+const mensajeDiv = document.createElement('div');
+mensajeDiv.id = 'mensaje-usuario';
+mensajeDiv.style.position = 'fixed';
+mensajeDiv.style.top = '20px';
+mensajeDiv.style.right = '20px';
+mensajeDiv.style.zIndex = '9999';
+mensajeDiv.style.padding = '12px 24px';
+mensajeDiv.style.borderRadius = '8px';
+mensajeDiv.style.display = 'none';
+mensajeDiv.style.fontWeight = 'bold';
+document.body.appendChild(mensajeDiv);
+
+function mostrarMensaje(texto, tipo = 'success') {
+    mensajeDiv.textContent = texto;
+    mensajeDiv.style.display = 'block';
+    mensajeDiv.style.background = tipo === 'success' ? '#22c55e' : '#ef4444';
+    mensajeDiv.style.color = '#fff';
+    setTimeout(() => {
+        mensajeDiv.style.display = 'none';
+    }, 3500);
+}
 
 async function loadUsersTable(nombreFilter = '', rolFilter = '') {
     const userListBody = document.getElementById('user-list-body');
@@ -237,3 +280,4 @@ window.openDeleteUserPopup = function(id) {
     console.log('Abrir popup de eliminación para:', id);
     // Aquí iría la lógica para mostrar tu modal/popup de eliminación
 };
+

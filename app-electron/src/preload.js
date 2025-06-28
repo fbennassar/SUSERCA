@@ -8,7 +8,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getProfile: (userId) => ipcRenderer.invoke('auth:getProfile', userId),
   getRol: () => ipcRenderer.invoke('rol:getRol'),
   signOut: () => ipcRenderer.invoke('auth:signOut'),
-   inviteUser: (inviteData) => ipcRenderer.invoke('usuarios:invite', inviteData),
+  inviteUser: (inviteData) => ipcRenderer.invoke('usuarios:invite', inviteData),
+  createUser: (userData) => ipcRenderer.invoke('usuarios:create', userData),
   signOutAndClear: () => ipcRenderer.invoke('usuarios:logout'),
   getAllProfiles: (nombreFilter, rolFilter) => ipcRenderer.invoke('users:getAllProfiles', nombreFilter, rolFilter),
 });
