@@ -91,7 +91,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
             const nombre = nombreInput.value.trim();
             const email = emailInput.value.trim();
-            const password = passwordInput;
+            const password = passwordInput.value;
 
             if (!nombre || !email || !rolId || !password) {
                 alert('Por favor, complete todos los campos.');
