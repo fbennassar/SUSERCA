@@ -7,6 +7,8 @@ require('electron-reload')(process.cwd(), {
 
 require('./backend/ipc/IPCusuarios.js')
 require('./backend/ipc/IPCrol.js');
+require('./backend/ipc/IPCclientes.js');
+require('./backend/ipc/IPCproveedores');
 
 const db = require('./backend/db/supabaseClient.js');
 const path = require('path');
