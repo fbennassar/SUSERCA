@@ -193,11 +193,13 @@
       <!--Crear orden-->
       <h1 class="text-3xl font-bold pt-2 pb-1 text-center">Crear orden</h1>
       <div
-        class="bg-white w-full rounded-xl pt-4 pb-4 mb-3 px-4 max-w-6xl"
+        class="bg-white w-full rounded-xl pt-4 mb-3 px-4 max-w-6xl"
         style="box-sizing: border-box"
       >
         <form class="w-full">
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div
+            class="grid grid-cols-1 sm:grid-cols-3 gap-3 border-b border-gray-200 pb-8 mb-4"
+          >
             <div>
               <h1 class="pl-2 text-base">Tipo de orden</h1>
               <select
@@ -243,21 +245,115 @@
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
               />
             </div>
-
-            <div class="col-span-1 sm:col-span-2 flex justify-end mt-1">
-              <button
-                type="submit"
-                class="bg-green-700 shadow-md text-white rounded-md px-4 py-1 font-bold hover:bg-green-800 hover:cursor-pointer transition"
-              >
-                Guardar orden
-              </button>
-            </div>
           </div>
         </form>
+        <div
+          class="bg-white w-full pt-4 mb-3 px-4 max-w-6xl"
+          styles="box-sizing: border-box"
+        >
+          <form class="w-full">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <h1 class="pl-2 text-base">Seleccionar Productos</h1>
+                <select
+                  name="Productos"
+                  id="Productos"
+                  class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
+                  onchange="              
+                this.classList.toggle('text-gray-400', this.value === '');
+                this.classList.toggle('text-black', this.value !== '');
+                "
+                >
+                  <option
+                    class="text-black font-bold"
+                    value=""
+                    disabled
+                    selected
+                  >
+                    Seleccione un producto
+                  </option>
+
+                  <option class="text-black" value="">Producto 1</option>
+                  <option class="text-black" value="">Producto 2</option>
+                  <option class="text-black" value="">Producto 3</option>
+                  <option class="text-black" value="">Producto 4</option>
+                  <option class="text-black" value="">Producto 5</option>
+                </select>
+              </div>
+
+              <div>
+                <h1 class="pl-2 text-base">Cantidad</h1>
+                <input
+                  type="text"
+                  placeholder="Ej: 20"
+                  class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
+                />
+              </div>
+
+              <div>
+                <h1 class="invisible text-base">.</h1>
+                <div class="flex justify-end items-start h-full">
+                  <button
+                    type="submit"
+                    class="bg-green-700 shadow-md text-white rounded-md px-4 py-1 font-bold hover:bg-green-800 hover:cursor-pointer transition"
+                  >
+                    Añadir a orden
+                  </button>
+                </div>
+              </div>
+
+              <div class="overflow-x-auto mt-4 w-full col-span-3">
+                <table
+                  class="w-full border border-gray-300 rounded-lg bg-white"
+                >
+                  <thead>
+                    <tr
+                      class="divide-x divide-gray-300 border-b border-gray-300"
+                    >
+                      <th class="w-1/5 px-4 py-2">Producto</th>
+                      <th class="w-1/5 px-4 py-2">Cantidad</th>
+                      <th class="w-1/5 px-4 py-2">Precio Unitario</th>
+                      <th class="w-1/5 px-4 py-2">Sub-Total</th>
+                      <th class="w-1/5 px-4 py-2">Acciones</th>
+                    </tr>
+                  </thead>
+
+                  <tbody class="divide-y divide-gray-200">
+                    <tr class="divide-x divide-gray-200">
+                      <td class="text-left px-2 py-2 truncate max-w-[100px]">
+                        Producto 1
+                      </td>
+                      <td class="text-left px-2 py-2 truncate max-w-[100px]">
+                        20
+                      </td>
+                      <td class="text-left px-2 py-2 truncate max-w-[100px]">
+                        100
+                      </td>
+                      <td class="text-left px-2 py-2 truncate max-w-[100px]">
+                        2000
+                      </td>
+                      <td class="text-left px-2 py-2 truncate max-w-[100px]">
+                        si
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </form>
+          <div class="col-span-1 sm:col-span-2 flex justify-end my-3">
+            <button
+              type="submit"
+              class="bg-green-700 shadow-md text-white rounded-md px-4 py-3 font-bold hover:bg-green-800 hover:cursor-pointer transition"
+            >
+              Guardar orden
+            </button>
+          </div>
+        </div>
       </div>
 
       <!--Productos de la orden-->
-      <h1 class="text-3xl font-bold pt-2 pb-1 text-center">
+      <!-- <h1 class="text-3xl font-bold pt-2 pb-1 text-center">
         Productos de la orden
       </h1>
 
@@ -346,7 +442,7 @@
             </div>
           </div>
         </form>
-      </div>
+      </div> -->
 
       <!--Buscar y filtrar ordenes-->
 
