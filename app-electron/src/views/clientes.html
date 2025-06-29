@@ -8,6 +8,7 @@
     <script src="../scripts/authGuard.js" defer></script>
     <script src="../scripts/sidebar.js" defer></script>
     <script src="../scripts/header.js"></script>
+    <script src="../scripts/clientes.js" defer></script>
   </head>
 
   <body class="min-h-screen bg-zinc-200 flex flex-col">
@@ -331,9 +332,10 @@
           <div class="bg-zinc-200 rounded-xl py-3 px-1.5">
             <form class="flex flex-col gap-4">
               <div>
-                <h1 class="pl-1">Nombre del Cliente</h1>
+                <h1 class="pl-1">Razon social del cliente</h1>
                 <input
                   type="text"
+                  name="nombre"
                   class="border border-black shadow-md rounded-full bg-white w-70"
                 />
               </div>
@@ -341,7 +343,32 @@
                 <h1 class="pl-1">RIF</h1>
                 <input
                   type="text"
-                  class="border border-black shadow-md rounded-full bg-white w-60"
+                  name="id"
+                  class="border border-black shadow-md rounded-full bg-white w-70"
+                />
+              </div>
+              <div>
+                <h1 class="pl-1">Email</h1>
+                <input
+                  type="text"
+                  name="email"
+                  class="border border-black shadow-md rounded-full bg-white w-70"
+                />
+              </div>
+              <div>
+                <h1 class="pl-1">Telefono</h1>
+                <input
+                  type="text"
+                  name="telefono"
+                  class="border border-black shadow-md rounded-full bg-white w-70"
+                />
+              </div>
+              <div>
+                <h1 class="pl-1">Direccion</h1>
+                <input
+                  type="text"
+                  name="direccion"
+                  class="border border-black shadow-md rounded-full bg-white w-70"
                 />
               </div>
               <div>
@@ -357,6 +384,7 @@
                 </div>
                 <input
                   type="text"
+                  name="imagen"
                   class="border border-black shadow-md rounded-full bg-white w-full"
                 />
               </div>
@@ -368,6 +396,7 @@
                   Cancelar
                 </button>
                 <button
+                  onclick="handleCreateClient()"
                   class="px-4 py-2 rounded-full bg-green-700 text-white shadow-md hover:bg-green-800 hover:cursor-pointer transition"
                 >
                   Aceptar
@@ -389,9 +418,10 @@
           <div class="bg-zinc-200 rounded-xl py-3 px-1.5">
             <form class="flex flex-col gap-4">
               <div>
-                <h1 class="pl-1">Nombre del Cliente</h1>
+                <h1 class="pl-1">Razon social del cliente</h1>
                 <input
                   type="text"
+                  name="nombre" 
                   class="border border-black shadow-md rounded-full bg-white w-70"
                 />
               </div>
@@ -399,7 +429,32 @@
                 <h1 class="pl-1">RIF</h1>
                 <input
                   type="text"
-                  class="border border-black shadow-md rounded-full bg-white w-60"
+                  name="id" 
+                  class="border border-black shadow-md rounded-full bg-white w-70"
+                />
+              </div>
+              <div>
+                <h1 class="pl-1">Email</h1>
+                <input
+                  type="text"
+                  name="email" 
+                  class="border border-black shadow-md rounded-full bg-white w-70"
+                />
+              </div>
+              <div>
+                <h1 class="pl-1">Telefono</h1>
+                <input
+                  type="text"
+                  name="telefono" 
+                  class="border border-black shadow-md rounded-full bg-white w-70"
+                />
+              </div>
+              <div>
+                <h1 class="pl-1">Direccion</h1>
+                <input
+                  type="text"
+                  name="direccion"
+                  class="border border-black shadow-md rounded-full bg-white w-70"
                 />
               </div>
               <div>
@@ -427,6 +482,7 @@
                 </button>
                 <button
                   class="px-4 py-2 rounded-full bg-green-700 text-white shadow-md hover:bg-green-800 hover:cursor-pointer transition"
+                  onclick="handleUpdateClient()"
                 >
                   Aceptar
                 </button>
