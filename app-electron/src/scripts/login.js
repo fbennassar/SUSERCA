@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Ocultar el texto y mostrar el spinner
     loginText.classList.add('opacity-0');
     loadingIndicator.classList.remove('opacity-0');
-
     try {
       const result = await window.electronAPI.login(email, password);
 
