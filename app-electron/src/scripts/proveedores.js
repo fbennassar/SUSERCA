@@ -197,3 +197,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     alert('Ocurrió un error inesperado al cargar proveedores.');
   }
 });
+
+document.getElementsByName('searchInput')[0].addEventListener('keyup', async (event) => {
+  const query = event.target.value.trim(); // Obtener el valor del campo de búsqueda y eliminar espacios
+  if (query.length > 0) {
+    const result = await window.electronAPI.searchProveedores(query);
+    if (result.error) {
+      console.error('Error al buscar proveedores:', result.error);
+    } else {
+      renderProveedores(result.data); // Actualizar la lista de proveedores directamente con renderProveedores
+    }
+  } else {
+    await loadAllProveedores(); // Cargar todos los proveedores si el campo está vacío
+  }
+});
+
+async function loadAllProveedores() {
+  try {
+    const result = await window.electronAPI.getAllProveedores();
+    if (result.error) {
+      console.error('Error al cargar todos los proveedores:', result.error);
+    } else {
+      renderProveedores(result.data); // Renderiza todos los proveedores
+    }
+  } catch (error) {
+    console.error('Error inesperado al cargar todos los proveedores:', error);
+  }
+}

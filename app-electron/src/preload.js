@@ -14,6 +14,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
   updateUser: (userId, updates) =>
     ipcRenderer.invoke("usuarios:update", { userId, updates }),
   signOutAndClear: () => ipcRenderer.invoke("usuarios:logout"),
+  searchClients: (query) =>
+    ipcRenderer.invoke("clientes:searchClients", query),
   getAllClients: () => ipcRenderer.invoke("clientes:getAllClients"),
   getClientByID: (id) => ipcRenderer.invoke("clientes:getClientByID", id),
   getClientByName: (name) =>
@@ -25,6 +27,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
   deleteClient: (id) => ipcRenderer.invoke("clientes:delete", id),
   getAllProfiles: (nombreFilter, rolFilter) =>
     ipcRenderer.invoke("users:getAllProfiles", nombreFilter, rolFilter),
+  searchProveedores: (query) =>
+    ipcRenderer.invoke("proveedores:search", query),
   getAllProveedores: () => ipcRenderer.invoke("proveedores:getAll"),
   getProveedorById: (id) =>
     ipcRenderer.invoke("proveedores:getProveedorById", id),

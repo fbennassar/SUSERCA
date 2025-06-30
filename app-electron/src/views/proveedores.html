@@ -201,12 +201,14 @@
               <input
                 type="text"
                 placeholder="Razon Social, RIF..."
+                name="searchInput"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
               />
             </div>
             <button
               type="reset"
               class="bg-gray-500 shadow-md text-white rounded-full px-4 py-1 font-bold hover:bg-gray-700 hover:cursor-pointer transition"
+              onclick="document.querySelector('form').reset(); loadAllProveedores()"
             >
               Limpiar Filtros
             </button>
