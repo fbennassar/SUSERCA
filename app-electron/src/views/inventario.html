@@ -8,6 +8,7 @@
     <script src="../scripts/authGuard.js" defer></script>
     <script src="../scripts/sidebar.js" defer></script>
     <script src="../scripts/header.js"></script>
+    <script src="../scripts/inventario.js" defer></script>
   </head>
 
   <body class="min-h-screen bg-zinc-200 flex flex-col">
@@ -200,6 +201,7 @@
               <input
                 type="text"
                 placeholder="Nombre, codigo..."
+                name="searchInput"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
               />
             </div>
@@ -220,12 +222,13 @@
             <div class="col-span-1 sm:col-span-2 flex gap-5 justify-end mt-1">
               <button
                 type="reset"
+                onclick="document.querySelector('form').reset(); loadAllProductos()"
                 class="bg-gray-500 shadow-md text-white rounded-full px-4 py-1 font-bold hover:bg-gray-700 hover:cursor-pointer transition"
               >
                 Limpiar Filtros
               </button>
               <button
-                onclick="document.getElementById('add-modal').classList.remove('hidden')"
+                onclick="document.getElementById('add-modal').classList.remove('hidden');"
                 type="button"
                 class="bg-green-700 shadow-md text-white rounded-full px-4 py-1 font-bold hover:bg-green-800 hover:cursor-pointer transition"
               >
@@ -243,6 +246,7 @@
         </button>
       </div>
       <div
+        id="cards-grid"
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 py-6 max-w-6xl w-full mx-auto"
       >
         <div
@@ -352,6 +356,7 @@
                 <h1 class="pl-1">Codigo</h1>
                 <input
                   type="text"
+                  name="id"
                   class="border border-black shadow-md rounded-full bg-white w-70"
                 />
               </div>
@@ -359,6 +364,7 @@
                 <h1 class="pl-1">Nombre</h1>
                 <input
                   type="text"
+                  name="nombre"
                   class="border border-black shadow-md rounded-full bg-white w-full"
                 />
               </div>
@@ -366,21 +372,32 @@
                 <h1 class="pl-1">Categoria</h1>
                 <input
                   type="text"
-                  class="border border-black shadow-md rounded-full bg-white w-65"
+                  name="categoria"
+                  class="border border-black shadow-md rounded-full bg-white w-70"
                 />
               </div>
               <div>
                 <h1 class="pl-1">Precio</h1>
                 <input
                   type="text"
-                  class="border border-black shadow-md rounded-full bg-white"
+                  name="precio"
+                  class="border border-black shadow-md rounded-full bg-white w-70"
                 />
               </div>
               <div>
                 <h1 class="pl-1">Stock</h1>
                 <input
                   type="text"
-                  class="border border-black shadow-md rounded-full bg-white"
+                  name="cantidad"
+                  class="border border-black shadow-md rounded-full bg-white w-70"
+                />
+              </div>
+               <div>
+                <h1 class="pl-1">Descripción</h1>
+                <input
+                  type="text"
+                  name="descripcion"
+                  class="border border-black shadow-md rounded-full bg-white w-70"
                 />
               </div>
               <div>
@@ -408,6 +425,7 @@
                 </button>
                 <button
                   class="px-4 py-2 rounded-full bg-green-700 text-white shadow-md hover:bg-green-800 hover:cursor-pointer transition"
+                  onclick="handleCreateProducto()"
                 >
                   Aceptar
                 </button>
@@ -431,6 +449,7 @@
                 <h1 class="pl-1">Codigo</h1>
                 <input
                   type="text"
+                  name="id"
                   class="border border-black shadow-md rounded-full bg-white w-70"
                 />
               </div>
@@ -438,6 +457,7 @@
                 <h1 class="pl-1">Nombre</h1>
                 <input
                   type="text"
+                  name="nombre"
                   class="border border-black shadow-md rounded-full bg-white w-full"
                 />
               </div>
@@ -445,21 +465,32 @@
                 <h1 class="pl-1">Categoria</h1>
                 <input
                   type="text"
-                  class="border border-black shadow-md rounded-full bg-white w-65"
+                  name="categoria"
+                  class="border border-black shadow-md rounded-full bg-white w-70"
                 />
               </div>
               <div>
                 <h1 class="pl-1">Precio</h1>
                 <input
                   type="text"
-                  class="border border-black shadow-md rounded-full bg-white"
+                  name="precio"
+                  class="border border-black shadow-md rounded-full bg-white w-70"
                 />
               </div>
               <div>
                 <h1 class="pl-1">Stock</h1>
                 <input
                   type="text"
-                  class="border border-black shadow-md rounded-full bg-white"
+                  name="cantidad"
+                  class="border border-black shadow-md rounded-full bg-white w-70"
+                />
+              </div>
+              <div>
+                <h1 class="pl-1">Descripción</h1>
+                <input
+                  type="text"
+                  name="descripcion"
+                  class="border border-black shadow-md rounded-full bg-white w-70"
                 />
               </div>
               <div>
@@ -487,6 +518,7 @@
                 </button>
                 <button
                   class="px-4 py-2 rounded-full bg-green-700 text-white shadow-md hover:bg-green-800 hover:cursor-pointer transition"
+                  onclick="handleUpdateProducto()"
                 >
                   Aceptar
                 </button>
