@@ -49,6 +49,44 @@ exports.getClientByID = async (id) => {
   return { data, error };
 };
 
+exports.searchClients = async (query) => {
+  if (!supabase) {
+    throw new Error('Cliente Supabase no inicializado.');
+  }
+  console.log("Query proporcionado para buscar clientes:", query); // Log para depuración
+
+  // Buscar por nombre
+  const { data: nameData, error: nameError } = await supabase.supabase
+    .from('cliente')
+    .select('*')
+    .ilike('nombre', `%${query}%`)
+    .eq('activo', true);
+
+  let idData = [];
+  let idError = null;
+
+  // Verificar si el query es numérico antes de buscar por ID
+  if (!isNaN(query)) {
+    const { data, error } = await supabase.supabase
+      .from('cliente')
+      .select('*')
+      .eq('id', query) // Filtrar directamente por ID si es numérico
+      .eq('activo', true);
+    idData = data || [];
+    idError = error;
+  }
+
+  // Combinar resultados
+  const data = [...(nameData || []), ...idData];
+  const error = nameError || idError;
+
+  console.log("Respuesta combinada de Supabase en searchClients:", { data, error }); // Log para depuración
+  if (error) {
+    console.error(`Error al buscar clientes con query ${query} en Supabase`, { error: error.message });
+  }
+  return { data, error };
+};
+
 exports.getClientByName = async (name) => {
   if (!supabase) {
     throw new Error('Cliente Supabase (anónimo) no inicializado por falta de credenciales.');

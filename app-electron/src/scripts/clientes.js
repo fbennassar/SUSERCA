@@ -39,6 +39,33 @@ function renderClients(clients) {
   });
 }
 
+document.getElementsByName('searchInput')[0].addEventListener('keyup', async (event) => {
+  const query = event.target.value.trim(); // Obtener el valor del campo de búsqueda y eliminar espacios
+  if (query.length > 0) {
+    const result = await window.electronAPI.searchClients(query);
+    if (result.error) {
+      console.error('Error al buscar clientes:', result.error);
+    } else {
+      renderClients(result.data); // Actualizar la lista de clientes directamente con renderClients
+    }
+  } else {
+    await loadAllClients(); // Cargar todos los clientes si el campo está vacío
+  }
+});
+
+async function loadAllClients() {
+  try {
+    const result = await window.electronAPI.getAllClients();
+    if (result.error) {
+      console.error('Error al cargar todos los clientes:', result.error);
+    } else {
+      renderClients(result.data); // Renderiza todos los clientes
+    }
+  } catch (error) {
+    console.error('Error inesperado al cargar todos los clientes:', error);
+  }
+}
+
 function openEditModal(clientId) {
   const editModal = document.getElementById("edit-modal");
   editModal.classList.remove("hidden");
