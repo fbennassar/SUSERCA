@@ -244,3 +244,27 @@ exports.deleteUser = async (userId) => {
     throw error;
   }
 }
+
+exports.updateUser = async (userId, updates) => {
+  if (!supabaseAdmin) {
+    console.error('[db/usuarios.js] updateUser: Error - Cliente Supabase Admin no inicializado. Asegúrate de que SUPABASE_ADMIN_KEY (o SERVICE_ROLE_KEY) esté configurada.');
+    throw new Error('Cliente Supabase Admin no inicializado. No se puede actualizar el usuario.');
+  }
+
+  try {
+    const { data, error } = await supabaseAdmin
+      .from('profiles')
+      .update(updates)
+      .eq('id', userId);
+
+    if (error) {
+      console.error('[db/usuarios.js] updateUser: Error al actualizar el usuario:', error);
+      throw new Error(error.message || 'Error desconocido al actualizar el usuario.');
+    }
+
+    return data;
+  } catch (error) {
+    console.error('[db/usuarios.js] updateUser: Excepción general:', error.message);
+    throw error;
+  }
+}

@@ -3,6 +3,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     const createSelectRol = document.getElementById('createSelectRol'); // Asegúrate de que este ID coincida con el del formulario de creación
     const filterNombreInput = document.getElementById('filterNombre');
     const selectRolFilter = document.getElementById('selectRolFilter');
+    const selectRolEdit = document.getElementById('selectRolEdit'); // Asegúrate de que este ID coincida con el del formulario de edición
 
     try {
         const { rol: rolesArray, error } = await window.electronAPI.getRol(); // 'rolesArray' es el array aquí
@@ -14,6 +15,7 @@ window.addEventListener('DOMContentLoaded', async () => {
             if (selectRolForm) selectRolForm.appendChild(option.cloneNode(true));
             if (selectRolFilter) selectRolFilter.appendChild(option);
             if (createSelectRol) createSelectRol.appendChild(option.cloneNode(true)); // Clonar también para el formulario de creación
+            if (selectRolEdit) selectRolEdit.appendChild(option.cloneNode(true)); // Clonar también para el formulario de edición
             // Considera no continuar si los roles no se cargan
         } else if (rolesArray && rolesArray.length > 0) {
             rolesArray.forEach(rolItem => { // Corregido: usar rolItem para evitar shadowing
@@ -23,6 +25,7 @@ window.addEventListener('DOMContentLoaded', async () => {
                 if (selectRolForm) selectRolForm.appendChild(option.cloneNode(true));
                 if (selectRolFilter) selectRolFilter.appendChild(option.cloneNode(true)); // Clonar también para el filtro
                 if (createSelectRol) createSelectRol.appendChild(option.cloneNode(true)); // Clonar también para el formulario de creación
+                if (selectRolEdit) selectRolEdit.appendChild(option.cloneNode(true)); // Clonar también para el formulario de edición
             });
         } else {
             const option = document.createElement('option');
@@ -274,6 +277,22 @@ window.mostrarCorreoCompleto = function(correo) {
 // Definiciones de ejemplo para las funciones de popup (debes tener las tuyas)
 window.openEditUserPopup = function(id, nombre, email, rol) { 
     console.log('Abrir popup de edición para:', id, nombre, email, rol);
+    const editPopup = document.getElementById('edit-popup');
+    editPopup.dataset.userId = id;
+    editPopup.querySelector('#editNombre').value = nombre || '';
+    editPopup.querySelector('#editEmail').value = email || '';
+    const select = editPopup.querySelector('#selectRolEdit');
+    let found = false;
+    for (let option of select.options) {
+        if (option.textContent === rol) {
+        select.value = option.value;
+        found = true;
+        break;
+  }
+}
+if (!found) select.value = '';
+    editPopup.classList.remove('hidden');
+
     
 };
 window.openDeleteUserPopup = function(id) { 
@@ -313,3 +332,50 @@ async function deleteUser(userId) {
     }
 }
 
+async function updateUser(userId, updates) {
+    if (!userId || !updates) {
+        console.error('ID de usuario o actualizaciones no proporcionadas para actualizar.');
+        mostrarMensaje('ID de usuario o actualizaciones no proporcionadas.', 'error');
+        return;
+    }
+
+    try {
+        const { data, error } = await window.electronAPI.updateUser(userId, updates);
+        if (error) {
+            console.error('Error al actualizar usuario:', error);
+            mostrarMensaje(`Error al actualizar usuario: ${error}`, 'error');
+        } else {
+            
+            console.log('Usuario actualizado:', data);
+            mostrarMensaje('Usuario actualizado exitosamente.', 'success');
+            await loadUsersTable(); // Recargar la tabla de usuarios
+        }
+
+        const editPopup = document.getElementById('edit-popup');
+        editPopup.classList.add('hidden'); // Cerrar el popup de edición
+    } catch (e) {
+        console.error('Error inesperado al actualizar usuario:', e);
+        mostrarMensaje('Ocurrió un error inesperado. Por favor, intente de nuevo.', 'error');
+    }
+}
+
+document.querySelector('#edit-popup form').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const editPopup = document.getElementById('edit-popup');
+    const userId = editPopup.dataset.userId;
+    const nombre = editPopup.querySelector('#editNombre').value.trim();
+    const email = editPopup.querySelector('#editEmail').value.trim();
+    const rolId = editPopup.querySelector('#selectRolEdit').value;
+
+    // Agrega aquí otros campos si los tienes, por ejemplo, password, teléfono, etc.
+
+    // Construye el objeto updates solo con los campos que quieres actualizar
+    const updates = {
+        nombre,
+        email,
+        id_rol: rolId
+        // Agrega otros campos aquí si es necesario
+    };
+
+    await updateUser(userId, updates);
+});
