@@ -276,11 +276,9 @@
               this.classList.toggle('text-black', this.value !== '');
             "
               >
-
                 <option class="text-black font-bold" value="" disabled selected>
                   Rol...
                 </option>
-
               </select>
             </div>
             <div>
@@ -292,10 +290,20 @@
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
               />
             </div>
-            <div class="col-span-1 sm:col-span-2 flex justify-end mt-1">
+            <div>
+              <h1 class="pl-2 text-base">Telefono</h1>
+              <input
+                id="createPhoneNumber"
+                type="number"
+                placeholder="Ej: 041234567"
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
+              />
+            </div>
+            <div class="flex items-end justify-end">
               <button
                 type="submit"
                 class="bg-green-700 shadow-md text-white rounded-full px-4 py-1 font-bold hover:bg-green-800 hover:cursor-pointer transition"
+                style="min-width: 140px"
               >
                 Crear usuario
               </button>
@@ -367,9 +375,7 @@
                 <th class="text-left px-2 py-2">Acciones</th>
               </tr>
             </thead>
-            <tbody id="user-list-body" class="divide-y divide-gray-200">
-              
-            </tbody>
+            <tbody id="user-list-body" class="divide-y divide-gray-200"></tbody>
           </table>
         </div>
       </div>
@@ -513,15 +519,26 @@
           </button>
         </div>
       </div>
-      <div id="modalCorreo" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden">
-        <div class="bg-zinc-200 rounded-xl pt-4 pb-4 ml-44 mx-25 mb-3 px-4 max-w-xl relative">
-            <button onclick="document.getElementById('modalCorreo').classList.add('hidden')" class="absolute text-2xl font-extrabold hover:cursor-pointer right-5 top-3">X</button>
-            <div class="bg-white p-5 rounded-2xl">
-                <p id="correoCompleto" class="text-xl"></p>
-            </div>
+      <div
+        id="modalCorreo"
+        class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden"
+      >
+        <div
+          class="bg-zinc-200 rounded-xl pt-4 pb-4 ml-44 mx-25 mb-3 px-4 max-w-xl relative"
+        >
+          <button
+            onclick="document.getElementById('modalCorreo').classList.add('hidden')"
+            class="absolute text-2xl font-extrabold hover:cursor-pointer right-5 top-3"
+          >
+            X
+          </button>
+          <div class="bg-white p-5 rounded-2xl">
+            <p id="correoCompleto" class="text-xl"></p>
+          </div>
         </div>
-    </div>
+      </div>
     </main>
   </body>
   <script src="../scripts/usuarios.js" defer></script>
+  <!-- <script src="../libs/sweetalert2.all.min.js"></script> -->
 </html>
