@@ -1,3 +1,26 @@
+const mensajeDiv = document.createElement('div');
+mensajeDiv.id = 'mensaje-usuario';
+mensajeDiv.style.position = 'fixed';
+mensajeDiv.style.top = '20px';
+mensajeDiv.style.right = '20px';
+mensajeDiv.style.zIndex = '9999';
+mensajeDiv.style.padding = '12px 24px';
+mensajeDiv.style.borderRadius = '8px';
+mensajeDiv.style.display = 'none';
+mensajeDiv.style.fontWeight = 'bold';
+document.body.appendChild(mensajeDiv);
+
+function mostrarMensaje(texto, tipo = 'success') {
+  mensajeDiv.textContent = texto;
+  mensajeDiv.style.display = 'block';
+  mensajeDiv.style.background = tipo === 'success' ? '#22c55e' : '#ef4444';
+  mensajeDiv.style.color = '#fff';
+  setTimeout(() => {
+    mensajeDiv.style.display = 'none';
+  }, 3500);
+}
+
+
 function buildClientSchema(modalId) {
   const modal = document.getElementById(modalId); // Obtén el contenedor del modal dinámicamente
   const clienteSchema = {
@@ -81,7 +104,7 @@ function openEditModal(clientId) {
     console.log("Resultado de getClientById:", result); // Log del resultado obtenido
     if (result.error) {
       console.error("Error al obtener cliente para editar:", result.error);
-      alert("Error al cargar datos del cliente.");
+      mostrarMensaje("Error al cargar datos del cliente.", 'error');
     } else {
       const client = result.data;
 
@@ -102,7 +125,7 @@ function openEditModal(clientId) {
     }
   }).catch((error) => {
     console.error("Error inesperado al cargar datos del cliente:", error);
-    alert("Ocurrió un error inesperado al cargar datos del cliente.");
+    mostrarMensaje("Ocurrió un error inesperado al cargar datos del cliente.", 'error');
   });
 
 }
@@ -119,9 +142,9 @@ function openDeletePopup(clientId) {
       const result = await window.electronAPI.deleteClient(clientId);
       if (result.error) {
         console.error("Error al eliminar cliente:", result.error);
-        alert("Error al eliminar cliente.");
+        mostrarMensaje("Error al eliminar cliente.", 'error');
       } else {
-        alert("Cliente eliminado exitosamente.");
+        mostrarMensaje("Cliente eliminado exitosamente.", 'success');
         deletePopup.classList.add("hidden");
 
         // Refrescar la lista de clientes
@@ -130,7 +153,7 @@ function openDeletePopup(clientId) {
       }
     } catch (error) {
       console.error("Error inesperado al eliminar cliente:", error);
-      alert("Ocurrió un error inesperado al eliminar cliente.");
+      mostrarMensaje("Ocurrió un error inesperado al eliminar cliente.", 'error');
     }
   };
 }
@@ -144,14 +167,14 @@ window.handleCreateClient = async function handleCreateClient() {
     if (!clienteSchema.nombre || !clienteSchema.id || !clienteSchema.email || !clienteSchema.telefono || !clienteSchema.direccion) {
       const errorMessage = "Campos incompletos. Por favor, completa todos los campos.";
       console.error(errorMessage, { clienteSchema });
-      alert(errorMessage);
+      mostrarMensaje(errorMessage, 'error');
       return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clienteSchema.email)) {
       const errorMessage = "Email inválido. Por favor, ingresa un email válido.";
       console.error(errorMessage, { email: clienteSchema.email });
-      alert(errorMessage);
+      mostrarMensaje(errorMessage, 'error');
       return;
     }
 
@@ -160,10 +183,10 @@ window.handleCreateClient = async function handleCreateClient() {
 
     if (result.error) {
       console.error("Error al crear cliente en Supabase", { error: result.error, clienteSchema });
-      alert("Error al crear cliente: " + result.error);
+      mostrarMensaje("Error al crear cliente: " + result.error, 'error');
     } else {
       console.log("Cliente creado exitosamente:", result.data);
-      alert("Cliente creado exitosamente.");
+      mostrarMensaje("Cliente creado exitosamente.", 'success');
       document.getElementById("add-modal").classList.add("hidden");
 
       // Refresca la lista de clientes
@@ -172,7 +195,7 @@ window.handleCreateClient = async function handleCreateClient() {
     }
   } catch (error) {
     console.error("Error inesperado en handleCreateClient:", error);
-    alert("Ocurrió un error. Revisa la consola para más detalles.");
+    mostrarMensaje("Ocurrió un error. Revisa la consola para más detalles.", 'error');
   }
 };
 
@@ -185,14 +208,14 @@ window.handleUpdateClient = async function handleUpdateClient() {
     if (!clienteSchema.nombre || !clienteSchema.id || !clienteSchema.email || !clienteSchema.telefono || !clienteSchema.direccion) {
       const errorMessage = "Campos incompletos. Por favor, completa todos los campos.";
       console.error(errorMessage, { clienteSchema });
-      alert(errorMessage);
+      mostrarMensaje(errorMessage, 'error');
       return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clienteSchema.email)) {
       const errorMessage = "Email inválido. Por favor, ingresa un email válido.";
       console.error(errorMessage, { email: clienteSchema.email });
-      alert(errorMessage);
+      mostrarMensaje(errorMessage, 'error');
       return;
     }
 
@@ -201,10 +224,10 @@ window.handleUpdateClient = async function handleUpdateClient() {
 
     if (result.error) {
       console.error("Error al actualizar cliente en Supabase", { error: result.error, clienteSchema });
-      alert("Error al actualizar cliente: " + result.error);
+      mostrarMensaje("Error al actualizar cliente: " + result.error, 'error');
     } else {
       console.log("Cliente actualizado exitosamente:", result.data);
-      alert("Cliente actualizado exitosamente.");
+      mostrarMensaje("Cliente actualizado exitosamente.", 'success');
       document.getElementById("edit-modal").classList.add("hidden");
 
       // Refresca la lista de clientes
@@ -213,7 +236,7 @@ window.handleUpdateClient = async function handleUpdateClient() {
     }
   } catch (error) {
     console.error("Error inesperado en handleUpdateClient:", error);
-    alert("Ocurrió un error inesperado. Revisa la consola para más detalles.");
+    mostrarMensaje("Ocurrió un error inesperado. Revisa la consola para más detalles.", 'error');
   }
 };
 
@@ -224,12 +247,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const clients = await window.electronAPI.getAllClients();
     if (clients.error) {
       console.error('Error al cargar clientes:', clients.error);
-      alert('Error al cargar clientes. Revisa la consola para más detalles.');
+      mostrarMensaje('Error al cargar clientes. Revisa la consola para más detalles.', 'error');
     } else {
       renderClients(clients.data);
     }
   } catch (error) {
     console.error('Error inesperado al cargar clientes:', error);
-    alert('Ocurrió un error inesperado al cargar clientes.');
+    mostrarMensaje('Ocurrió un error inesperado al cargar clientes.', 'error');
   }
 });
