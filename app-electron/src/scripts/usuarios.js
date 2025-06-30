@@ -274,10 +274,42 @@ window.mostrarCorreoCompleto = function(correo) {
 // Definiciones de ejemplo para las funciones de popup (debes tener las tuyas)
 window.openEditUserPopup = function(id, nombre, email, rol) { 
     console.log('Abrir popup de edición para:', id, nombre, email, rol);
-    // Aquí iría la lógica para mostrar tu modal/popup de edición
+    
 };
 window.openDeleteUserPopup = function(id) { 
     console.log('Abrir popup de eliminación para:', id);
-    // Aquí iría la lógica para mostrar tu modal/popup de eliminación
+    const deletePopup = document.getElementById('delete-popup');
+    deletePopup.dataset.userId = id;
+    deletePopup.classList.remove('hidden');
 };
+window.closeDeleteUserPopup = function() {
+    const deletePopup = document.getElementById('delete-popup');
+    deletePopup.classList.add('hidden');
+    deletePopup.removeAttribute('data-user-id'); // Limpiar el ID del usuario
+}
+
+async function deleteUser(userId) {
+    if (!userId) {
+        console.error('ID de usuario no proporcionado para eliminar.');
+        mostrarMensaje('ID de usuario no proporcionado.', 'error');
+        return;
+    }
+
+    try {
+        const { data, error } = await window.electronAPI.deleteUser(userId);
+        if (error) {
+            console.error('Error al eliminar usuario:', error);
+            mostrarMensaje(`Error al eliminar usuario: ${error}`, 'error');
+        } else {
+            console.log('Usuario eliminado:', data);
+            mostrarMensaje('Usuario eliminado exitosamente.', 'success');
+            await loadUsersTable(); // Recargar la tabla de usuarios
+        }
+
+        closeDeleteUserPopup(); // Cerrar el popup de eliminación
+    } catch (e) {
+        console.error('Error inesperado al eliminar usuario:', e);
+        mostrarMensaje('Ocurrió un error inesperado. Por favor, intente de nuevo.', 'error');
+    }
+}
 

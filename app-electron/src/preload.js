@@ -10,6 +10,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   signOut: () => ipcRenderer.invoke("auth:signOut"),
   inviteUser: (inviteData) => ipcRenderer.invoke("usuarios:invite", inviteData),
   createUser: (userData) => ipcRenderer.invoke("usuarios:create", userData),
+  deleteUser: (userId) => ipcRenderer.invoke("usuarios:delete", userId),
   signOutAndClear: () => ipcRenderer.invoke("usuarios:logout"),
   getAllClients: () => ipcRenderer.invoke("clientes:getAllClients"),
   getClientByID: (id) => ipcRenderer.invoke("clientes:getClientByID", id),
