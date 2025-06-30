@@ -15,6 +15,11 @@ function buildClientSchema(modalId) {
 function renderClients(clients) {
   const container = document.querySelector(".grid");
   container.innerHTML = ""; // Limpia el contenedor antes de renderizar
+
+  if (!clients || clients.length === 0) {
+    container.innerHTML = '<p class="text-center text-gray-500 col-span-full py-10">No hay clientes para mostrar.</p>';
+    return; // Detiene la ejecución para no renderizar nada más
+  }
   clients.forEach((client) => {
     const card = document.createElement("div");
     card.className = "bg-white rounded-lg shadow-md overflow-hidden border border-gray-200";

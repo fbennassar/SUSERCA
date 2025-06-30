@@ -1,3 +1,26 @@
+// Crear el div de mensajes flotantes
+const mensajeDiv = document.createElement('div');
+mensajeDiv.id = 'mensaje-usuario';
+mensajeDiv.style.position = 'fixed';
+mensajeDiv.style.top = '20px';
+mensajeDiv.style.right = '20px';
+mensajeDiv.style.zIndex = '9999';
+mensajeDiv.style.padding = '12px 24px';
+mensajeDiv.style.borderRadius = '8px';
+mensajeDiv.style.display = 'none';
+mensajeDiv.style.fontWeight = 'bold';
+document.body.appendChild(mensajeDiv);
+
+function mostrarMensaje(texto, tipo = 'success') {
+  mensajeDiv.textContent = texto;
+  mensajeDiv.style.display = 'block';
+  mensajeDiv.style.background = tipo === 'success' ? '#22c55e' : '#ef4444';
+  mensajeDiv.style.color = '#fff';
+  setTimeout(() => {
+    mensajeDiv.style.display = 'none';
+  }, 3500);
+}
+
 function buildProveedorSchema(modalId) {
   const modal = document.getElementById(modalId); // Obtén el contenedor del modal dinámicamente
   const proveedorSchema = {
@@ -15,6 +38,14 @@ function buildProveedorSchema(modalId) {
 function renderProveedores(proveedores) {
   const container = document.querySelector(".grid");
   container.innerHTML = ""; // Limpia el contenedor antes de renderizar
+
+ 
+  if (!proveedores || proveedores.length === 0) {
+    container.innerHTML = '<p class="text-center text-gray-500 col-span-full py-10">No hay proveedores para mostrar.</p>';
+    return; // Detiene la ejecución para no renderizar nada más
+  }
+ 
+
   proveedores.forEach((proveedor) => {
     const card = document.createElement("div");
     card.className = "bg-white rounded-lg shadow-md overflow-hidden border border-gray-200";
@@ -38,7 +69,25 @@ function renderProveedores(proveedores) {
     container.appendChild(card);
   });
 }
+async function recargarProveedores() {
+  const container = document.querySelector(".grid");
+  const result = await window.electronAPI.getAllProveedores();
 
+  if (result.error) {
+    console.error('Error al recargar proveedores:', result.error);
+    mostrarMensaje('Error al recargar proveedores.', 'error');
+    // No hagas nada con la vista, déjala como está para que el usuario vea los datos antiguos.
+    return; 
+  }
+
+  if (!result.data || result.data.length === 0) {
+    // Si no hay datos, muestra un mensaje en lugar de dejar la vista en blanco.
+    container.innerHTML = '<p class="text-center text-gray-500 col-span-full">No hay proveedores para mostrar.</p>';
+  } else {
+    // Solo renderiza si realmente hay datos.
+    renderProveedores(result.data);
+  }
+}
 function openEditModal(proveedorId) {
   const editModal = document.getElementById("edit-modal");
   editModal.classList.remove("hidden");
@@ -47,7 +96,7 @@ function openEditModal(proveedorId) {
   window.electronAPI.getProveedorById(proveedorId).then((result) => {
     if (result.error) {
       console.error("Error al obtener proveedor para editar:", result.error);
-      alert("Error al cargar datos del proveedor.");
+      mostrarMensaje('Error al cargar datos del proveedor.', 'error');
     } else {
       const proveedor = result.data;
 
@@ -66,10 +115,12 @@ function openEditModal(proveedorId) {
       if (telefonoInput) telefonoInput.value = proveedor.telefono || "";
       if (direccionInput) direccionInput.value = proveedor.direccion || "";
     }
+
   }).catch((error) => {
     console.error("Error inesperado al cargar datos del proveedor:", error);
-    alert("Ocurrió un error inesperado al cargar datos del proveedor.");
+    mostrarMensaje('Ocurrió un error inesperado al cargar datos del proveedor.', 'error');
   });
+
 }
 
 function openDeletePopup(proveedorId) {
@@ -84,18 +135,15 @@ function openDeletePopup(proveedorId) {
       const result = await window.electronAPI.deleteProveedor(proveedorId);
       if (result.error) {
         console.error("Error al eliminar proveedor:", result.error);
-        alert("Error al eliminar proveedor.");
+        mostrarMensaje('Error al eliminar proveedor.', 'error');
       } else {
-        alert("Proveedor eliminado exitosamente.");
+        mostrarMensaje('Proveedor eliminado exitosamente.', 'success');
         deletePopup.classList.add("hidden");
-
-        // Refrescar la lista de proveedores
-        const proveedores = await window.electronAPI.getAllProveedores();
-        renderProveedores(proveedores.data);
+        await recargarProveedores();
       }
     } catch (error) {
       console.error("Error inesperado al eliminar proveedor:", error);
-      alert("Ocurrió un error inesperado al eliminar proveedor.");
+      mostrarMensaje('Ocurrió un error inesperado al eliminar proveedor.', 'error');
     }
   };
 }
@@ -109,14 +157,14 @@ window.handleCreateProveedor = async function handleCreateProveedor() {
     if (!proveedorSchema.nombre || !proveedorSchema.id || !proveedorSchema.email || !proveedorSchema.telefono || !proveedorSchema.direccion) {
       const errorMessage = "Campos incompletos. Por favor, completa todos los campos.";
       console.error(errorMessage, { proveedorSchema });
-      alert(errorMessage);
+      mostrarMensaje(errorMessage, 'error');
       return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(proveedorSchema.email)) {
       const errorMessage = "Email inválido. Por favor, ingresa un email válido.";
       console.error(errorMessage, { email: proveedorSchema.email });
-      alert(errorMessage);
+      mostrarMensaje(errorMessage, 'error');
       return;
     }
 
@@ -125,19 +173,16 @@ window.handleCreateProveedor = async function handleCreateProveedor() {
 
     if (result.error) {
       console.error("Error al crear proveedor en Supabase", { error: result.error, proveedorSchema });
-      alert("Error al crear proveedor: " + result.error);
+      mostrarMensaje('Error al crear proveedor: ' + result.error, 'error');
     } else {
       console.log("Proveedor creado exitosamente:", result.data);
-      alert("Proveedor creado exitosamente.");
+      mostrarMensaje('Proveedor creado exitosamente.', 'success');
       document.getElementById("add-modal").classList.add("hidden");
-
-      // Refresca la lista de proveedores
-      const proveedores = await window.electronAPI.getAllProveedores();
-      renderProveedores(proveedores.data);
+      await recargarProveedores();
     }
   } catch (error) {
     console.error("Error inesperado en handleCreateProveedor:", error);
-    alert("Ocurrió un error. Revisa la consola para más detalles.");
+    mostrarMensaje('Ocurrió un error. Revisa la consola para más detalles.', 'error');
   }
 };
 
@@ -150,14 +195,14 @@ window.handleUpdateProveedor = async function handleUpdateProveedor() {
     if (!proveedorSchema.nombre || !proveedorSchema.id || !proveedorSchema.email || !proveedorSchema.telefono || !proveedorSchema.direccion) {
       const errorMessage = "Campos incompletos. Por favor, completa todos los campos.";
       console.error(errorMessage, { proveedorSchema });
-      alert(errorMessage);
+      mostrarMensaje(errorMessage, 'error');
       return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(proveedorSchema.email)) {
       const errorMessage = "Email inválido. Por favor, ingresa un email válido.";
       console.error(errorMessage, { email: proveedorSchema.email });
-      alert(errorMessage);
+      mostrarMensaje(errorMessage, 'error');
       return;
     }
 
@@ -166,19 +211,16 @@ window.handleUpdateProveedor = async function handleUpdateProveedor() {
 
     if (result.error) {
       console.error("Error al actualizar proveedor en Supabase", { error: result.error, proveedorSchema });
-      alert("Error al actualizar proveedor: " + result.error);
+      mostrarMensaje('Error al actualizar proveedor: ' + result.error, 'error');
     } else {
       console.log("Proveedor actualizado exitosamente:", result.data);
-      alert("Proveedor actualizado exitosamente.");
+      mostrarMensaje('Proveedor actualizado exitosamente.', 'success');
       document.getElementById("edit-modal").classList.add("hidden");
-
-      // Refresca la lista de proveedores
-      const proveedores = await window.electronAPI.getAllProveedores();
-      renderProveedores(proveedores.data);
+      await recargarProveedores();
     }
   } catch (error) {
     console.error("Error inesperado en handleUpdateProveedor:", error);
-    alert("Ocurrió un error inesperado. Revisa la consola para más detalles.");
+    mostrarMensaje('Ocurrió un error inesperado. Revisa la consola para más detalles.', 'error');
   }
 };
 
@@ -188,13 +230,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     const proveedores = await window.electronAPI.getAllProveedores();
     if (proveedores.error) {
       console.error('Error al cargar proveedores:', proveedores.error);
-      alert('Error al cargar proveedores. Revisa la consola para más detalles.');
+      mostrarMensaje('Error al cargar proveedores. Revisa la consola para más detalles.', 'error');
     } else {
       renderProveedores(proveedores.data);
     }
   } catch (error) {
     console.error('Error inesperado al cargar proveedores:', error);
-    alert('Ocurrió un error inesperado al cargar proveedores.');
+    mostrarMensaje('Ocurrió un error inesperado al cargar proveedores.', 'error');
   }
 });
 
