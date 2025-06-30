@@ -1,16 +1,6 @@
 const session = require('../session/session');
 const supabase = require('./supabaseClient'); // Importa el cliente Supabase correctamente
 
-
-
-// Función para configurar el token de autenticación
-exports.setAuthToken = (token) => {
-  if (!supabase) {
-    throw new Error('Cliente Supabase no inicializado.');
-  }
-  supabase.auth.setAuth(token);
-};
-
 exports.createClient = async (clientData) => {
   if (!supabase) {
     throw new Error('Cliente Supabase no inicializado.');
@@ -104,6 +94,9 @@ exports.delete = async (id) => {
   if (!supabase) {
     throw new Error('Cliente Supabase no inicializado.');
   }
+  
+  const sessionData = await supabase.supabase.auth.getSession();
+  console.log("Datos de la sesión actual:", sessionData);
   console.log("ID proporcionado para eliminar:", id); // Log del ID
   const { data, error, count } = await supabase.supabase
     .from('cliente') // Cambiado a 'cliente'
@@ -111,12 +104,13 @@ exports.delete = async (id) => {
     .eq('id', id) // Filtrar por ID del cliente
     .select(); // Seleccionar para devolver el cliente actualizado
   console.log("Respuesta de Supabase en delete:", { data, error, count }); // Log de la respuesta
+  console.log("error reportado", error); // Log de los datos del cliente antes de la eliminación
+  console.log("Datos del cliente después de la eliminación:", data); // Log de los datos del cliente
+  console.log("Cantidad de filas afectadas:", count); // Log de la cantidad de filas afectadas
+  // Manejo de errores
   if (error) {
     console.error(`Error al marcar cliente con ID ${id} como inactivo en Supabase`, { error: error.message });
     throw new Error(error.message); // Lanza el error para que sea manejado en el frontend
-  }
-  if (count === 0) {
-    console.warn(`No se afectaron filas para el ID ${id}. Verifica las políticas de seguridad o los permisos.`);
   }
   return { data, error };
 };

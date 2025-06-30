@@ -1,4 +1,5 @@
-const { supabase, supabaseAdmin } = require('./supabaseClient.js');
+const { supabase } = require('./supabaseClient.js');
+const session = require('../session/session.js');
 
 exports.login = async (email, password) => {
 
@@ -7,7 +8,6 @@ exports.login = async (email, password) => {
   }
 
   try {
-
     const { data, error } = await supabase.functions.invoke('login_handler', {
       body: { email, password },
     });
@@ -33,6 +33,36 @@ exports.login = async (email, password) => {
       throw new Error(response && response.message ? response.message : 'Credenciales inválidas o usuario no encontrado.');
     }
 
+    // Extrae los tokens de la sesión
+    const { access_token: accessToken, refresh_token: refreshToken } = response.session;
+    console.log("Access Token:", accessToken);
+    console.log("Refresh Token:", refreshToken);
+    // Configura el token de autenticación en Supabase
+    if (accessToken && refreshToken) {
+      try {
+        const { data, error } = await supabase.auth.setSession({
+          access_token: accessToken,
+          refresh_token: refreshToken,
+        });
+        if (error) {
+          console.error("Error al configurar la sesión:", error.message);
+          throw new Error("Error al configurar la sesión de usuario.");
+        }
+        console.log("Datos de la sesión actual después de setSession:", data);
+      } catch (error) {
+        console.error("Error al configurar la sesión:", error.message);
+        throw new Error("Error al configurar la sesión de usuario.");
+      }
+    } else {
+      throw new Error('Tokens de sesión no encontrados.');
+    }
+    const sessionData = await supabase.auth.getSession;
+    console.log("Datos de la sesión actual:", sessionData);
+
+    session.setUser(response.user);
+    session.setProfile(this.getProfile(response.user.id));
+    console.log('Inicio de sesión exitoso:', response.user);
+    console.log('Perfil del usuario:', session.getProfile());
     return response.user;
   } catch (error) {
     console.error('Error al iniciar sesión (llamando a Edge Function con invoke):', error);
@@ -58,7 +88,7 @@ exports.getProfile = async (userId) => {
       `)
       .eq('id', userId)
       .single();
-
+      console.log("Datos obtenidos del perfil:", data); // Log para depuración
     if (error) {
       if (error.code === 'PGRST116') {
         console.warn(`No se encontró perfil para el usuario con ID: ${userId}`);
