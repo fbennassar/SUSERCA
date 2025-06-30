@@ -32,7 +32,7 @@ ipcMain.handle('clientes:getAllClients', async () => {
 });
 
 // Get Client by ID
-ipcMain.handle('clientes:getClientById', async (event, id) => {
+ipcMain.handle('clientes:getClientByID', async (event, id) => {
   try {
     const { data, error } = await getClientByID(id);
     if (error) {

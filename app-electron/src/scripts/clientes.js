@@ -44,7 +44,9 @@ function openEditModal(clientId) {
   editModal.classList.remove("hidden");
 
   // Cargar datos del cliente en el modal
-  window.electronAPI.getClientById(clientId).then((result) => {
+  window.electronAPI.getClientByID(clientId).then((result) => {
+    console.log("ID proporcionado desde el frontend:", clientId); // Log del ID proporcionado
+    console.log("Resultado de getClientById:", result); // Log del resultado obtenido
     if (result.error) {
       console.error("Error al obtener cliente para editar:", result.error);
       alert("Error al cargar datos del cliente.");
