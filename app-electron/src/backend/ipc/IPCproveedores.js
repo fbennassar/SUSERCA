@@ -1,6 +1,6 @@
 const { ipcMain } = require('electron');
 const { createProveedor, getAllProveedores, getProveedorByID, 
-        getProveedorByName, updateProveedor, deleteProveedor } 
+        getProveedorByName, updateProveedor, deleteProveedor, searchProveedores } 
         = require('../db/proveedores');
 // Create
 ipcMain.handle('proveedores:create', async (event, proveedorData) => {
@@ -88,3 +88,18 @@ ipcMain.handle('proveedores:delete', async (event, id) => {
         return { error: error.message };
     }
 });
+// Search Proveedores
+ipcMain.handle('proveedores:search', async (event, query) => {
+    try {
+        const { data, error } = await searchProveedores(query);
+        if (error) {
+            console.error('Error al buscar proveedores en IPC:', { error: error.message, query });
+            return { error };
+        }
+        return { data };
+    } catch (error) {
+        console.error('Error inesperado en IPC proveedores:search:', error);
+        return { error: error.message };
+    }
+});
+

@@ -1,5 +1,5 @@
 const { ipcMain } = require('electron');
-const { createClient, getAllClients, getClientByID, getClientByName, update, delete: deleteClient } = require('../db/clientes');
+const { createClient, getAllClients, getClientByID, getClientByName, update, delete: deleteClient, searchClients } = require('../db/clientes');
 
 // Create
 ipcMain.handle('clientes:create', async (event, clientData) => {
@@ -42,6 +42,20 @@ ipcMain.handle('clientes:getClientByID', async (event, id) => {
     return { data };
   } catch (error) {
     console.error('Error inesperado en IPC clientes:getClientById:', error);
+    return { error: error.message };
+  }
+});
+
+ipcMain.handle('clientes:searchClients', async (event, query) => {
+  try {
+    const { data, error } = await searchClients(query);
+    if (error) {
+      console.error('Error al buscar clientes en IPC:', { error: error.message, query });
+      return { error };
+    }
+    return { data };
+  } catch (error) {
+    console.error('Error inesperado en IPC clientes:search:', error);
     return { error: error.message };
   }
 });
