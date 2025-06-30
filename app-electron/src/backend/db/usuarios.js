@@ -1,4 +1,4 @@
-const { supabase } = require('./supabaseClient.js');
+const { supabase, supabaseAdmin } = require('./supabaseClient.js');
 const session = require('../session/session.js');
 
 exports.login = async (email, password) => {
