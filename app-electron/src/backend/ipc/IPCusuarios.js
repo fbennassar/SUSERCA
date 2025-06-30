@@ -144,3 +144,46 @@ ipcMain.handle('usuarios:create', async (event, { nombre, email, rolId, password
     return { data: null, error: error.message || 'Ocurrió un error en el servidor al procesar la creacion.' };
   }
 });
+
+ipcMain.handle('usuarios:delete', async (event, userId) => {
+
+  const currentProfile = session.getProfile();
+
+  if (!currentProfile) {
+    return { data: null, error: 'No hay perfil de usuario en sesión. Acción no autorizada.' };
+  }
+
+  if (!currentProfile.rol || currentProfile.rol.nombre !== 'Gerente') {
+    return { data: null, error: 'Acción no autorizada. Solo los Gerentes pueden eliminar usuarios.' };
+  }
+
+  try {
+    const result = await usuarios.deleteUser(userId);
+
+    return { data: result, error: null };
+  } catch (error) {
+    // Devolver el mensaje de error al frontend
+    return { data: null, error: error.message || 'Ocurrió un error en el servidor al procesar la eliminación.' };
+  }
+});
+
+ipcMain.handle('usuarios:update', async (event, { userId, updates }) => {
+  const currentProfile = session.getProfile();
+
+  if (!currentProfile) {
+    return { data: null, error: 'No hay perfil de usuario en sesión. Acción no autorizada.' };
+  }
+
+  if (!currentProfile.rol || currentProfile.rol.nombre !== 'Gerente') {
+    return { data: null, error: 'Acción no autorizada. Solo los Gerentes pueden actualizar usuarios.' };
+  }
+
+  try {
+    const result = await usuarios.updateUser(userId, updates);
+
+    return { data: result, error: null };
+  } catch (error) {
+    // Devolver el mensaje de error al frontend
+    return { data: null, error: error.message || 'Ocurrió un error en el servidor al procesar la actualización.' };
+  }
+});

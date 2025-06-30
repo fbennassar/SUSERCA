@@ -7,6 +7,17 @@ exports.login = async (email, password) => {
     throw new Error('Cliente Supabase (anónimo) no inicializado.');
   }
 
+  const isActiveUser = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('email', email)
+    .eq('activo', true)
+    .single();
+  if (isActiveUser.error) {
+    console.error('Error al verificar si el usuario está activo:', isActiveUser.error);
+    throw new Error('Error al verificar el estado del usuario.');
+  }
+
   try {
     const { data, error } = await supabase.functions.invoke('login_handler', {
       body: { email, password },
@@ -123,7 +134,9 @@ exports.getAllProfiles = async (nombreFilter = '', rolFilter = '') => {
         id_rol,
         rol (
           nombre
-        )`);
+          )`)
+      .eq('activo', true)
+      .order('nombre', { ascending: true });
         
     if (nombreFilter) {
       query = query.ilike('nombre', `%${nombreFilter}%`);
@@ -207,3 +220,51 @@ exports.createUser = async (nombre, email, rolId, password) => {
     throw error;
   }
 };
+
+exports.deleteUser = async (userId) => {
+  // el estatus de activo pasa a false
+  if (!supabaseAdmin) {
+    console.error('[db/usuarios.js] deleteUser: Error - Cliente Supabase Admin no inicializado. Asegúrate de que SUPABASE_ADMIN_KEY (o SERVICE_ROLE_KEY) esté configurada.');
+    throw new Error('Cliente Supabase Admin no inicializado. No se puede eliminar el usuario.');
+  }
+  try {
+    const { data, error } = await supabaseAdmin
+      .from('profiles')
+      .update({ activo: false })
+      .eq('id', userId);
+
+    if (error) {
+      console.error('[db/usuarios.js] deleteUser: Error al actualizar el estatus del usuario:', error);
+      throw new Error(error.message || 'Error desconocido al eliminar el usuario.');
+    }
+
+    return data;
+  } catch (error) {
+    console.error('[db/usuarios.js] deleteUser: Excepción general:', error.message);
+    throw error;
+  }
+}
+
+exports.updateUser = async (userId, updates) => {
+  if (!supabaseAdmin) {
+    console.error('[db/usuarios.js] updateUser: Error - Cliente Supabase Admin no inicializado. Asegúrate de que SUPABASE_ADMIN_KEY (o SERVICE_ROLE_KEY) esté configurada.');
+    throw new Error('Cliente Supabase Admin no inicializado. No se puede actualizar el usuario.');
+  }
+
+  try {
+    const { data, error } = await supabaseAdmin
+      .from('profiles')
+      .update(updates)
+      .eq('id', userId);
+
+    if (error) {
+      console.error('[db/usuarios.js] updateUser: Error al actualizar el usuario:', error);
+      throw new Error(error.message || 'Error desconocido al actualizar el usuario.');
+    }
+
+    return data;
+  } catch (error) {
+    console.error('[db/usuarios.js] updateUser: Excepción general:', error.message);
+    throw error;
+  }
+}

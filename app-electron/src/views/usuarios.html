@@ -400,17 +400,21 @@
                 <div>
                   <h1 class="pl-2 text-base">Nombre</h1>
                   <input
+                    id="editNombre"
                     type="text"
                     placeholder="Ej: Jose"
                     class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
+                    required
                   />
                 </div>
                 <div>
                   <h1 class="pl-2 text-base">Correo</h1>
                   <input
+                    id="editEmail"
                     type="email"
                     placeholder="Ej: email@example.com"
                     class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
+                    required
                   />
                 </div>
                 <div>
@@ -426,14 +430,6 @@
                   >
                     <option value="" disabled selected>Rol...</option>
                   </select>
-                </div>
-                <div>
-                  <h1 class="pl-2 text-base">Clave</h1>
-                  <input
-                    type="password"
-                    placeholder="Ej: Clave"
-                    class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
-                  />
                 </div>
                 <div class="col-span-1 sm:col-span-2 flex justify-end mt-1">
                   <button
@@ -468,7 +464,7 @@
                 Cancelar
               </button>
               <button
-                onclick=""
+                onclick="deleteUser(document.getElementById('delete-popup').dataset.userId)"
                 class="px-4 py-2 rounded-full bg-red-600 text-white hover:bg-red-700 hover:cursor-pointer transition"
               >
                 Eliminar
