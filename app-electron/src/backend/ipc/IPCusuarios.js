@@ -122,7 +122,7 @@ ipcMain.handle('usuarios:invite', async (event, { email, rolId, redirectTo }) =>
 });
 
 
-ipcMain.handle('usuarios:create', async (event, { nombre, email, rolId, password }) => {
+ipcMain.handle('usuarios:create', async (event, { nombre, email, rolId, telefono, password }) => {
 
   const currentProfile = session.getProfile();
 
@@ -136,7 +136,7 @@ ipcMain.handle('usuarios:create', async (event, { nombre, email, rolId, password
   }
 
   try {
-    const result = await usuarios.createUser(nombre, email, rolId, password);
+    const result = await usuarios.createUser(nombre, email, rolId, telefono, password);
 
     return { data: result, error: null };
   } catch (error) {

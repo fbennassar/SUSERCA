@@ -90,19 +90,21 @@ window.addEventListener('DOMContentLoaded', async () => {
             const nombreInput = document.getElementById('createNombre');
             const emailInput = document.getElementById('createEmail');
             const rolId = createSelectRol.value;
+            const createTelefonoInput = document.getElementById('createTelefono'); // Asegúrate de que este ID coincida con el del formulario de creación
             const passwordInput = document.getElementById('createPassword');
 
             const nombre = nombreInput.value.trim();
             const email = emailInput.value.trim();
+            const telefono = createTelefonoInput.value.trim(); // Manejar si el campo de teléfono no existe
             const password = passwordInput.value;
 
-            if (!nombre || !email || !rolId || !password) {
-                alert('Por favor, complete todos los campos.');
+            if (!nombre || !email || !rolId || !password || !telefono) {
+                mostrarMensaje('Por favor, complete todos los campos.', 'error');
                 return;
             }
 
             try {
-                const { data, error } = await window.electronAPI.createUser({ nombre, email, rolId, password });
+                const { data, error } = await window.electronAPI.createUser({ nombre, email, rolId, telefono, password });
                 if (error) {
                     console.error('Error al crear usuario:', error);
                     mostrarMensaje(`Error al crear usuario: ${error}`, 'error');
@@ -112,6 +114,7 @@ window.addEventListener('DOMContentLoaded', async () => {
                     nombreInput.value = '';
                     emailInput.value = '';
                     passwordInput.value = '';
+                    createTelefonoInput.value = ''; // Limpiar el campo de teléfono
                     selectRolForm.value = '';
                     selectRolForm.classList.add('text-gray-400');
                     selectRolForm.classList.remove('text-black');
