@@ -1,4 +1,5 @@
 const { contextBridge, ipcRenderer } = require("electron");
+const { getCategoria } = require("./backend/db/categoria");
 
 contextBridge.exposeInMainWorld("electronAPI", {
   login: (email, password) =>
@@ -7,6 +8,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   getUser: () => ipcRenderer.invoke("auth:getUser"),
   getProfile: (userId) => ipcRenderer.invoke("auth:getProfile", userId),
   getRol: () => ipcRenderer.invoke("rol:getRol"),
+  getCategoria: () => ipcRenderer.invoke("categoria:getCategoria"),
   signOut: () => ipcRenderer.invoke("auth:signOut"),
   inviteUser: (inviteData) => ipcRenderer.invoke("usuarios:invite", inviteData),
   createUser: (userData) => ipcRenderer.invoke("usuarios:create", userData),

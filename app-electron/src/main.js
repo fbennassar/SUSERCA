@@ -7,6 +7,7 @@ require("electron-reload")(process.cwd(), {
 
 require("./backend/ipc/IPCusuarios.js");
 require("./backend/ipc/IPCrol.js");
+require("./backend/ipc/IPCcategoria.js");
 require("./backend/ipc/IPCclientes.js");
 require("./backend/ipc/IPCproveedores");
 require("./backend/ipc/IPCinventario.js");
