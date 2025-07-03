@@ -65,7 +65,7 @@ function buildProductoSchema(modalId) {
   const productoSchema = {
     nombre: modal.querySelector("input[name='nombre']").value,
     id: modal.querySelector("input[name='id']").value,
-    descripcion: modal.querySelector("input[name='descripcion']").value,
+    descripcion: modal.querySelector("textarea[name='descripcion']").value,
     precio: modal.querySelector("input[name='precio']").value,
     cantidad: modal.querySelector("input[name='cantidad']").value,
     categoria: capitalizeCategory(modal.querySelector("input[name='categoria']").value),
