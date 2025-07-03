@@ -1,5 +1,5 @@
 const { ipcMain, dialog } = require('electron');
-const { createProducto, getAllProductos, getProductoByID, getProductoByName, updateProducto, deleteProducto, searchProductos } = require('../db/inventario');
+const { createProducto, getAllProductos, getProductoByID, getProductoByName, updateProducto, deleteProducto, searchProductos, getProductosByCategoria } = require('../db/inventario');
 const xlsx = require('xlsx');
 const fs = require('fs');
 
@@ -134,7 +134,8 @@ ipcMain.handle('productos:exportarExcel', async () => {
       nombre: producto.nombre,
       descripcion: producto.descripcion,
       precio: producto.precio,
-      cantidad: producto.cantidad
+      cantidad: producto.cantidad,
+      categoria: producto.categoria
     }));
 
     // 3. Preparar los datos para la hoja de cálculo
@@ -150,5 +151,17 @@ ipcMain.handle('productos:exportarExcel', async () => {
   } catch (error) {
     console.error('Error al generar el reporte de productos:', error);
     return { error: error.message || 'Un error desconocido ocurrió.' };
+  }
+});
+
+ipcMain.handle('productos:getByCategoria', async (event, categoriaId) => {
+  try {
+    const { data, error } = await getProductosByCategoria(categoriaId);
+    if (error) {
+      return { error: error.message };
+    }
+    return { data };
+  } catch (error) {
+    return { error: error.message };
   }
 });

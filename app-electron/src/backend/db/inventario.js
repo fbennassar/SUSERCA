@@ -149,3 +149,33 @@ exports.searchProductos = async (query) => {
   }
   return { data, error };
 };
+
+exports.getProductosByCategoria = async (categoriaId) => {
+  if (!supabase) {
+    throw new Error('Cliente Supabase no inicializado.');
+  }
+  try {
+    const { data, error } = await supabase.supabase
+      .from('producto')
+      .select(`
+        *,
+        categoria (
+          nombre
+        )
+      `)
+      .eq('id_categoria', categoriaId);
+
+    if (error) {
+      throw error;
+    }
+    // Mapeamos para mantener la consistencia del objeto producto
+    const productos = data.map(p => ({
+      ...p,
+      categoria: p.categoria.nombre
+    }));
+    return { data: productos, error: null };
+  } catch (error) {
+    console.error('Error en getProductosByCategoria:', error);
+    return { data: null, error };
+  }
+};

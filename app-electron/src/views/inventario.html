@@ -248,15 +248,11 @@
             <div>
               <h1 class="pl-2 text-base">Categoria</h1>
               <select
-                name="rol"
-                id="rol"
+                name="categoria"
+                id="category-filter-select"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
               >
-                <option value="all">Todas las categorias</option>
-                <option value="rol1">Seguridad Vial</option>
-                <option value="rol2">Implementos de Seguridad</option>
-                <option value="rol3">Jose Finol</option>
-                <option value="rol4">Napolitano</option>
+                <option value="">Todas las categorias</option>
               </select>
             </div>
             <div class="col-span-1 sm:col-span-2 flex gap-5 justify-end mt-1">
@@ -366,11 +362,14 @@
               </div>
               <div>
                 <h1 class="pl-1">Categoria</h1>
-                <input
-                  type="text"
+                <select
+                  required
                   name="categoria"
+                  id="add-product-categoria"
                   class="border border-black shadow-md rounded-full bg-white w-full pl-2"
-                />
+                >
+                  <option value="">Seleccionar categoría</option>
+                </select>
               </div>
               <div>
                 <h1 class="pl-1">Precio</h1>
@@ -410,6 +409,7 @@
                 <input
                   type="file"
                   accept="image/*"
+                  name="imagen"
                   id="add-product-image"
                   class="border border-black shadow-md rounded-full bg-white w-full mt-2"
                 />
@@ -495,7 +495,7 @@
               </div>
               <div>
                 <div class="pl-1 flex flex-row items-center">
-                  <h1>Cargar Imagen</h1>
+                  <h1>Cargar Nueva Imagen</h1>
                   <button class="hover:cursor-pointer ml-5">
                     <img
                       class="size-6 mb-1 pl-2"
@@ -507,7 +507,8 @@
                 <input
                   type="file"
                   accept="image/*"
-                  id="add-product-image"
+                  name="imagen"
+                  id="edit-product-image"
                   class="border border-black shadow-md rounded-full bg-white w-full mt-2"
                 />
               </div>

@@ -27,6 +27,8 @@ async function loadAllProductos() {
   }
 }
 
+
+
 function renderProductos(productos) {
     const container = document.querySelector('#cards-grid'); // Usar el ID único del contenedor de las cards
     container.innerHTML = ''; // Limpia el contenedor antes de renderizar
@@ -62,13 +64,9 @@ function renderProductos(productos) {
 
 function buildProductoSchema(modalId) {
   const modal = document.getElementById(modalId); // Obtén el contenedor del modal dinámicamente
-  const categoriaInput = modal.querySelector("input[name='categoria']").value;
+  const categoriaInput = modal.querySelector("select[name='categoria']").value;
+  
 
-  // Mapear categorías a sus respectivos IDs
-  const categoriaMap = {
-    "Seguridad Vial": 1,
-    "Implementos De Seguridad": 2
-  };
 
   const productoSchema = {
     nombre: modal.querySelector("input[name='nombre']").value,
@@ -76,7 +74,7 @@ function buildProductoSchema(modalId) {
     descripcion: modal.querySelector("textarea[name='descripcion']").value,
     precio: modal.querySelector("input[name='precio']").value,
     cantidad: modal.querySelector("input[name='cantidad']").value,
-    id_categoria: categoriaMap[capitalizeCategory(categoriaInput)],
+    id_categoria: categoriaInput ? parseInt(categoriaInput) : null, // Asegúrate de que sea un número
     // imagen: modal.querySelector("input[name='imagen']")?.value || "", // Si aplica
   };
 
@@ -284,3 +282,51 @@ function mostrarMensaje(texto, tipo = 'success') {
         mensajeDiv.style.display = 'none';
     }, 3500);
 }
+
+// ...existing code...
+// Cargar productos automáticamente al abrir la página
+document.addEventListener('DOMContentLoaded', async () => {
+  loadAllProductos(); // Carga inicial de todos los productos
+
+  // --- LÓGICA DE FILTRADO POR CATEGORÍA ---
+  const categorySelect = document.getElementById('category-filter-select');
+  const addProductCategoryInput = document.getElementById('add-product-categoria');
+
+  // Poblar el select con las categorías
+  try {
+    const { categoria: categorias, error } = await window.electronAPI.getCategorias();
+    if (error) {
+      mostrarMensaje('Error al cargar categorías', 'error');
+    } else {
+      categorias.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.id;
+        option.textContent = cat.nombre;
+        categorySelect.appendChild(option);
+        addProductCategoryInput.appendChild(option.cloneNode(true)); // Clonar la opción para el input de agregar producto
+      });
+    }
+  } catch (e) {
+    mostrarMensaje('Error inesperado al cargar categorías.', 'error');
+  }
+
+  // Añadir event listener para el cambio de categoría
+  categorySelect.addEventListener('change', async (event) => {
+    const categoryId = event.target.value;
+    if (categoryId) {
+      // Filtrar por la categoría seleccionada
+      try {
+        const result = await window.electronAPI.getProductosByCategoria(categoryId);
+        if (result.error) {
+          mostrarMensaje(`Error al filtrar: ${result.error}`, 'error');
+        } else {
+          renderProductos(result.data);
+        }
+      } catch (e) {
+        mostrarMensaje('Error inesperado al filtrar productos.', 'error');
+      }
+    } else {
+      // Si se selecciona "Todas las categorías", cargar todos los productos
+      loadAllProductos();
+    }
+  })});

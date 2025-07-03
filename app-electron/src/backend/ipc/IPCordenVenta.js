@@ -4,7 +4,7 @@ const ordenVentaDB = require('../db/ordenVenta');
 ipcMain.handle('ordenVenta:create', async (event, ordenVentaData, productos) => {
   try {
     // Asegurarse de que RIF y Razón social estén presentes en ordenVentaData
-    if (!ordenVentaData.RIF || !ordenVentaData.razonSocial) {
+    if (!ordenVentaData.rif || !ordenVentaData.nombre) {
       throw new Error('Faltan RIF o Razón social en los datos de la orden de venta');
     }
 

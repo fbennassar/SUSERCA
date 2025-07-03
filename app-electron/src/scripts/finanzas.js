@@ -34,15 +34,15 @@ function renderOrdenes(ordenes) {
     return;
   }
   container.innerHTML = ''; // Limpia el contenedor antes de renderizar
-
   ordenes.forEach((orden) => {
     const row = document.createElement('tr');
+    const entidad = orden.tipo === 'Venta' ? orden.cliente : orden.proveedor;
     row.className = 'divide-x divide-gray-200';
     row.innerHTML = `
       <td class="text-left px-2 py-2">${orden.id}</td>
       <td class="text-left px-2 py-2">${orden.tipo}</td>
-      <td class="text-left px-2 py-2">${orden.proveedor?.id || 'N/A'}</td>
-      <td class="text-left px-2 py-2">${orden.proveedor?.nombre || 'N/A'}</td>
+      <td class="text-left px-2 py-2">${entidad?.id || 'N/A'}</td>
+      <td class="text-left px-2 py-2">${entidad?.nombre || 'N/A'}</td>
       <td class="text-left px-2 py-2">${orden.monto || 'N/A'}</td>
       <td class="text-left px-2 py-2">${orden.monto_pagado || 'N/A'}</td>
       <td class="text-left px-2 py-2">${orden.monto_restante || 'N/A'}</td>
@@ -70,11 +70,13 @@ window.handleCreateOrdenVenta = async function handleCreateOrdenVenta() {
   try {
     const ordenVentaData = {
       rif: document.querySelector("input[name='rif']").value,
-      razon_social: document.querySelector("input[name='razon_social']").value,
+      nombre: document.querySelector("input[name='razon_social']").value,
       fecha_ini: document.querySelector("input[name='fecha_ini']").value,
       monto: calculateMonto(),
       estatus: 1, // Example status
     };
+
+    console.log('Orden Venta Data:', ordenVentaData); // Log para inspeccionar datos
 
     const productos = getSelectedProductos();
 
@@ -85,6 +87,14 @@ window.handleCreateOrdenVenta = async function handleCreateOrdenVenta() {
       alert('Error al crear orden de venta.');
     } else {
       alert('Orden de venta creada exitosamente.');
+      document.getElementsByName('rif')[0].value = '';
+      document.getElementsByName('razon_social')[0].value = '';
+      document.getElementsByName('fecha_ini')[0].value = '';
+      document.getElementsByName('cantidad')[0].value = '';
+      const productosTable = document.getElementById('productos-tbody');
+      if (productosTable) {
+        productosTable.innerHTML = ''; // Limpiar la tabla de productos
+      }
       loadOrdenes();
     }
   } catch (error) {
@@ -112,6 +122,16 @@ window.handleCreateOrdenCompra = async function handleCreateOrdenCompra() {
       alert('Error al crear orden de compra.');
     } else {
       alert('Orden de compra creada exitosamente.');
+      // limpiar campos del modal
+      document.getElementsByName('rif')[0].value = '';
+      document.getElementsByName('razon_social')[0].value = '';
+      document.getElementsByName('fecha_ini')[0].value = '';
+      document.getElementsByName('cantidad')[0].value = '';
+      const productosTable = document.getElementById('productos-tbody');
+      if (productosTable) {
+        productosTable.innerHTML = ''; // Limpiar la tabla de productos
+      }
+      // Cerrar el modal
       loadOrdenes();
     }
   } catch (error) {
