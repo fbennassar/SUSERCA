@@ -10,6 +10,8 @@ require("./backend/ipc/IPCrol.js");
 require("./backend/ipc/IPCclientes.js");
 require("./backend/ipc/IPCproveedores");
 require("./backend/ipc/IPCinventario.js");
+require("./backend/ipc/IPCordenVenta.js");
+require("./backend/ipc/IPCordenCompra.js");
 
 const db = require("./backend/db/supabaseClient.js");
 const path = require("path");

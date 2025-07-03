@@ -8,6 +8,7 @@
     <script src="../scripts/authGuard.js" defer></script>
     <script src="../scripts/sidebar.js" defer></script>
     <script src="../scripts/header.js"></script>
+    <script src="../scripts/finanzas.js" defer></script>
   </head>
 
   <body class="min-h-screen bg-zinc-200 flex flex-col">
@@ -207,16 +208,16 @@
                 id="TipoOrden"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
                 onchange="
-              this.classList.toggle('text-gray-400', this.value === '');
-              this.classList.toggle('text-black', this.value !== '');
-            "
+                  this.classList.toggle('text-gray-400', this.value === '');
+                  this.classList.toggle('text-black', this.value !== '');
+                "
               >
                 <option class="text-black font-bold" value="" disabled selected>
                   Seleccione un tipo de orden
                 </option>
 
-                <option class="text-black" value="">Venta</option>
-                <option class="text-black" value="">Compra</option>
+                <option class="text-black" value="Venta">Venta</option>
+                <option class="text-black" value="Compra">Compra</option>
               </select>
             </div>
 
@@ -224,16 +225,20 @@
               <h1 class="pl-2 text-base">RIF</h1>
               <input
                 type="text"
+                name="rif"
+                id="rif"
                 placeholder="J-12345678-0"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
               />
             </div>
 
             <div>
-              <h1 class="pl-2 text-base">Razon social</h1>
+              <h1 class="pl-2 text-base">Razón social</h1>
               <input
                 type="text"
-                placeholder="Razon social"
+                name="razon_social"
+                id="razon_social"
+                placeholder="Razón social"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
               />
             </div>
@@ -242,6 +247,7 @@
               <h1 class="pl-2 text-base">Fecha de orden</h1>
               <input
                 type="date"
+                name="fecha_ini"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
               />
             </div>
@@ -256,20 +262,15 @@
               <div>
                 <h1 class="pl-2 text-base">Seleccionar Productos</h1>
                 <select
-                  name="Productos"
-                  id="Productos"
+                  name="productos"
+                  id="productos"
                   class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
-                  onchange="              
-                this.classList.toggle('text-gray-400', this.value === '');
-                this.classList.toggle('text-black', this.value !== '');
-                "
+                  onchange="
+                    this.classList.toggle('text-gray-400', this.value === '');
+                    this.classList.toggle('text-black', this.value !== '');
+                  "
                 >
-                  <option
-                    class="text-black font-bold"
-                    value=""
-                    disabled
-                    selected
-                  >
+                  <option class="text-black font-bold" value="" disabled selected>
                     Seleccione un producto
                   </option>
 
@@ -284,7 +285,8 @@
               <div>
                 <h1 class="pl-2 text-base">Cantidad</h1>
                 <input
-                  type="text"
+                  type="number"
+                  name="cantidad"
                   placeholder="Ej: 20"
                   class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
                 />
@@ -294,7 +296,8 @@
                 <h1 class="invisible text-base">.</h1>
                 <div class="flex justify-end items-start h-full">
                   <button
-                    type="submit"
+                    type="button"
+                    onclick="addProductoToOrden()"
                     class="bg-green-700 shadow-md text-white rounded-md px-4 py-1 font-bold hover:bg-green-800 hover:cursor-pointer transition"
                   >
                     Añadir a orden
@@ -303,13 +306,9 @@
               </div>
 
               <div class="overflow-x-auto mt-4 w-full col-span-3">
-                <table
-                  class="w-full border border-gray-300 rounded-lg bg-white"
-                >
+                <table class="w-full border border-gray-300 rounded-lg bg-white productos-table">
                   <thead>
-                    <tr
-                      class="divide-x divide-gray-300 border-b border-gray-300"
-                    >
+                    <tr class="divide-x divide-gray-300 border-b border-gray-300">
                       <th class="w-1/5 px-4 py-2">Producto</th>
                       <th class="w-1/5 px-4 py-2">Cantidad</th>
                       <th class="w-1/5 px-4 py-2">Precio Unitario</th>
@@ -318,24 +317,8 @@
                     </tr>
                   </thead>
 
-                  <tbody class="divide-y divide-gray-200">
-                    <tr class="divide-x divide-gray-200">
-                      <td class="text-left px-2 py-2 truncate max-w-[100px]">
-                        Producto 1
-                      </td>
-                      <td class="text-left px-2 py-2 truncate max-w-[100px]">
-                        20
-                      </td>
-                      <td class="text-left px-2 py-2 truncate max-w-[100px]">
-                        100
-                      </td>
-                      <td class="text-left px-2 py-2 truncate max-w-[100px]">
-                        2000
-                      </td>
-                      <td class="text-left px-2 py-2 truncate max-w-[100px]">
-                        si
-                      </td>
-                    </tr>
+                  <tbody id="productos-tbody">
+                    <!-- Rows will be dynamically added here -->
                   </tbody>
                 </table>
               </div>
@@ -343,6 +326,7 @@
           </form>
           <div class="col-span-1 sm:col-span-2 flex justify-end my-3">
             <button
+              id="btn-guardar_orden"
               type="submit"
               class="bg-green-700 shadow-md text-white rounded-md px-4 py-3 font-bold hover:bg-green-800 hover:cursor-pointer transition"
             >
@@ -565,7 +549,7 @@
         styles="box-sizing: border-box"
       >
         <div class="overflow-x-auto mt-4 w-full col-span-3">
-          <table class="w-full border border-gray-300 rounded-lg bg-white">
+          <table id="ordenes-table" class="w-full border border-gray-300 rounded-lg bg-white ordenes-grid">
             <thead>
               <tr class="divide-x divide-gray-300 border-b border-gray-300">
                 <th class="w-1/5 px-4 py-2">ID</th>
@@ -814,22 +798,22 @@
             &times;
           </button>
 
-          <h1 class="text-2xl font-bold mb-4 text-start">
+          <h1 for="pagos-popup-title" class="text-2xl font-bold mb-4 text-start">
             Agregar pago a orden: {id de orden}
           </h1>
           <div
             class="bg-gray-400 rounded-xl px-6 py-6 shadow-lg max-w-xl w-full relative grid grid-cols-1"
           >
-            <label class="text-black font-bold mt-1"
-              >Razon social: {razon social}</label
+            <label for="razon-social" class="text-black font-bold mt-1"
+              >Razón social: {razon social}</label
             >
-            <label class="text-black font-bold mt-1"
+            <label for="monto-total" class="text-black font-bold mt-1"
               >Monto total: {monto total orden}</label
             >
-            <label class="text-black font-bold mt-1"
+            <label for="monto-pagado" class="text-black font-bold mt-1"
               >Monto pagado: {monto pagado orden}</label
             >
-            <label class="text-black font-bold mt-1"
+            <label for="monto-restante" class="text-black font-bold mt-1"
               >Monto restante: {total - monto pagado}</label
             >
           </div>
@@ -847,7 +831,9 @@
             />
           </div>
           <div class="mt-4">
-            <label class="text-base pl-2 mt-2 font-bold">Fecha del pago</label>
+            <label class="text-base pl-2 mt-2 font-bold" for="pago-fecha"
+              >Fecha del pago</label
+            >
             <input
               id="pago-fecha"
               type="date"
@@ -856,7 +842,9 @@
           </div>
 
           <div class="mt-4">
-            <label class="text-base pl-2 mt-2 font-bold">Tipo de Pago</label>
+            <label class="text-base pl-2 mt-2 font-bold" for="pago-tipo"
+              >Tipo de Pago</label
+            >
             <select
               id="pago-tipo"
               class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
@@ -884,6 +872,7 @@
 
             <button
               type="button"
+              id="btn-registrar-pago"
               class="bg-green-700 shadow-md text-white rounded-md px-4 py-2 font-bold hover:bg-green-800 hover:cursor-pointer transition mt-4"
             >
               Registrar pago
@@ -905,9 +894,7 @@
               </thead>
               <tbody id="historial-pagos-body">
                 <tr>
-                  <td class="px-4 py-2">2024-06-15</td>
-                  <td class="px-4 py-2">$100</td>
-                  <td class="px-4 py-2">Cuota</td>
+                  
                 </tr>
               </tbody>
             </table>
@@ -935,13 +922,14 @@
           <div
             class="bg-gray-400 rounded-xl px-6 py-6 shadow-lg max-w-xl w-full relative grid grid-cols-1"
           >
-            <label class="text-black mt-1 text-start text-2xl"
-              >¿Estas seguro de que deseas eliminar la orden {ID orden}?</label
-            >
+            <label id="delete-popup-label" class="text-black mt-1 text-start text-2xl">
+              ¿Estas seguro de que deseas eliminar la orden?
+            </label>
             <div class="grid grid-cols-2 gap-3">
               <button
                 type="button"
                 class="bg-white shadow-md text-black rounded-md px-4 py-2 font-bold hover:bg-gray-300 hover:cursor-pointer transition mt-4"
+                onclick="document.getElementById('delete-popup').classList.add('hidden')"
               >
                 Cancelar
               </button>
@@ -949,6 +937,7 @@
               <button
                 type="button"
                 class="bg-red-600 shadow-md text-white rounded-md px-4 py-2 font-bold hover:bg-red-700 hover:cursor-pointer transition mt-4"
+                id="delete-confirm-button"
               >
                 Eliminar
               </button>
