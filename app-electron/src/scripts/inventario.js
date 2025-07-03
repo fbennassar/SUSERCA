@@ -73,7 +73,7 @@ function buildProductoSchema(modalId) {
   const productoSchema = {
     nombre: modal.querySelector("input[name='nombre']").value,
     id: modal.querySelector("input[name='id']").value,
-    descripcion: modal.querySelector("input[name='descripcion']").value,
+    descripcion: modal.querySelector("textarea[name='descripcion']").value,
     precio: modal.querySelector("input[name='precio']").value,
     cantidad: modal.querySelector("input[name='cantidad']").value,
     id_categoria: categoriaMap[capitalizeCategory(categoriaInput)],
@@ -120,7 +120,7 @@ function openEditModal(productId) {
       // Asegúrate de que los campos del modal existan antes de asignar valores
       const nombreInput = editModal.querySelector("input[name='nombre']");
       const idInput = editModal.querySelector("input[name='id']");
-      const descripcionInput = editModal.querySelector("input[name='descripcion']");
+      const descripcionInput = editModal.querySelector("textarea[name='descripcion']");
       const precioInput = editModal.querySelector("input[name='precio']");
       const cantidadInput = editModal.querySelector("input[name='cantidad']");
       const categoriaInput = editModal.querySelector("input[name='categoria']");
