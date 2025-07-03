@@ -47,4 +47,5 @@ contextBridge.exposeInMainWorld("electronAPI", {
   deleteProducto: (id) => ipcRenderer.invoke('productos:delete', id),
   getProductoByID: (id) => ipcRenderer.invoke('productos:getByID', id),
   getProductoByName: (name) => ipcRenderer.invoke('productos:getByName', name),
+  reporteExcelProductos: () => ipcRenderer.invoke('productos:exportarExcel'),
 });

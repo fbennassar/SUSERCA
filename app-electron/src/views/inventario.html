@@ -280,6 +280,7 @@
       </div>
       <div class="w-full max-w-6xl mx-auto flex justify-start mt-2">
         <button
+          onclick="window.electronAPI.reporteExcelProductos()"
           class="bg-green-700 border border-green-700 text-white rounded-full px-15 py-1 font-bold shadow-md hover:bg-green-800 hover:cursor-pointer transition"
         >
           Imprimir Reporte
@@ -407,7 +408,9 @@
                   </button>
                 </div>
                 <input
-                  type="text"
+                  type="file"
+                  accept="image/*"
+                  id="add-product-image"
                   class="border border-black shadow-md rounded-full bg-white w-full mt-2"
                 />
               </div>
@@ -502,7 +505,9 @@
                   </button>
                 </div>
                 <input
-                  type="text"
+                  type="file"
+                  accept="image/*"
+                  id="add-product-image"
                   class="border border-black shadow-md rounded-full bg-white w-full mt-2"
                 />
               </div>
