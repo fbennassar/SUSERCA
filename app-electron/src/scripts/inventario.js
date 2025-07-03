@@ -62,19 +62,26 @@ function renderProductos(productos) {
 
 function buildProductoSchema(modalId) {
   const modal = document.getElementById(modalId); // Obtén el contenedor del modal dinámicamente
+  const categoriaInput = modal.querySelector("input[name='categoria']").value;
+
+  // Mapear categorías a sus respectivos IDs
+  const categoriaMap = {
+    "Seguridad Vial": 1,
+    "Implementos De Seguridad": 2
+  };
+
   const productoSchema = {
     nombre: modal.querySelector("input[name='nombre']").value,
     id: modal.querySelector("input[name='id']").value,
     descripcion: modal.querySelector("textarea[name='descripcion']").value,
     precio: modal.querySelector("input[name='precio']").value,
     cantidad: modal.querySelector("input[name='cantidad']").value,
-    categoria: capitalizeCategory(modal.querySelector("input[name='categoria']").value),
+    id_categoria: categoriaMap[capitalizeCategory(categoriaInput)],
     // imagen: modal.querySelector("input[name='imagen']")?.value || "", // Si aplica
   };
 
   // Validar categoría
-  const validCategories = ["Seguridad Vial", "Implementos De Seguridad"];
-  if (!validCategories.includes(productoSchema.categoria)) {
+  if (!productoSchema.id_categoria) {
     alert("Categoría inválida. Las categorías válidas son: Seguridad Vial e Implementos De Seguridad.");
     throw new Error("Categoría inválida");
   }
@@ -93,6 +100,12 @@ function capitalizeCategory(category) {
 function openEditModal(productId) {
   const editModal = document.getElementById("edit-modal");
   editModal.classList.remove("hidden");
+
+  // Mapear IDs de categoría a nombres
+  const categoriaMap = {
+    1: "Seguridad Vial",
+    2: "Implementos De Seguridad"
+  };
 
   // Cargar datos del producto en el modal
   window.electronAPI.getProductoByID(productId).then((result) => {
@@ -119,7 +132,7 @@ function openEditModal(productId) {
       if (descripcionInput) descripcionInput.value = producto.descripcion || "";
       if (precioInput) precioInput.value = producto.precio || "";
       if (cantidadInput) cantidadInput.value = producto.cantidad || "";
-      if (categoriaInput) categoriaInput.value = producto.categoria || "";
+      if (categoriaInput) categoriaInput.value = categoriaMap[producto.id_categoria] || "";
     }
   }).catch((error) => {
     console.error("Error inesperado al cargar datos del producto:", error);
@@ -164,11 +177,12 @@ function openDeletePopup(productId) {
 window.handleCreateProducto = async function handleCreateProducto() {
   console.log("Iniciando flujo para agregar producto");
   try {
+    debugger
     const productoSchema = buildProductoSchema("add-modal"); // Especifica el modal de origen
     console.log("Producto schema construido:", productoSchema);
 
     // Validaciones básicas
-    if (!productoSchema.nombre || !productoSchema.id || !productoSchema.descripcion || !productoSchema.precio || !productoSchema.cantidad || !productoSchema.categoria) {
+    if (!productoSchema.nombre || !productoSchema.id || !productoSchema.descripcion || !productoSchema.precio || !productoSchema.cantidad || !productoSchema.id_categoria) {
       const errorMessage = "Campos incompletos. Por favor, completa todos los campos.";
       console.error(errorMessage, { productoSchema });
       alert(errorMessage);
@@ -205,7 +219,7 @@ window.handleUpdateProducto = async function handleUpdateProducto() {
     const productoSchema = buildProductoSchema("edit-modal"); // Especifica el modal de origen
 
     // Validaciones básicas
-    if (!productoSchema.nombre || !productoSchema.id || !productoSchema.descripcion || !productoSchema.precio || !productoSchema.cantidad || !productoSchema.categoria) {
+    if (!productoSchema.nombre || !productoSchema.id || !productoSchema.descripcion || !productoSchema.precio || !productoSchema.cantidad || !productoSchema.id_categoria) {
       const errorMessage = "Campos incompletos. Por favor, completa todos los campos.";
       console.error(errorMessage, { productoSchema });
       alert(errorMessage);

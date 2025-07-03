@@ -22,12 +22,12 @@ ipcMain.handle('productos:getAll', async () => {
   console.log("IPC productos:getAll - Solicitando todos los productos");
   try {
     const { data, error } = await getAllProductos();
-    console.log("IPC productos:getAll - Respuesta de getAllProductos:", { data, error });
+    //console.log("IPC productos:getAll - Respuesta de getAllProductos:", { data, error });
     if (error) {
       console.error("IPC productos:getAll - Error al obtener productos:", error);
       return { error };
     }
-    console.log("IPC productos:getAll - Productos obtenidos exitosamente:", data);
+    //console.log("IPC productos:getAll - Productos obtenidos exitosamente:", data);
     return { data };
   } catch (error) {
     console.error("IPC productos:getAll - Error inesperado:", error);
