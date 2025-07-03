@@ -120,7 +120,7 @@ function openEditModal(productId) {
       // Asegúrate de que los campos del modal existan antes de asignar valores
       const nombreInput = editModal.querySelector("input[name='nombre']");
       const idInput = editModal.querySelector("input[name='id']");
-      const descripcionInput = editModal.querySelector("input[name='descripcion']");
+      const descripcionInput = editModal.querySelector("textarea[name='descripcion']");
       const precioInput = editModal.querySelector("input[name='precio']");
       const cantidadInput = editModal.querySelector("input[name='cantidad']");
       const categoriaInput = editModal.querySelector("input[name='categoria']");
