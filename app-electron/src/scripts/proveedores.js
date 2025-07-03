@@ -28,7 +28,7 @@ function buildProveedorSchema(modalId) {
     id: modal.querySelector("input[name='id']").value,
     email: modal.querySelector("input[name='email']").value,
     telefono: modal.querySelector("input[name='telefono']").value,
-    direccion: modal.querySelector("input[name='direccion']").value,
+    direccion: modal.querySelector("textarea[name='direccion']").value,
     // imagen: modal.querySelector("input[name='imagen']")?.value || "", // Si aplica
   };
 
@@ -105,7 +105,7 @@ function openEditModal(proveedorId) {
       const idInput = editModal.querySelector("input[name='id']");
       const emailInput = editModal.querySelector("input[name='email']");
       const telefonoInput = editModal.querySelector("input[name='telefono']");
-      const direccionInput = editModal.querySelector("input[name='direccion']");
+      const direccionInput = editModal.querySelector("textarea[name='direccion']");
 
       console.log("Datos del proveedor obtenidos:", proveedor); // Log para depuración
 
