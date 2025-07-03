@@ -33,7 +33,7 @@ exports.createOrdenVenta = async (ordenVentaData, productos) => {
     // Update ordenVentaData with clienteId
     ordenVentaData.id_cliente = clienteId;
 
-    // Filter ordenVentaData to include only necessary fields
+    // Filter ordenVentaData to include only necessary fields for the 'orden_venta' table
     const filteredOrdenVentaData = {
       id_cliente: ordenVentaData.id_cliente,
       fecha_ini: new Date(ordenVentaData.fecha_ini).toISOString(),
@@ -43,7 +43,7 @@ exports.createOrdenVenta = async (ordenVentaData, productos) => {
 
     const { data: ordenVenta, error: ordenVentaError } = await supabase.supabase
       .from('orden_venta')
-      .insert(filteredOrdenVentaData)
+      .insert(filteredOrdenVentaData) // <-- Usar el objeto filtrado
       .select();
 
     if (ordenVentaError) throw ordenVentaError;

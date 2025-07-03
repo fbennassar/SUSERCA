@@ -42,9 +42,11 @@ contextBridge.exposeInMainWorld("electronAPI", {
   getProfileSeguro: () => ipcRenderer.invoke("get-profile-seguro"),
   getAllProductos: () => ipcRenderer.invoke('productos:getAll'),
   searchProductos: (query) => ipcRenderer.invoke('productos:search', query),
+  getProductosByCategoria: (categoriaId) => ipcRenderer.invoke('productos:getByCategoria', categoriaId),
   createProducto: (producto) => ipcRenderer.invoke('productos:create', producto),
   updateProducto: (id, producto) => ipcRenderer.invoke('productos:update', { id, updates: producto }),
   deleteProducto: (id) => ipcRenderer.invoke('productos:delete', id),
+  getCategorias: () => ipcRenderer.invoke('categoria:getCategoria'),
   getProductoByID: (id) => ipcRenderer.invoke('productos:getByID', id),
   getProductoByName: (name) => ipcRenderer.invoke('productos:getByName', name),
   createOrdenVenta: (ordenVentaData, productos) => ipcRenderer.invoke('ordenVenta:create', ordenVentaData, productos),
@@ -61,4 +63,5 @@ contextBridge.exposeInMainWorld("electronAPI", {
   searchOrdenesCompra: (criteria) => ipcRenderer.invoke('ordenCompra:search', criteria),
   insertIntoCuentasPorCobrar: (idOrdenVenta, paymentData) => ipcRenderer.invoke('cuentasPorCobrar:insert', idOrdenVenta, paymentData),
   insertIntoCuentasPorPagar: (idOrdenCompra, paymentData) => ipcRenderer.invoke('cuentasPorPagar:insert', idOrdenCompra, paymentData),
+  reporteExcelProductos: () => ipcRenderer.invoke('productos:exportarExcel'),
 });

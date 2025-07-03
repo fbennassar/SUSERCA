@@ -192,7 +192,7 @@ exports.inviteUser = async (email, rolId, redirectTo) => {
   }
 };
 
-exports.createUser = async (nombre, email, rolId, password) => {
+exports.createUser = async (nombre, email, rolId, telefono,password) => {
   if (!supabaseAdmin) {
     console.error('[db/usuarios.js] createUser: Error - Cliente Supabase Admin no inicializado. Asegúrate de que SUPABASE_ADMIN_KEY (o SERVICE_ROLE_KEY) esté configurada.');
     throw new Error('Cliente Supabase Admin no inicializado. No se puede crear el usuario.');
@@ -205,7 +205,8 @@ exports.createUser = async (nombre, email, rolId, password) => {
       email_confirm: true,
       user_metadata: {
         nombre: nombre,
-        id_rol: rolId
+        id_rol: rolId,
+        telefono: telefono
       }
     });
 
