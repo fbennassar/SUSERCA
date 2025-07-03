@@ -99,38 +99,37 @@ function openEditModal(productId) {
   const editModal = document.getElementById("edit-modal");
   editModal.classList.remove("hidden");
 
-  // Mapear IDs de categoría a nombres
-  const categoriaMap = {
-    1: "Seguridad Vial",
-    2: "Implementos De Seguridad"
-  };
-
   // Cargar datos del producto en el modal
-  window.electronAPI.getProductoByID(productId).then((result) => {
-    console.log("ID proporcionado desde el frontend:", productId); // Log del ID proporcionado
-    console.log("Resultado de getProductoByID:", result); // Log del resultado obtenido
+  window.electronAPI.getProductoByID(productId).then(async (result) => {
     if (result.error) {
       console.error("Error al obtener producto para editar:", result.error);
       mostrarMensaje("Error al cargar datos del producto.", "error");
     } else {
       const producto = result.data;
+      const categoriaSelect = editModal.querySelector("select[name='categoria']");
 
-      // Asegúrate de que los campos del modal existan antes de asignar valores
-      const nombreInput = editModal.querySelector("input[name='nombre']");
-      const idInput = editModal.querySelector("input[name='id']");
-      const descripcionInput = editModal.querySelector("textarea[name='descripcion']");
-      const precioInput = editModal.querySelector("input[name='precio']");
-      const cantidadInput = editModal.querySelector("input[name='cantidad']");
-      const categoriaInput = editModal.querySelector("input[name='categoria']");
+      // Poblar el select de categorías del modal de edición
+      categoriaSelect.innerHTML = ''; // Limpiar opciones previas
+      const { categoria: categorias, error } = await window.electronAPI.getCategorias();
+      if (error) {
+        mostrarMensaje('Error al cargar categorías para editar', 'error');
+      } else {
+        categorias.forEach(cat => {
+          const option = document.createElement('option');
+          option.value = cat.id;
+          option.textContent = cat.nombre;
+          categoriaSelect.appendChild(option);
+        });
+      }
 
-      console.log("Datos del producto obtenidos:", producto); // Log para depuración
-
-      if (nombreInput) nombreInput.value = producto.nombre || "";
-      if (idInput) idInput.value = producto.id || "";
-      if (descripcionInput) descripcionInput.value = producto.descripcion || "";
-      if (precioInput) precioInput.value = producto.precio || "";
-      if (cantidadInput) cantidadInput.value = producto.cantidad || "";
-      if (categoriaInput) categoriaInput.value = categoriaMap[producto.id_categoria] || "";
+      // Asignar valores del producto a los campos del modal
+      editModal.querySelector("input[name='nombre']").value = producto.nombre || "";
+      editModal.querySelector("input[name='id']").value = producto.id || "";
+      editModal.querySelector("textarea[name='descripcion']").value = producto.descripcion || "";
+      editModal.querySelector("input[name='precio']").value = producto.precio || "";
+      editModal.querySelector("input[name='cantidad']").value = producto.cantidad || "";
+      // Seleccionar la categoría correcta en el <select>
+      if (categoriaSelect) categoriaSelect.value = producto.id_categoria || "";
     }
   }).catch((error) => {
     console.error("Error inesperado al cargar datos del producto:", error);
