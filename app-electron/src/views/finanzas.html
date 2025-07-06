@@ -487,23 +487,22 @@
         class="bg-white w-full rounded-xl pt-4 pb-4 mb-3 px-4 max-w-6xl"
         styles="box-sizing: border-box"
       >
-        <form class="w-full">
+        <form class="w-full" id="filter-form">
           <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
             <div>
               <h1 class="pl-2 text-base">Tipo</h1>
               <select
-                name="FiltroID"
-                id="filtro"
+                name="FiltroTipo"
+                id="filtro-tipo"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
-                onchange="              
-              this.classList.toggle('text-gray-400', this.value === '');
-              this.classList.toggle('text-black', this.value !== '');"
+                onchange="this.classList.toggle('text-gray-400', this.value === ''); this.classList.toggle('text-black', this.value !== '');"
               >
                 <option class="font-bold text-black" disabled selected>
-                  Seleccione un ID
+                  Seleccione un tipo
                 </option>
-                <option class="text-black" value="">Compra</option>
-                <option class="text-black" value="">Venta</option>
+                <option class="text-black" value="">Todos</option>
+                <option class="text-black" value="Compra">Compra</option>
+                <option class="text-black" value="Venta">Venta</option>
               </select>
             </div>
 
@@ -511,6 +510,7 @@
               <h1 class="pl-2 text-base">ID</h1>
               <input
                 type="text"
+                id="filtro-id"
                 placeholder="Ej: ......"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
               />
@@ -520,15 +520,17 @@
               <h1 class="pl-2 text-base">RIF</h1>
               <input
                 type="text"
+                id="filtro-rif"
                 placeholder="Ej: J-12345678-0"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
               />
             </div>
 
             <div>
-              <h1 class="pl-2 text-base">Razon Social</h1>
+              <h1 class="pl-2 text-base">Razón Social</h1>
               <input
                 type="text"
+                id="filtro-razon-social"
                 placeholder="Ej: Alpeca"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
               />
@@ -538,20 +540,21 @@
               <h1 class="pl-2 text-base">Estatus</h1>
               <select
                 name="Estatus"
-                id="estatus"
+                id="filtro-estatus"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
-                onchange="              
-              this.classList.toggle('text-gray-400', this.value === '');
-              this.classList.toggle('text-black', this.value !== '');"
+                onchange="this.classList.toggle('text-gray-400', this.value === ''); this.classList.toggle('text-black', this.value !== '');"
               >
                 <option class="text-black font-bold" value="" disabled selected>
                   Seleccione un estatus
                 </option>
 
-                <option class="text-black" value="">.</option>
-                <option class="text-black" value="">.</option>
+                <option class="text-black" value="">Todos</option>
+                <option class="text-black" value="Pendiente">Pendiente</option>
+                <option class="text-black" value="Parcialmente pagada">Parcialmente pagado</option>
+                <option class="text-black" value="Pagada">Pagado</option>
               </select>
             </div>
+
 
             <div>
               <h1 class="pl-2 text-base">Fecha</h1>
@@ -560,25 +563,27 @@
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full mr-3"
               />
             </div>
-            <!-- <div class="flex items-center h-full pt-4">
+
                 <span
                   class=" block h-0.5 w-6 bg-gray-400 rounded-full"
                 ></span>
               </div> -->
+
             <div class="w-full">
               <h1 class="invisible text-base">.</h1>
               <input
                 type="date"
+                  id="filtro-hasta"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
               />
             </div>
 
+
             <div class="flex justify-end mt-2">
               <button
                 type="button"
+                id="btn-limpiar-filtro"
                 class="bg-red-600 hover:bg-red-700 text-white font-bold px-2 rounded-full shadow transition w-full"
-                onclick="
-                "
               >
                 Limpiar filtro
               </button>
@@ -614,9 +619,9 @@
                 <th class="w-1/5 px-4 py-2">ID</th>
                 <th class="w-1/5 px-4 py-2">Tipo</th>
                 <th class="w-1/5 px-4 py-2">RIF</th>
-                <th class="w-1/5 px-4 py-2">Razon social</th>
+                <th class="w-1/5 px-4 py-2">Razón social</th>
                 <th class="w-1/5 px-4 py-2">Monto total</th>
-                <th class="w-1/5 px-4 py-2">Monto Pagado</th>
+                <th class="w-1/5 px-4 py-2">Monto pagado</th>
                 <th class="w-1/5 px-4 py-2">Monto restante</th>
                 <th class="w-1/5 px-4 py-2">Fecha</th>
                 <th class="w-1/5 px-4 py-2">Estatus</th>
@@ -637,8 +642,10 @@
                 <td class="text-left px-2 py-2">.</td>
                 <td class="text-left px-2 py-2">
                   <div class="flex gap-2 items-center justify-center">
+
                     <button
                       type="button"
+
                       class="hover:cursor-pointer"
                       title="Editar"
                     >
@@ -647,7 +654,7 @@
                         alt="edit"
                         class="w-6 h-6"
                       />
-                    </button>
+                    </button--->
 
                     <button
                       onclick="document.getElementById('delete-popup').classList.remove('hidden')"
