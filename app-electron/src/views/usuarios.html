@@ -396,9 +396,22 @@
         </form>
       </div>
 
-      <h1 class="text-3xl font-bold pt-2 pb-1 text-center">
-        Lista de Usuarios
-      </h1>
+      <div class="flex items-center justify-between mb-2">
+        <h1 class="text-3xl font-bold pt-2 pb-1">Lista de Usuarios</h1>
+        <button
+          type="button"
+          onclick="refreshUserTable()"
+        >
+          <img src="../assets/icons/table/refresh.png" alt="refresh" class="size-11 ml-4 hover:cursor-pointer">
+        </button>
+      </div>
+        <!-- Limita la altura para mostrar solo 5 filas y agrega scroll -->
+        <div class="max-h-[20rem] overflow-y-auto">
+          <table class="table-fixed w-full">
+            <!-- ... -->
+          </table>
+        </div>
+      </div>
       <div
         class="bg-white w-full rounded-xl pt-4 pb-4 mb-3 px-4 max-w-6xl"
         style="box-sizing: border-box"

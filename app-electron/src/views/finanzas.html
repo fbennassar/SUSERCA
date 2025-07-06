@@ -310,7 +310,12 @@
                     this.classList.toggle('text-black', this.value !== '');
                   "
                 >
-                  <option class="text-black font-bold" value="" disabled selected>
+                  <option
+                    class="text-black font-bold"
+                    value=""
+                    disabled
+                    selected
+                  >
                     Seleccione un producto
                   </option>
 
@@ -346,9 +351,13 @@
               </div>
 
               <div class="overflow-x-auto mt-4 w-full col-span-3">
-                <table class="w-full border border-gray-300 rounded-lg bg-white productos-table">
+                <table
+                  class="w-full border border-gray-300 rounded-lg bg-white productos-table"
+                >
                   <thead>
-                    <tr class="divide-x divide-gray-300 border-b border-gray-300">
+                    <tr
+                      class="divide-x divide-gray-300 border-b border-gray-300"
+                    >
                       <th class="w-1/5 px-4 py-2">Producto</th>
                       <th class="w-1/5 px-4 py-2">Cantidad</th>
                       <th class="w-1/5 px-4 py-2">Precio Unitario</th>
@@ -544,25 +553,25 @@
               </select>
             </div>
 
-              <div>
-                <h1 class="pl-2 text-base">Fecha</h1>
-                <input
-                  type="date"
-                  class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full mr-3"
-                />
-              </div>
-              <!-- <div class="flex items-center h-full pt-4">
+            <div>
+              <h1 class="pl-2 text-base">Fecha</h1>
+              <input
+                type="date"
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full mr-3"
+              />
+            </div>
+            <!-- <div class="flex items-center h-full pt-4">
                 <span
                   class=" block h-0.5 w-6 bg-gray-400 rounded-full"
                 ></span>
               </div> -->
-              <div class="w-full">
-                <h1 class="invisible text-base">.</h1>
-                <input
-                  type="date"
-                  class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
-                />
-              </div>
+            <div class="w-full">
+              <h1 class="invisible text-base">.</h1>
+              <input
+                type="date"
+                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
+              />
+            </div>
 
             <div class="flex justify-end mt-2">
               <button
@@ -580,14 +589,26 @@
 
       <!--Lista de Ordenes-->
 
-      <h1 class="text-3xl font-bold pt-2 pb-1 text-center">Lista de ordenes</h1>
+      <div class="flex items-center justify-between mb-2">
+        <h1 class="text-3xl font-bold pt-2 pb-1">Lista de Ordenes</h1>
+        <button type="button" onclick="refreshOrdenesTable()">
+          <img
+            src="../assets/icons/table/refresh.png"
+            alt="refresh"
+            class="size-11 ml-4 hover:cursor-pointer"
+          />
+        </button>
+      </div>
 
       <div
         class="bg-white w-full rounded-xl pt-4 pb-4 mb-3 px-4 max-w-6xl"
         styles="box-sizing: border-box"
       >
-        <div class="overflow-x-auto mt-4 w-full col-span-3">
-          <table id="ordenes-table" class="w-full border border-gray-300 rounded-lg bg-white ordenes-grid">
+        <div class="overflow-y-auto" style="max-height: 340px">
+          <table
+            id="ordenes-table"
+            class="w-full rounded-lg bg-white ordenes-grid"
+          >
             <thead>
               <tr class="divide-x divide-gray-300 border-b border-gray-300">
                 <th class="w-1/5 px-4 py-2">ID</th>
@@ -617,7 +638,7 @@
                 <td class="text-left px-2 py-2">
                   <div class="flex gap-2 items-center justify-center">
                     <button
-                      onclick="document.getElementById('edit-popup').classList.remove('hidden')"
+                      type="button"
                       class="hover:cursor-pointer"
                       title="Editar"
                     >
@@ -665,15 +686,8 @@
         <div
           class="bg-white rounded-xl px-6 py-6 shadow-lg max-w-xl w-full relative"
         >
-          <button
-            onclick="document.getElementById('edit-popup').classList.add('hidden')"
-            class="absolute top-2 right-2 text-2xl font-bold text-gray-500 hover:text-red-600"
-          >
-            &times;
-          </button>
-
           <h1 class="text-2xl font-bold mb-4 text-start">Editar Orden</h1>
-          <form>
+          <form class="bg-zinc-200 rounded-2xl p-4">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="flex flex-col gap-4">
                 <div>
@@ -682,7 +696,7 @@
                     id="edit-rif"
                     type="text"
                     placeholder="J-12345678-0"
-                    class="bg-gray-100 w-full rounded-xl px-4 py-2 mt-1 border border-gray-300"
+                    class="bg-white w-full rounded-xl px-4 py-2 mt-1 shadow-md border border-gray-300"
                   />
                 </div>
                 <div>
@@ -693,7 +707,7 @@
                     id="edit-razon"
                     type="text"
                     placeholder="Razón social"
-                    class="bg-gray-100 w-full rounded-xl px-4 py-2 mt-1 border border-gray-300"
+                    class="bg-white w-full rounded-xl px-4 py-2 mt-1 shadow-md border border-gray-300"
                   />
                 </div>
                 <div>
@@ -703,7 +717,7 @@
                   <input
                     id="edit-fecha"
                     type="date"
-                    class="bg-gray-100 w-full rounded-xl px-4 py-2 mt-1 border border-gray-300"
+                    class="bg-white w-full rounded-xl px-4 py-2 mt-1 shadow-md border border-gray-300"
                   />
                 </div>
               </div>
@@ -715,7 +729,7 @@
                   id="edit-descripcion"
                   type="text"
                   placeholder="Descripción de la orden"
-                  class="bg-gray-100 w-full rounded-xl px-4 py-2 mt-1 border border-gray-300"
+                  class="bg-white w-full rounded-xl px-4 py-2 mt-1 shadow-md border border-gray-300"
                 ></textarea>
               </div>
             </div>
@@ -729,7 +743,7 @@
                   <select
                     id="producto"
                     name="producto"
-                    class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
+                    class="border border-black bg-white shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
                     onchange="
                 this.classList.toggle('text-gray-400', this.value === '');
                 this.classList.toggle('text-black', this.value !== '');
@@ -757,7 +771,7 @@
                     type="number"
                     min="1"
                     placeholder="Ej: 20"
-                    class="bg-gray-100 w-full rounded-xl px-4 py-2 mt-1 border border-gray-300"
+                    class="bg-white w-full rounded-xl px-4 mt-1 shadow-md border border-gray-300"
                     required
                   />
                 </div>
@@ -810,9 +824,9 @@
                 <button
                   type="button"
                   onclick="document.getElementById('edit-popup').classList.add('hidden')"
-                  class="bg-gray-500 text-white px-4 py-2 rounded-full hover:bg-red-700 transition"
+                  class="bg-white text-black px-4 py-2 rounded-full hover:bg-gray-300 hover:cursor-pointer transition"
                 >
-                  Cancelar edición
+                  Cancelar
                 </button>
               </div>
             </div>
@@ -836,7 +850,10 @@
             &times;
           </button> -->
 
-          <h1 for="pagos-popup-title" class="text-2xl font-bold mb-4 text-start">
+          <h1
+            for="pagos-popup-title"
+            class="text-2xl font-bold mb-4 text-start"
+          >
             Agregar pago a orden: {id de orden}
           </h1>
           <div
@@ -932,9 +949,7 @@
                 </tr>
               </thead>
               <tbody id="historial-pagos-body">
-                <tr>
-                  
-                </tr>
+                <tr></tr>
               </tbody>
             </table>
           </div>
@@ -961,7 +976,10 @@
           <div
             class="bg-gray-200 rounded-xl px-6 py-6 shadow-lg max-w-xl w-full relative grid grid-cols-1"
           >
-            <label id="delete-popup-label" class="text-black mt-1 text-start text-2xl">
+            <label
+              id="delete-popup-label"
+              class="text-black mt-1 text-start text-2xl"
+            >
               ¿Estas seguro de que deseas eliminar la orden?
             </label>
             <div class="grid grid-cols-2 gap-3">
@@ -987,4 +1005,31 @@
     </main>
   </body>
   <script src="../libs/sweetalert2.all.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Delegación de eventos robusta para el botón de editar en la tabla de órdenes
+      var ordenesTable = document.getElementById("ordenes-table");
+      if (ordenesTable) {
+        ordenesTable.addEventListener("click", function (e) {
+          // Buscar si el click fue en un botón de editar o su imagen
+          var target = e.target;
+          // Si se hace click en el <img>, subir al <button>
+          if (
+            target.tagName === "IMG" &&
+            target.closest('button[title="Editar"]')
+          ) {
+            target = target.closest('button[title="Editar"]');
+          }
+          if (
+            target.tagName === "BUTTON" &&
+            target.getAttribute("title") === "Editar"
+          ) {
+            e.preventDefault();
+            var popup = document.getElementById("edit-popup");
+            if (popup) popup.classList.remove("hidden");
+          }
+        });
+      }
+    });
+  </script>
 </html>
