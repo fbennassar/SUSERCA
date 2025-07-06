@@ -215,3 +215,53 @@ exports.insertIntoCuentasPorCobrar = async (idOrdenVenta, paymentData) => {
     return { data: null, error };
   }
 };
+
+// Add search logic for ordenVenta
+exports.searchOrdenesVenta = async (criteria) => {
+  try {
+    let query = supabase.supabase.from('orden_venta').select(`
+      *,
+      cliente (id, nombre, email, telefono, direccion),
+      estatus (nombre),
+      orden_venta_producto (id_codigo_producto, cantidad, producto (nombre, precio, descripcion)),
+      cuentas_por_cobrar (monto)
+    `).eq('activo', true); // Include active filter
+
+    if (criteria.id) {
+      query = query.eq('id', criteria.id);
+    }
+    if (criteria.rif) {
+      query = query.eq('id_cliente', criteria.rif);
+    }
+    if (criteria.razonSocial) {
+      query = query.ilike('cliente.nombre', `%${criteria.razonSocial}%`);
+    }
+    if (criteria.estatus) {
+      query = query.eq('estatus.nombre', criteria.estatus);
+    }
+    if (criteria.desde) {
+      const desdeDate = new Date(criteria.desde).toISOString().split('T')[0];
+      query = query.gte('fecha_ini', `${desdeDate}T00:00:00`); // Aseguramos que incluya el día completo
+    }
+    if (criteria.hasta) {
+      const hastaDate = new Date(criteria.hasta).toISOString().split('T')[0];
+      query = query.lte('fecha_ini', `${hastaDate}T23:59:59`); // Incluimos el día completo hasta las 23:59:59
+    }
+
+    const { data, error } = await query;
+
+    if (error) throw error;
+
+    const ordenesConCobros = await Promise.all(
+      data.map(async (ordenVenta) => {
+        const cobros = await calculateCobrosOrdenVenta(ordenVenta);
+        return { ...ordenVenta, ...cobros };
+      })
+    );
+
+    return { data: ordenesConCobros, error: null };
+  } catch (error) {
+    console.error('Error al buscar órdenes de venta:', error);
+    return { data: null, error };
+  }
+};
