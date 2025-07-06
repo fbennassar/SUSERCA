@@ -270,3 +270,67 @@ function mostrarMensaje(texto, tipo = 'success') {
         mensajeDiv.style.display = 'none';
     }, 3500);
 }
+
+async function exportarExcel() {
+  try {
+    // Muestra un mensaje de que el proceso ha comenzado
+    mostrarMensaje("Generando reporte de inventario...", "info");
+
+    // 1. Obtener todos los productos de la base de datos
+    const result = await window.electronAPI.getAllProductos();
+
+    // Validar si hubo un error o no hay datos
+    if (result.error) {
+      console.error('Error al obtener datos para el reporte:', result.error);
+      mostrarMensaje('No se pudieron obtener los datos para el reporte.', 'error');
+      return;
+    }
+
+    const productos = result.data;
+
+    if (!productos || productos.length === 0) {
+      mostrarMensaje('No hay productos en el inventario para generar un reporte.', 'info');
+      return;
+    }
+
+    // 2. Formatear los datos para el reporte (opcional pero recomendado)
+    // Seleccionamos y renombramos las columnas que queremos en el Excel.
+    const datosParaReporte = productos.map(p => ({
+      'ID Producto': p.id,
+      'Nombre': p.nombre,
+      'Categoría': p.categoria,
+      'Descripción': p.descripcion,
+      'Precio (USD)': p.precio,
+      'Cantidad en Stock': p.cantidad,
+      'Valor Total (USD)': p.precio * p.cantidad // Columna calculada
+    }));
+
+    // 3. Crear la hoja de cálculo y el libro de trabajo con SheetJS
+    const worksheet = window.XLSX.utils.json_to_sheet(datosParaReporte);
+    const workbook = window.XLSX.utils.book_new();
+    window.xlsxAPI.utils.book_append_sheet(workbook, worksheet, 'Inventario'); // Nombramos la pestaña "Inventario"
+
+    // Ajustar el ancho de las columnas (opcional, pero mejora la apariencia)
+    worksheet['!cols'] = [
+      { wch: 15 }, // ID Producto
+      { wch: 30 }, // Nombre
+      { wch: 25 }, // Categoría
+      { wch: 40 }, // Descripción
+      { wch: 15 }, // Precio (USD)
+      { wch: 20 }, // Cantidad en Stock
+      { wch: 20 }  // Valor Total (USD)
+    ];
+
+    // 4. Generar el archivo y disparar la descarga
+    // El nombre del archivo incluirá la fecha y hora actual.
+    const fecha = new Date().toISOString().slice(0, 10); // Formato YYYY-MM-DD
+    window.xlsxAPI.writeFile(workbook, `Reporte_Inventario_SUSERCA_${fecha}.xlsx`);
+
+    // Muestra un mensaje de éxito
+    mostrarMensaje("Reporte de inventario generado exitosamente.", "success");
+
+  } catch (error) {
+    console.error('Error inesperado al generar el reporte de Excel:', error);
+    mostrarMensaje('Ocurrió un error crítico al generar el reporte.', 'error');
+  }
+}
