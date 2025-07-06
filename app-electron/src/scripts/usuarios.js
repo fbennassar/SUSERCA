@@ -1,238 +1,262 @@
-window.addEventListener('DOMContentLoaded', async () => {
-    const selectRolForm = document.getElementById('selectRol');
-    const createSelectRol = document.getElementById('createSelectRol'); // Asegúrate de que este ID coincida con el del formulario de creación
-    const filterNombreInput = document.getElementById('filterNombre');
-    const selectRolFilter = document.getElementById('selectRolFilter');
-    const selectRolEdit = document.getElementById('selectRolEdit'); // Asegúrate de que este ID coincida con el del formulario de edición
+window.addEventListener("DOMContentLoaded", async () => {
+  const selectRolForm = document.getElementById("selectRol");
+  const createSelectRol = document.getElementById("createSelectRol"); // Asegúrate de que este ID coincida con el del formulario de creación
+  const filterNombreInput = document.getElementById("filterNombre");
+  const selectRolFilter = document.getElementById("selectRolFilter");
+  const selectRolEdit = document.getElementById("selectRolEdit"); // Asegúrate de que este ID coincida con el del formulario de edición
 
-    try {
-        const { rol: rolesArray, error } = await window.electronAPI.getRol(); // 'rolesArray' es el array aquí
-        console.log('Roles obtenidos:', rolesArray);
-        if (error) {
-            console.error('Error al obtener los roles:', error);
-            const option = document.createElement('option');
-            option.textContent = 'Error al cargar roles';
-            if (selectRolForm) selectRolForm.appendChild(option.cloneNode(true));
-            if (selectRolFilter) selectRolFilter.appendChild(option);
-            if (createSelectRol) createSelectRol.appendChild(option.cloneNode(true)); // Clonar también para el formulario de creación
-            if (selectRolEdit) selectRolEdit.appendChild(option.cloneNode(true)); // Clonar también para el formulario de edición
-            // Considera no continuar si los roles no se cargan
-        } else if (rolesArray && rolesArray.length > 0) {
-            rolesArray.forEach(rolItem => { // Corregido: usar rolItem para evitar shadowing
-                const option = document.createElement('option');
-                option.value = rolItem.id;
-                option.textContent = rolItem.nombre;
-                if (selectRolForm) selectRolForm.appendChild(option.cloneNode(true));
-                if (selectRolFilter) selectRolFilter.appendChild(option.cloneNode(true)); // Clonar también para el filtro
-                if (createSelectRol) createSelectRol.appendChild(option.cloneNode(true)); // Clonar también para el formulario de creación
-                if (selectRolEdit) selectRolEdit.appendChild(option.cloneNode(true)); // Clonar también para el formulario de edición
-            });
-        } else {
-            const option = document.createElement('option');
-            option.textContent = 'No hay roles disponibles';
-            if (selectRolForm) selectRolForm.appendChild(option.cloneNode(true));
-            if (selectRolFilter) selectRolFilter.appendChild(option);
-        }
-    } catch (error) {
-        console.error('Error catastrófico al cargar los roles:', error);
-        const option = document.createElement('option');
-        option.textContent = 'Error crítico al cargar roles';
+  try {
+    const { rol: rolesArray, error } = await window.electronAPI.getRol(); // 'rolesArray' es el array aquí
+    console.log("Roles obtenidos:", rolesArray);
+    if (error) {
+      console.error("Error al obtener los roles:", error);
+      const option = document.createElement("option");
+      option.textContent = "Error al cargar roles";
+      if (selectRolForm) selectRolForm.appendChild(option.cloneNode(true));
+      if (selectRolFilter) selectRolFilter.appendChild(option);
+      if (createSelectRol) createSelectRol.appendChild(option.cloneNode(true)); // Clonar también para el formulario de creación
+      if (selectRolEdit) selectRolEdit.appendChild(option.cloneNode(true)); // Clonar también para el formulario de edición
+      // Considera no continuar si los roles no se cargan
+    } else if (rolesArray && rolesArray.length > 0) {
+      rolesArray.forEach((rolItem) => {
+        // Corregido: usar rolItem para evitar shadowing
+        const option = document.createElement("option");
+        option.value = rolItem.id;
+        option.textContent = rolItem.nombre;
         if (selectRolForm) selectRolForm.appendChild(option.cloneNode(true));
-        if (selectRolFilter) selectRolFilter.appendChild(option);
+        if (selectRolFilter)
+          selectRolFilter.appendChild(option.cloneNode(true)); // Clonar también para el filtro
+        if (createSelectRol)
+          createSelectRol.appendChild(option.cloneNode(true)); // Clonar también para el formulario de creación
+        if (selectRolEdit) selectRolEdit.appendChild(option.cloneNode(true)); // Clonar también para el formulario de edición
+      });
+    } else {
+      const option = document.createElement("option");
+      option.textContent = "No hay roles disponibles";
+      if (selectRolForm) selectRolForm.appendChild(option.cloneNode(true));
+      if (selectRolFilter) selectRolFilter.appendChild(option);
     }
+  } catch (error) {
+    console.error("Error catastrófico al cargar los roles:", error);
+    const option = document.createElement("option");
+    option.textContent = "Error crítico al cargar roles";
+    if (selectRolForm) selectRolForm.appendChild(option.cloneNode(true));
+    if (selectRolFilter) selectRolFilter.appendChild(option);
+  }
 
-    const inviteUserForm = document.getElementById('inviteUserForm');
-    if (inviteUserForm) {
-        inviteUserForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
+  const inviteUserForm = document.getElementById("inviteUserForm");
+  if (inviteUserForm) {
+    inviteUserForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
 
-            const emailInput = document.getElementById('inviteEmail');
+      const emailInput = document.getElementById("inviteEmail");
 
-            const email = emailInput.value.trim();
-            const rolId = selectRolForm.value; // Usar selectRolForm
+      const email = emailInput.value.trim();
+      const rolId = selectRolForm.value; // Usar selectRolForm
 
-            if (!email || !rolId) {
-                alert('Por favor, ingrese el correo y seleccione un rol.');
-                return;
-            }
+      if (!email || !rolId) {
+        alert("Por favor, ingrese el correo y seleccione un rol.");
+        return;
+      }
 
-            const redirectTo = `${window.location.origin}/src/views/login.html`;
-            const submitButton = inviteUserForm.querySelector('button[type="submit"]');
-            const originalButtonText = submitButton.textContent;
+      const redirectTo = `${window.location.origin}/src/views/login.html`;
+      const submitButton = inviteUserForm.querySelector(
+        'button[type="submit"]'
+      );
+      const originalButtonText = submitButton.textContent;
 
-
-
-            try {
-                const { data, error } = await window.electronAPI.inviteUser({ email, rolId, redirectTo });
-                if (error) {
-                    console.error('Error al enviar invitación:', error);
-                    mostrarMensaje(`Error al enviar invitación: ${error}`, 'error');
-                } else {
-                    console.log('Invitación enviada:', data);
-                    mostrarMensaje('Invitación enviada exitosamente.', 'success');
-                    emailInput.value = '';
-                    selectRolForm.value = '';
-                    selectRolForm.classList.add('text-gray-400');
-                    selectRolForm.classList.remove('text-black');
-                }
-            } catch (e) {
-                console.error('Error inesperado al enviar invitación:', e);
-                mostrarMensaje('Ocurrió un error inesperado. Por favor, intente de nuevo.', 'error');
-            }
+      try {
+        const { data, error } = await window.electronAPI.inviteUser({
+          email,
+          rolId,
+          redirectTo,
         });
-    }
+        if (error) {
+          console.error("Error al enviar invitación:", error);
+          mostrarMensaje(`Error al enviar invitación: ${error}`, "error");
+        } else {
+          console.log("Invitación enviada:", data);
+          mostrarMensaje("Invitación enviada exitosamente.", "success");
+          emailInput.value = "";
+          selectRolForm.value = "";
+          selectRolForm.classList.add("text-gray-400");
+          selectRolForm.classList.remove("text-black");
+        }
+      } catch (e) {
+        console.error("Error inesperado al enviar invitación:", e);
+        mostrarMensaje(
+          "Ocurrió un error inesperado. Por favor, intente de nuevo.",
+          "error"
+        );
+      }
+    });
+  }
 
-    const createUserForm = document.getElementById('createUserForm');
-    if (createUserForm) {
-        createUserForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
+  const createUserForm = document.getElementById("createUserForm");
+  if (createUserForm) {
+    createUserForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
 
-            const nombreInput = document.getElementById('createNombre');
-            const emailInput = document.getElementById('createEmail');
-            const rolId = createSelectRol.value;
-            const createTelefonoInput = document.getElementById('createTelefono'); // Asegúrate de que este ID coincida con el del formulario de creación
-            const passwordInput = document.getElementById('createPassword');
+      const nombreInput = document.getElementById("createNombre");
+      const emailInput = document.getElementById("createEmail");
+      const rolId = createSelectRol.value;
+      const createTelefonoInput = document.getElementById("createTelefono"); // Asegúrate de que este ID coincida con el del formulario de creación
+      const passwordInput = document.getElementById("createPassword");
 
-            const nombre = nombreInput.value.trim();
-            const email = emailInput.value.trim();
-            const telefono = createTelefonoInput.value.trim(); // Manejar si el campo de teléfono no existe
-            const password = passwordInput.value;
+      const nombre = nombreInput.value.trim();
+      const email = emailInput.value.trim();
+      const telefono = createTelefonoInput.value.trim(); // Manejar si el campo de teléfono no existe
+      const password = passwordInput.value;
 
-            if (!nombre || !email || !rolId || !password || !telefono) {
-                mostrarMensaje('Por favor, complete todos los campos.', 'error');
-                return;
-            }
+      if (!nombre || !email || !rolId || !password || !telefono) {
+        mostrarMensaje("Por favor, complete todos los campos.", "error");
+        return;
+      }
 
-            try {
-                const { data, error } = await window.electronAPI.createUser({ nombre, email, rolId, telefono, password });
-                if (error) {
-                    console.error('Error al crear usuario:', error);
-                    mostrarMensaje(`Error al crear usuario: ${error}`, 'error');
-                } else {
-                    console.log('Usuario creado:', data);
-                    mostrarMensaje('Usuario creado exitosamente.', 'success');
-                    nombreInput.value = '';
-                    emailInput.value = '';
-                    passwordInput.value = '';
-                    createTelefonoInput.value = ''; // Limpiar el campo de teléfono
-                    selectRolForm.value = '';
-                    selectRolForm.classList.add('text-gray-400');
-                    selectRolForm.classList.remove('text-black');
-                }
-            } catch (e) {
-                console.error('Error inesperado al crear usuario:', e);
-                mostrarMensaje('Ocurrió un error inesperado. Por favor, intente de nuevo.', 'error');
-            }
+      try {
+        const { data, error } = await window.electronAPI.createUser({
+          nombre,
+          email,
+          rolId,
+          telefono,
+          password,
         });
-    }
+        if (error) {
+          console.error("Error al crear usuario:", error);
+          mostrarMensaje(`Error al crear usuario: ${error}`, "error");
+        } else {
+          console.log("Usuario creado:", data);
+          mostrarMensaje("Usuario creado exitosamente.", "success");
+          nombreInput.value = "";
+          emailInput.value = "";
+          passwordInput.value = "";
+          createTelefonoInput.value = ""; // Limpiar el campo de teléfono
+          selectRolForm.value = "";
+          selectRolForm.classList.add("text-gray-400");
+          selectRolForm.classList.remove("text-black");
+        }
+      } catch (e) {
+        console.error("Error inesperado al crear usuario:", e);
+        mostrarMensaje(
+          "Ocurrió un error inesperado. Por favor, intente de nuevo.",
+          "error"
+        );
+      }
+    });
+  }
 
-    const limpiarFiltrosBtn = document.getElementById('limpiarFiltros');
-    if (limpiarFiltrosBtn) {
-        limpiarFiltrosBtn.addEventListener('click', async () => {
-            if(filterNombreInput) filterNombreInput.value = '';
-            if(selectRolFilter) {
-                selectRolFilter.value = '';
-                selectRolFilter.classList.add('text-gray-400');
-                selectRolFilter.classList.remove('text-black');
-            }
-            await loadUsersTable();
-        });
-    }
+  const limpiarFiltrosBtn = document.getElementById("limpiarFiltros");
+  if (limpiarFiltrosBtn) {
+    limpiarFiltrosBtn.addEventListener("click", async () => {
+      if (filterNombreInput) filterNombreInput.value = "";
+      if (selectRolFilter) {
+        selectRolFilter.value = "";
+        selectRolFilter.classList.add("text-gray-400");
+        selectRolFilter.classList.remove("text-black");
+      }
+      await loadUsersTable();
+    });
+  }
 
-    if (filterNombreInput) {
-        filterNombreInput.addEventListener('input', async () => {
-            const nombre = filterNombreInput.value;
-            const rol = selectRolFilter ? selectRolFilter.value : '';
-            await loadUsersTable(nombre, rol);
-        });
-    }
+  if (filterNombreInput) {
+    filterNombreInput.addEventListener("input", async () => {
+      const nombre = filterNombreInput.value;
+      const rol = selectRolFilter ? selectRolFilter.value : "";
+      await loadUsersTable(nombre, rol);
+    });
+  }
 
-    if (selectRolFilter) {
-        selectRolFilter.addEventListener('change', async () => {
-            const nombre = filterNombreInput ? filterNombreInput.value : '';
-            const rol = selectRolFilter.value;
-            if (rol) { // Cambiar estilo si se selecciona un rol
-                selectRolFilter.classList.remove('text-gray-400');
-                selectRolFilter.classList.add('text-black');
-            } else { // Volver al estilo por defecto si se deselecciona
-                selectRolFilter.classList.add('text-gray-400');
-                selectRolFilter.classList.remove('text-black');
-            }
-            await loadUsersTable(nombre, rol);
-        });
-    }
-    await loadUsersTable();
+  if (selectRolFilter) {
+    selectRolFilter.addEventListener("change", async () => {
+      const nombre = filterNombreInput ? filterNombreInput.value : "";
+      const rol = selectRolFilter.value;
+      if (rol) {
+        // Cambiar estilo si se selecciona un rol
+        selectRolFilter.classList.remove("text-gray-400");
+        selectRolFilter.classList.add("text-black");
+      } else {
+        // Volver al estilo por defecto si se deselecciona
+        selectRolFilter.classList.add("text-gray-400");
+        selectRolFilter.classList.remove("text-black");
+      }
+      await loadUsersTable(nombre, rol);
+    });
+  }
+  await loadUsersTable();
 });
 
-const mensajeDiv = document.createElement('div');
-mensajeDiv.id = 'mensaje-usuario';
-mensajeDiv.style.position = 'fixed';
-mensajeDiv.style.top = '20px';
-mensajeDiv.style.right = '20px';
-mensajeDiv.style.zIndex = '9999';
-mensajeDiv.style.padding = '12px 24px';
-mensajeDiv.style.borderRadius = '8px';
-mensajeDiv.style.display = 'none';
-mensajeDiv.style.fontWeight = 'bold';
+const mensajeDiv = document.createElement("div");
+mensajeDiv.id = "mensaje-usuario";
+mensajeDiv.style.position = "fixed";
+mensajeDiv.style.top = "20px";
+mensajeDiv.style.right = "20px";
+mensajeDiv.style.zIndex = "9999";
+mensajeDiv.style.padding = "12px 24px";
+mensajeDiv.style.borderRadius = "8px";
+mensajeDiv.style.display = "none";
+mensajeDiv.style.fontWeight = "bold";
 document.body.appendChild(mensajeDiv);
 
-function mostrarMensaje(texto, tipo = 'success') {
-    mensajeDiv.textContent = texto;
-    mensajeDiv.style.display = 'block';
-    mensajeDiv.style.background = tipo === 'success' ? '#22c55e' : '#ef4444';
-    mensajeDiv.style.color = '#fff';
-    setTimeout(() => {
-        mensajeDiv.style.display = 'none';
-    }, 3500);
+function mostrarMensaje(texto, tipo = "success") {
+  mensajeDiv.textContent = texto;
+  mensajeDiv.style.display = "block";
+  mensajeDiv.style.background = tipo === "success" ? "#22c55e" : "#ef4444";
+  mensajeDiv.style.color = "#fff";
+  setTimeout(() => {
+    mensajeDiv.style.display = "none";
+  }, 3500);
 }
 
-async function loadUsersTable(nombreFilter = '', rolFilter = '') {
-    const userListBody = document.getElementById('user-list-body');
-    if (!userListBody) {
-        console.error('Elemento tbody con id "user-list-body" no encontrado.');
-        return;
+async function loadUsersTable(nombreFilter = "", rolFilter = "") {
+  const userListBody = document.getElementById("user-list-body");
+  if (!userListBody) {
+    console.error('Elemento tbody con id "user-list-body" no encontrado.');
+    return;
+  }
+
+  try {
+    const { users, error } = await window.electronAPI.getAllProfiles(
+      nombreFilter,
+      rolFilter
+    );
+
+    if (error) {
+      console.error("Error al obtener los usuarios:", error);
+      userListBody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-red-500">Error al cargar usuarios: ${error}</td></tr>`; // Ajustar colspan
+      return;
     }
 
-    try {
-        const { users, error } = await window.electronAPI.getAllProfiles(nombreFilter, rolFilter);
+    userListBody.innerHTML = "";
 
-        if (error) {
-            console.error('Error al obtener los usuarios:', error);
-            userListBody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-red-500">Error al cargar usuarios: ${error}</td></tr>`; // Ajustar colspan
-            return;
-        }
+    if (users && users.length > 0) {
+      users.forEach((user) => {
+        const tr = document.createElement("tr");
+        tr.classList.add("divide-x", "divide-gray-200");
+        tr.setAttribute("data-user-id", user.id);
 
-        userListBody.innerHTML = ''; 
+        const tdNombre = document.createElement("td");
+        tdNombre.classList.add("text-left", "px-2", "py-2", "truncate");
+        tdNombre.style.maxWidth = "120px";
+        tdNombre.textContent = user.nombre || "N/A";
 
-        if (users && users.length > 0) {
-            users.forEach(user => {
-                const tr = document.createElement('tr');
-                tr.classList.add('divide-x', 'divide-gray-200');
-                tr.setAttribute('data-user-id', user.id);
+        const tdEmail = document.createElement("td");
+        tdEmail.classList.add("text-left", "px-2", "py-2", "truncate");
+        tdEmail.style.maxWidth = "250px";
+        // Corregido para mostrar puntos suspensivos si el correo es largo
+        tdEmail.innerHTML = `<a href="#" onclick="mostrarCorreoCompleto('${user.email || "N/A"}')">${(user.email || "N/A").substring(0, 30)}${user.email && user.email.length > 30 ? "..." : ""}</a>`;
 
-                const tdNombre = document.createElement('td');
-                tdNombre.classList.add('text-left', 'px-2', 'py-2', 'truncate');
-                tdNombre.style.maxWidth = '120px';
-                tdNombre.textContent = user.nombre || 'N/A';
+        const tdRol = document.createElement("td");
+        tdRol.classList.add("text-left", "px-2", "py-2", "truncate");
+        tdRol.style.maxWidth = "100px";
+        tdRol.textContent = user.rol || "Sin rol";
 
-                const tdEmail = document.createElement('td');
-                tdEmail.classList.add('text-left', 'px-2', 'py-2', 'truncate');
-                tdEmail.style.maxWidth = '250px';
-                // Corregido para mostrar puntos suspensivos si el correo es largo
-                tdEmail.innerHTML = `<a href="#" onclick="mostrarCorreoCompleto('${user.email || 'N/A'}')">${(user.email || 'N/A').substring(0, 30)}${(user.email && user.email.length > 30) ? '...' : ''}</a>`;
-
-                const tdRol = document.createElement('td');
-                tdRol.classList.add('text-left', 'px-2', 'py-2', 'truncate');
-                tdRol.style.maxWidth = '100px';
-                tdRol.textContent = user.rol || 'Sin rol';
-
-                const tdAcciones = document.createElement('td');
-                tdAcciones.classList.add('text-left', 'px-2', 'py-2');
-                tdAcciones.style.minWidth = '100px'; 
-                tdAcciones.innerHTML = `
+        const tdAcciones = document.createElement("td");
+        tdAcciones.classList.add("text-left", "px-2", "py-2");
+        tdAcciones.style.minWidth = "100px";
+        tdAcciones.innerHTML = `
                     <div class="flex gap-2 items-center justify-center">
                         <button
-                            onclick="openEditUserPopup('${user.id}', '${user.nombre || ''}', '${user.email || ''}', '${user.rol || ''}')" 
+                            onclick="openEditUserPopup('${user.id}', '${user.nombre || ""}', '${user.email || ""}', '${user.rol || ""}')" 
                             class="hover:cursor-pointer"
                             title="Editar Usuario"
                         >
@@ -256,129 +280,151 @@ async function loadUsersTable(nombreFilter = '', rolFilter = '') {
                     </div>
                 `;
 
-                tr.appendChild(tdNombre);
-                tr.appendChild(tdEmail);
-                tr.appendChild(tdRol);
-                tr.appendChild(tdAcciones);
+        tr.appendChild(tdNombre);
+        tr.appendChild(tdEmail);
+        tr.appendChild(tdRol);
+        tr.appendChild(tdAcciones);
 
-                userListBody.appendChild(tr);
-            });
-        } else {
-            userListBody.innerHTML = '<tr><td colspan="4" class="text-center py-4">No hay usuarios registrados.</td></tr>'; // Ajustar colspan
-        }
-    } catch (apiError) {
-        console.error('Error en la API al cargar los usuarios:', apiError);
-        userListBody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-red-500">Error crítico al cargar usuarios.</td></tr>`; // Ajustar colspan
+        userListBody.appendChild(tr);
+      });
+    } else {
+      userListBody.innerHTML =
+        '<tr><td colspan="4" class="text-center py-4">No hay usuarios registrados.</td></tr>'; // Ajustar colspan
     }
+  } catch (apiError) {
+    console.error("Error en la API al cargar los usuarios:", apiError);
+    userListBody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-red-500">Error crítico al cargar usuarios.</td></tr>`; // Ajustar colspan
+  }
 }
 
-window.mostrarCorreoCompleto = function(correo) {
-    document.getElementById('correoCompleto').innerText = correo;
-    document.getElementById('modalCorreo').classList.remove('hidden');
+function refreshUserTable() {
+  if (typeof loadUsers === "function") {
+    loadUsers(); // Asumiendo que tu función para cargar usuarios se llama así
+  } else {
+    location.reload(); // Alternativa: recarga la página si no existe la función
+  }
+}
+
+window.mostrarCorreoCompleto = function (correo) {
+  document.getElementById("correoCompleto").innerText = correo;
+  document.getElementById("modalCorreo").classList.remove("hidden");
 };
 
 // Definiciones de ejemplo para las funciones de popup (debes tener las tuyas)
-window.openEditUserPopup = function(id, nombre, email, rol) { 
-    console.log('Abrir popup de edición para:', id, nombre, email, rol);
-    const editPopup = document.getElementById('edit-popup');
-    editPopup.dataset.userId = id;
-    editPopup.querySelector('#editNombre').value = nombre || '';
-    editPopup.querySelector('#editEmail').value = email || '';
-    const select = editPopup.querySelector('#selectRolEdit');
-    let found = false;
-    for (let option of select.options) {
-        if (option.textContent === rol) {
-        select.value = option.value;
-        found = true;
-        break;
+window.openEditUserPopup = function (id, nombre, email, rol) {
+  console.log("Abrir popup de edición para:", id, nombre, email, rol);
+  const editPopup = document.getElementById("edit-popup");
+  editPopup.dataset.userId = id;
+  editPopup.querySelector("#editNombre").value = nombre || "";
+  editPopup.querySelector("#editEmail").value = email || "";
+  const select = editPopup.querySelector("#selectRolEdit");
+  let found = false;
+  for (let option of select.options) {
+    if (option.textContent === rol) {
+      select.value = option.value;
+      found = true;
+      break;
+    }
   }
-}
-if (!found) select.value = '';
-    editPopup.classList.remove('hidden');
-
-    
+  if (!found) select.value = "";
+  editPopup.classList.remove("hidden");
 };
-window.openDeleteUserPopup = function(id) { 
-    console.log('Abrir popup de eliminación para:', id);
-    const deletePopup = document.getElementById('delete-popup');
-    deletePopup.dataset.userId = id;
-    deletePopup.classList.remove('hidden');
+window.openDeleteUserPopup = function (id) {
+  console.log("Abrir popup de eliminación para:", id);
+  const deletePopup = document.getElementById("delete-popup");
+  deletePopup.dataset.userId = id;
+  deletePopup.classList.remove("hidden");
 };
-window.closeDeleteUserPopup = function() {
-    const deletePopup = document.getElementById('delete-popup');
-    deletePopup.classList.add('hidden');
-    deletePopup.removeAttribute('data-user-id'); // Limpiar el ID del usuario
-}
+window.closeDeleteUserPopup = function () {
+  const deletePopup = document.getElementById("delete-popup");
+  deletePopup.classList.add("hidden");
+  deletePopup.removeAttribute("data-user-id"); // Limpiar el ID del usuario
+};
 
 async function deleteUser(userId) {
-    if (!userId) {
-        console.error('ID de usuario no proporcionado para eliminar.');
-        mostrarMensaje('ID de usuario no proporcionado.', 'error');
-        return;
+  if (!userId) {
+    console.error("ID de usuario no proporcionado para eliminar.");
+    mostrarMensaje("ID de usuario no proporcionado.", "error");
+    return;
+  }
+
+  try {
+    const { data, error } = await window.electronAPI.deleteUser(userId);
+    if (error) {
+      console.error("Error al eliminar usuario:", error);
+      mostrarMensaje(`Error al eliminar usuario: ${error}`, "error");
+    } else {
+      console.log("Usuario eliminado:", data);
+      mostrarMensaje("Usuario eliminado exitosamente.", "success");
+      await loadUsersTable(); // Recargar la tabla de usuarios
     }
 
-    try {
-        const { data, error } = await window.electronAPI.deleteUser(userId);
-        if (error) {
-            console.error('Error al eliminar usuario:', error);
-            mostrarMensaje(`Error al eliminar usuario: ${error}`, 'error');
-        } else {
-            console.log('Usuario eliminado:', data);
-            mostrarMensaje('Usuario eliminado exitosamente.', 'success');
-            await loadUsersTable(); // Recargar la tabla de usuarios
-        }
-
-        closeDeleteUserPopup(); // Cerrar el popup de eliminación
-    } catch (e) {
-        console.error('Error inesperado al eliminar usuario:', e);
-        mostrarMensaje('Ocurrió un error inesperado. Por favor, intente de nuevo.', 'error');
-    }
+    closeDeleteUserPopup(); // Cerrar el popup de eliminación
+  } catch (e) {
+    console.error("Error inesperado al eliminar usuario:", e);
+    mostrarMensaje(
+      "Ocurrió un error inesperado. Por favor, intente de nuevo.",
+      "error"
+    );
+  }
 }
 
 async function updateUser(userId, updates) {
-    if (!userId || !updates) {
-        console.error('ID de usuario o actualizaciones no proporcionadas para actualizar.');
-        mostrarMensaje('ID de usuario o actualizaciones no proporcionadas.', 'error');
-        return;
+  if (!userId || !updates) {
+    console.error(
+      "ID de usuario o actualizaciones no proporcionadas para actualizar."
+    );
+    mostrarMensaje(
+      "ID de usuario o actualizaciones no proporcionadas.",
+      "error"
+    );
+    return;
+  }
+
+  try {
+    const { data, error } = await window.electronAPI.updateUser(
+      userId,
+      updates
+    );
+    if (error) {
+      console.error("Error al actualizar usuario:", error);
+      mostrarMensaje(`Error al actualizar usuario: ${error}`, "error");
+    } else {
+      console.log("Usuario actualizado:", data);
+      mostrarMensaje("Usuario actualizado exitosamente.", "success");
+      await loadUsersTable(); // Recargar la tabla de usuarios
     }
 
-    try {
-        const { data, error } = await window.electronAPI.updateUser(userId, updates);
-        if (error) {
-            console.error('Error al actualizar usuario:', error);
-            mostrarMensaje(`Error al actualizar usuario: ${error}`, 'error');
-        } else {
-            
-            console.log('Usuario actualizado:', data);
-            mostrarMensaje('Usuario actualizado exitosamente.', 'success');
-            await loadUsersTable(); // Recargar la tabla de usuarios
-        }
-
-        const editPopup = document.getElementById('edit-popup');
-        editPopup.classList.add('hidden'); // Cerrar el popup de edición
-    } catch (e) {
-        console.error('Error inesperado al actualizar usuario:', e);
-        mostrarMensaje('Ocurrió un error inesperado. Por favor, intente de nuevo.', 'error');
-    }
+    const editPopup = document.getElementById("edit-popup");
+    editPopup.classList.add("hidden"); // Cerrar el popup de edición
+  } catch (e) {
+    console.error("Error inesperado al actualizar usuario:", e);
+    mostrarMensaje(
+      "Ocurrió un error inesperado. Por favor, intente de nuevo.",
+      "error"
+    );
+  }
 }
 
-document.querySelector('#edit-popup form').addEventListener('submit', async function(event) {
+document
+  .querySelector("#edit-popup form")
+  .addEventListener("submit", async function (event) {
     event.preventDefault();
-    const editPopup = document.getElementById('edit-popup');
+    const editPopup = document.getElementById("edit-popup");
     const userId = editPopup.dataset.userId;
-    const nombre = editPopup.querySelector('#editNombre').value.trim();
-    const email = editPopup.querySelector('#editEmail').value.trim();
-    const rolId = editPopup.querySelector('#selectRolEdit').value;
+    const nombre = editPopup.querySelector("#editNombre").value.trim();
+    const email = editPopup.querySelector("#editEmail").value.trim();
+    const rolId = editPopup.querySelector("#selectRolEdit").value;
 
     // Agrega aquí otros campos si los tienes, por ejemplo, password, teléfono, etc.
 
     // Construye el objeto updates solo con los campos que quieres actualizar
     const updates = {
-        nombre,
-        email,
-        id_rol: rolId
-        // Agrega otros campos aquí si es necesario
+      nombre,
+      email,
+      id_rol: rolId,
+      // Agrega otros campos aquí si es necesario
     };
 
     await updateUser(userId, updates);
-});
+  });
