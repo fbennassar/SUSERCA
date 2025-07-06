@@ -667,3 +667,72 @@ function unpackPaymentHistory(order) {
     paymentHistoryBody.appendChild(row);
   });
 }
+
+function mostrarMensaje(mensaje, tipo) {
+  const mensajeContainer = document.createElement('div');
+  mensajeContainer.textContent = mensaje;
+  mensajeContainer.className = `mensaje ${tipo}`; // Add classes for styling, e.g., 'mensaje success' or 'mensaje error'
+
+  // Apply basic styles
+  mensajeContainer.style.position = 'fixed';
+  mensajeContainer.style.bottom = '20px';
+  mensajeContainer.style.right = '20px';
+  mensajeContainer.style.padding = '10px 20px';
+  mensajeContainer.style.borderRadius = '5px';
+  mensajeContainer.style.color = '#fff';
+  mensajeContainer.style.backgroundColor = tipo === 'success' ? 'green' : 'red';
+  mensajeContainer.style.zIndex = '1000';
+
+  document.body.appendChild(mensajeContainer);
+
+  // Remove the message after 3 seconds
+  setTimeout(() => {
+    mensajeContainer.remove();
+  }, 3000);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const rifInput = document.querySelector("input[name='rif']");
+  const razonSocialInput = document.querySelector("input[name='razon_social']");
+  const tipoOrdenSelect = document.getElementById('TipoOrden');
+
+  async function buscarEntidadPorRif(rif) {
+    const tipoOrden = tipoOrdenSelect.value;
+    if (!rif || !tipoOrden) return;
+
+    try {
+        const response = tipoOrden === 'Compra'
+            ? await window.electronAPI.getProveedorById(rif)
+            : await window.electronAPI.getClientByID(rif);
+
+        console.log('Respuesta completa de IPC:', response); // Log para depuración
+
+        if (response.error) {
+            console.error('Error al buscar entidad por RIF:', response.error);
+            //mostrarMensaje('No se encontró ninguna entidad con el RIF proporcionado.', 'error');
+            razonSocialInput.value = ''; // Limpiar el campo si no se encuentra
+            return;
+        }
+
+        if (response.data) {
+            razonSocialInput.value = response.data.nombre;
+        } else {
+            //mostrarMensaje('No se encontró ninguna entidad con el RIF proporcionado.', 'error');
+            razonSocialInput.value = ''; // Limpiar el campo si no se encuentra
+        }
+    } catch (error) {
+        console.error('Error inesperado al buscar entidad por RIF:', error);
+        mostrarMensaje('Ocurrió un error inesperado al buscar la entidad.', 'error');
+    }
+  }
+
+  let rifTimeout;
+
+  rifInput.addEventListener('keyup', (event) => {
+    clearTimeout(rifTimeout); // Clear the previous timeout
+    const rif = event.target.value.trim();
+    rifTimeout = setTimeout(() => {
+        buscarEntidadPorRif(rif);
+    }, 500); // Wait for 500ms before triggering the function
+});
+});
