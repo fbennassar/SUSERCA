@@ -481,7 +481,7 @@
         <form class="w-full">
           <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
             <div>
-              <h1 class="pl-2 text-base">Filtrar por ID</h1>
+              <h1 class="pl-2 text-base">Tipo</h1>
               <select
                 name="FiltroID"
                 id="filtro"
@@ -499,7 +499,7 @@
             </div>
 
             <div>
-              <h1 class="pl-2 text-base">Filtrar por tipos</h1>
+              <h1 class="pl-2 text-base">ID</h1>
               <input
                 type="text"
                 placeholder="Ej: ......"
@@ -508,7 +508,7 @@
             </div>
 
             <div>
-              <h1 class="pl-2 text-base">Filtrar por RIF</h1>
+              <h1 class="pl-2 text-base">RIF</h1>
               <input
                 type="text"
                 placeholder="Ej: J-12345678-0"
@@ -517,7 +517,7 @@
             </div>
 
             <div>
-              <h1 class="pl-2 text-base">Filtrar por Razon social</h1>
+              <h1 class="pl-2 text-base">Razon Social</h1>
               <input
                 type="text"
                 placeholder="Ej: Alpeca"
@@ -526,7 +526,7 @@
             </div>
 
             <div>
-              <h1 class="pl-2 text-base">Filtrar por estatus</h1>
+              <h1 class="pl-2 text-base">Estatus</h1>
               <select
                 name="Estatus"
                 id="estatus"
@@ -544,19 +544,18 @@
               </select>
             </div>
 
-            <div class="col-span-2 flex items-center gap-2">
-              <div class="w-full">
-                <h1 class="pl-2 text-base">Filtrar por fecha</h1>
+              <div>
+                <h1 class="pl-2 text-base">Fecha</h1>
                 <input
                   type="date"
-                  class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
+                  class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full mr-3"
                 />
               </div>
-              <div class="flex items-center h-full pt-4">
+              <!-- <div class="flex items-center h-full pt-4">
                 <span
-                  class="mx-2 block h-0.5 w-6 bg-gray-400 rounded-full"
+                  class=" block h-0.5 w-6 bg-gray-400 rounded-full"
                 ></span>
-              </div>
+              </div> -->
               <div class="w-full">
                 <h1 class="invisible text-base">.</h1>
                 <input
@@ -564,12 +563,11 @@
                   class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
                 />
               </div>
-            </div>
 
             <div class="flex justify-end mt-2">
               <button
                 type="button"
-                class="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-full shadow transition w-full"
+                class="bg-red-600 hover:bg-red-700 text-white font-bold px-2 rounded-full shadow transition w-full"
                 onclick="
                 "
               >
@@ -831,18 +829,18 @@
         <div
           class="bg-white rounded-xl px-6 py-6 shadow-lg max-w-xl w-full relative"
         >
-          <button
+          <!-- <button
             onclick="document.getElementById('pagos-popup').classList.add('hidden')"
-            class="absolute top-2 right-2 text-2xl font-bold text-gray-500 hover:text-red-600"
+            class="absolute top-2 right-2 text-2xl font-bold text-gray-200 hover:text-red-600"
           >
             &times;
-          </button>
+          </button> -->
 
           <h1 for="pagos-popup-title" class="text-2xl font-bold mb-4 text-start">
             Agregar pago a orden: {id de orden}
           </h1>
           <div
-            class="bg-gray-400 rounded-xl px-6 py-6 shadow-lg max-w-xl w-full relative grid grid-cols-1"
+            class="bg-gray-200 rounded-xl px-6 py-6 shadow-lg max-w-xl w-full relative grid grid-cols-1"
           >
             <label for="razon-social" class="text-black font-bold mt-1"
               >Razón social: {razon social}</label
@@ -867,7 +865,7 @@
               type="number"
               min="1"
               placeholder="Monto del pago"
-              class="bg-gray-100 w-full rounded-xl px-4 py-2 mt-1 border border-gray-300"
+              class="bg-gray-100 w-full rounded-xl shadow-md px-4 py-2 mt-1 border border-gray-300"
             />
           </div>
           <div class="mt-4">
@@ -877,7 +875,7 @@
             <input
               id="pago-fecha"
               type="date"
-              class="bg-gray-100 w-full rounded-xl px-4 py-2 mt-1 border border-gray-300"
+              class="bg-gray-100 w-full rounded-xl px-4 py-2 mt-1 shadow-md border border-gray-300"
             />
           </div>
 
@@ -904,6 +902,7 @@
 
           <div>
             <button
+              onclick="document.getElementById('pagos-popup').classList.add('hidden')"
               type="button"
               class="bg-gray-400 shadow-md text-white rounded-md px-4 py-2 font-bold hover:bg-gray-700 hover:cursor-pointer transition mt-4"
             >
@@ -960,7 +959,7 @@
 
           <h1 class="text-2xl font-bold mb-4 text-start">Eliminar Orden</h1>
           <div
-            class="bg-gray-400 rounded-xl px-6 py-6 shadow-lg max-w-xl w-full relative grid grid-cols-1"
+            class="bg-gray-200 rounded-xl px-6 py-6 shadow-lg max-w-xl w-full relative grid grid-cols-1"
           >
             <label id="delete-popup-label" class="text-black mt-1 text-start text-2xl">
               ¿Estas seguro de que deseas eliminar la orden?
