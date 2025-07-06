@@ -50,9 +50,9 @@ function renderOrdenes(ordenes) {
       <td class="text-left px-2 py-2">${orden.estatus?.nombre || 'N/A'}</td>
       <td class="text-left px-2 py-2">
         <div class="flex gap-2 items-center justify-center">
-          <button onclick="openEditModal('${orden.id}')" class="hover:cursor-pointer" title="Editar">
+          <!---button onclick="openEditModal('${orden.id}')" class="hover:cursor-pointer" title="Editar">
             <img src="../assets/icons/general/edit.png" alt="edit" class="w-6 h-6" />
-          </button>
+          </button--->
           <button onclick="openDeletePopup('${orden.id}', '${orden.tipo}')" class="hover:cursor-pointer">
             <img src="../assets/icons/general/delete.png" alt="delete" class="w-6 h-6" />
           </button>
@@ -639,15 +639,23 @@ async function insertPayment(orderId, orderType, paymentData) {
       : await window.electronAPI.insertIntoCuentasPorPagar(orderId, paymentData);
 
     if (response.error) {
-      console.error(`Error inserting payment for order ID ${orderId}:`, response.error);
-      mostrarMensaje('Error al registrar el pago.', 'error');
-    } else {
-      mostrarMensaje('Pago registrado exitosamente.', 'success');
-      loadOrdenes();
+      mostrarMensaje('Error al registrar el pago: ' + response.error.message, 'error');
+      return;
     }
+
+    mostrarMensaje('Pago registrado exitosamente.', 'success');
+
+    // Hide the payment popup
+    const pagosPopup = document.getElementById('pagos-popup');
+    if (pagosPopup) {
+      pagosPopup.classList.add('hidden');
+    }
+
+    // Re-render the orders
+    await loadOrdenes();
   } catch (error) {
-    console.error(`Unexpected error inserting payment for order ID ${orderId}:`, error);
-    mostrarMensaje('Ocurrió un error inesperado al registrar el pago.', 'error');
+    console.error('Error al registrar el pago:', error);
+    mostrarMensaje('Ocurrió un error al registrar el pago.', 'error');
   }
 }
 
