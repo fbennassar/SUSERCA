@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         ventaError: ordenesVentaResponse.error,
         compraError: ordenesCompraResponse.error
       });
-      alert('Error al cargar órdenes. Revisa la consola para más detalles.');
+      mostrarMensaje('Error al cargar órdenes. Revisa la consola para más detalles.', 'error');
     } else {
       const ordenesVenta = ordenesVentaResponse.data.map((orden) => ({ ...orden, tipo: 'Venta' }));
       const ordenesCompra = ordenesCompraResponse.data.map((orden) => ({ ...orden, tipo: 'Compra' }));
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   } catch (error) {
     console.error('Error inesperado al cargar órdenes:', error);
-    alert('Ocurrió un error inesperado al cargar órdenes.');
+    mostrarMensaje('Ocurrió un error inesperado al cargar órdenes.', 'error');
   }
 });
 
@@ -84,9 +84,9 @@ window.handleCreateOrdenVenta = async function handleCreateOrdenVenta() {
 
     if (response.error) {
       console.error('Error al crear orden de venta:', response.error);
-      alert('Error al crear orden de venta.');
+      mostrarMensaje('Error al crear orden de venta.', 'error');
     } else {
-      alert('Orden de venta creada exitosamente.');
+      mostrarMensaje('Orden de venta creada exitosamente.', 'success');
       document.getElementsByName('rif')[0].value = '';
       document.getElementsByName('razon_social')[0].value = '';
       document.getElementsByName('fecha_ini')[0].value = '';
@@ -99,7 +99,7 @@ window.handleCreateOrdenVenta = async function handleCreateOrdenVenta() {
     }
   } catch (error) {
     console.error('Error inesperado al crear orden de venta:', error);
-    alert('Ocurrió un error inesperado al crear la orden de venta.');
+    mostrarMensaje('Ocurrió un error inesperado al crear la orden de venta.', 'error');
   }
 };
 
@@ -119,9 +119,9 @@ window.handleCreateOrdenCompra = async function handleCreateOrdenCompra() {
 
     if (response.error) {
       console.error('Error al crear orden de compra:', response.error);
-      alert('Error al crear orden de compra.');
+      mostrarMensaje('Error al crear orden de compra.', 'error');
     } else {
-      alert('Orden de compra creada exitosamente.');
+      mostrarMensaje('Orden de compra creada exitosamente.', 'success');
       // limpiar campos del modal
       document.getElementsByName('rif')[0].value = '';
       document.getElementsByName('razon_social')[0].value = '';
@@ -136,7 +136,7 @@ window.handleCreateOrdenCompra = async function handleCreateOrdenCompra() {
     }
   } catch (error) {
     console.error('Error inesperado al crear orden de compra:', error);
-    alert('Ocurrió un error inesperado al crear la orden de compra.');
+    mostrarMensaje('Ocurrió un error inesperado al crear la orden de compra.', 'error');
   }
 };
 
@@ -152,9 +152,9 @@ window.handleEditOrden = async function handleEditOrden(id, tipo) {
 
     if (result.error) {
       console.error(`Error al editar orden de ${tipo.toLowerCase()}:`, result.error);
-      alert(`Error al editar orden de ${tipo.toLowerCase()}.`);
+      mostrarMensaje(`Error al editar orden de ${tipo.toLowerCase()}.`, 'error');
     } else {
-      alert(`Orden de ${tipo.toLowerCase()} editada exitosamente.`);
+      mostrarMensaje(`Orden de ${tipo.toLowerCase()} editada exitosamente.`, 'success');
       document.getElementById(modalId).classList.add('hidden');
       const ordenes = tipo === 'Venta'
         ? await window.electronAPI.getAllOrdenesVenta()
@@ -163,7 +163,7 @@ window.handleEditOrden = async function handleEditOrden(id, tipo) {
     }
   } catch (error) {
     console.error(`Error inesperado al editar orden de ${tipo.toLowerCase()}:`, error);
-    alert(`Ocurrió un error inesperado al editar orden de ${tipo.toLowerCase()}.`);
+    mostrarMensaje(`Ocurrió un error inesperado al editar orden de ${tipo.toLowerCase()}.`, 'error');
   }
 };
 
@@ -175,9 +175,9 @@ window.handleDeleteOrden = async function handleDeleteOrden(id, tipo) {
 
     if (result.error) {
       console.error(`Error al eliminar orden de ${tipo.toLowerCase()}:`, result.error);
-      alert(`Error al eliminar orden de ${tipo.toLowerCase()}.`);
+      mostrarMensaje(`Error al eliminar orden de ${tipo.toLowerCase()}.`, 'error');
     } else {
-      alert(`Orden de ${tipo.toLowerCase()} eliminada exitosamente.`);
+      mostrarMensaje(`Orden de ${tipo.toLowerCase()} eliminada exitosamente.`, 'error');
       const ordenes = tipo === 'Venta'
         ? await window.electronAPI.getAllOrdenesVenta()
         : await window.electronAPI.getAllOrdenesCompra();
@@ -185,7 +185,7 @@ window.handleDeleteOrden = async function handleDeleteOrden(id, tipo) {
     }
   } catch (error) {
     console.error(`Error inesperado al eliminar orden de ${tipo.toLowerCase()}:`, error);
-    alert(`Ocurrió un error inesperado al eliminar orden de ${tipo.toLowerCase()}.`);
+    mostrarMensaje(`Ocurrió un error inesperado al eliminar orden de ${tipo.toLowerCase()}.`, 'error');
   }
 };
 
@@ -197,9 +197,9 @@ window.handlePayment = async function handlePayment(id, tipo, monto) {
 
     if (result.error) {
       console.error(`Error al realizar pago de orden de ${tipo.toLowerCase()}:`, result.error);
-      alert(`Error al realizar pago de orden de ${tipo.toLowerCase()}.`);
+      mostrarMensaje(`Error al realizar pago de orden de ${tipo.toLowerCase()}.`, 'error');
     } else {
-      alert(`Pago realizado exitosamente para orden de ${tipo.toLowerCase()}.`);
+      mostrarMensaje(`Pago realizado exitosamente para orden de ${tipo.toLowerCase()}.`, 'success');
       const ordenes = tipo === 'Venta'
         ? await window.electronAPI.getAllOrdenesVenta()
         : await window.electronAPI.getAllOrdenesCompra();
@@ -207,7 +207,7 @@ window.handlePayment = async function handlePayment(id, tipo, monto) {
     }
   } catch (error) {
     console.error(`Error inesperado al realizar pago de orden de ${tipo.toLowerCase()}:`, error);
-    alert(`Ocurrió un error inesperado al realizar pago de orden de ${tipo.toLowerCase()}.`);
+    mostrarMensaje(`Ocurrió un error inesperado al realizar pago de orden de ${tipo.toLowerCase()}.`, 'error');
   }
 };
 
@@ -223,7 +223,7 @@ window.handleSearchOrdenes = async function handleSearchOrdenes(criteria) {
         ventaError: ordenesVentaResponse.error,
         compraError: ordenesCompraResponse.error
       });
-      alert('Error al buscar órdenes. Revisa la consola para más detalles.');
+      mostrarMensaje('Error al buscar órdenes. Revisa la consola para más detalles.', 'error');
     } else {
       const ordenesVenta = ordenesVentaResponse.data.map((orden) => ({ ...orden, tipo: 'Venta' }));
       const ordenesCompra = ordenesCompraResponse.data.map((orden) => ({ ...orden, tipo: 'Compra' }));
@@ -233,7 +233,7 @@ window.handleSearchOrdenes = async function handleSearchOrdenes(criteria) {
     }
   } catch (error) {
     console.error('Error inesperado al buscar órdenes:', error);
-    alert('Ocurrió un error inesperado al buscar órdenes.');
+    mostrarMensaje('Ocurrió un error inesperado al buscar órdenes.', 'error');
   }
 };
 
@@ -323,7 +323,7 @@ async function addProductoToOrden() {
   const cantidad = parseFloat(cantidadInput.value);
 
   if (!productoId || isNaN(cantidad) || cantidad <= 0 || isNaN(productoPrecioUnitario)) {
-    alert('Por favor seleccione un producto válido y una cantidad válida.');
+    mostrarMensaje('Por favor seleccione un producto válido y una cantidad válida.', 'error');
     return;
   }
 
@@ -335,7 +335,7 @@ async function addProductoToOrden() {
   );
 
   if (existingRow) {
-    alert('Este producto ya ha sido agregado.');
+    mostrarMensaje('Este producto ya ha sido agregado.', 'error');
     return;
   }
 
@@ -390,7 +390,7 @@ async function loadOrdenes() {
         ventaError: ordenesVentaResponse.error,
         compraError: ordenesCompraResponse.error
       });
-      alert('Error al cargar órdenes. Revisa la consola para más detalles.');
+      mostrarMensaje('Error al cargar órdenes. Revisa la consola para más detalles.', 'error');
     } else {
       const ordenesVenta = ordenesVentaResponse.data.map((orden) => ({ ...orden, tipo: 'Venta' }));
       const ordenesCompra = ordenesCompraResponse.data.map((orden) => ({ ...orden, tipo: 'Compra' }));
@@ -400,7 +400,7 @@ async function loadOrdenes() {
     }
   } catch (error) {
     console.error('Error inesperado al cargar órdenes:', error);
-    alert('Ocurrió un error inesperado al cargar órdenes.');
+    mostrarMensaje('Ocurrió un error inesperado al cargar órdenes.', 'error');
   }
 }
 
@@ -411,7 +411,7 @@ document.getElementById('btn-guardar_orden').addEventListener('click', async () 
   } else if (tipoOrden === 'Compra') {
     await handleCreateOrdenCompra();
   } else {
-    alert('Por favor, seleccione un tipo de orden válido.');
+    mostrarMensaje('Por favor, seleccione un tipo de orden válido.', 'error');
   }
 });
 
@@ -531,7 +531,7 @@ function openPagosPopup(orderId, orderType) {
       const paymentMethod = document.getElementById('pago-tipo').value;
 
       if (isNaN(paymentAmount) || paymentAmount <= 0 || !paymentDate || !paymentMethod) {
-        alert('Por favor, complete todos los campos correctamente.');
+        mostrarMensaje('Por favor, complete todos los campos correctamente.', 'error');
         return;
       }
 
@@ -587,14 +587,14 @@ async function insertPayment(orderId, orderType, paymentData) {
 
     if (response.error) {
       console.error(`Error inserting payment for order ID ${orderId}:`, response.error);
-      alert('Error al registrar el pago.');
+      mostrarMensaje('Error al registrar el pago.', 'error');
     } else {
-      alert('Pago registrado exitosamente.');
+      mostrarMensaje('Pago registrado exitosamente.', 'success');
       loadOrdenes();
     }
   } catch (error) {
     console.error(`Unexpected error inserting payment for order ID ${orderId}:`, error);
-    alert('Ocurrió un error inesperado al registrar el pago.');
+    mostrarMensaje('Ocurrió un error inesperado al registrar el pago.', 'error');
   }
 }
 
