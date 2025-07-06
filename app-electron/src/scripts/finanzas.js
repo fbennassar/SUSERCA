@@ -46,7 +46,7 @@ function renderOrdenes(ordenes) {
       <td class="text-left px-2 py-2">${orden.monto || 'N/A'}</td>
       <td class="text-left px-2 py-2">${orden.monto_pagado || 'N/A'}</td>
       <td class="text-left px-2 py-2">${orden.monto_restante || 'N/A'}</td>
-      <td class="text-left px-2 py-2">${new Date(orden.fecha_ini).toLocaleDateString() || 'N/A'}</td>
+      <td class="text-left px-2 py-2">${new Date(orden.fecha_ini).toISOString().split('T')[0] || 'N/A'}</td>
       <td class="text-left px-2 py-2">${orden.estatus?.nombre || 'N/A'}</td>
       <td class="text-left px-2 py-2">
         <div class="flex gap-2 items-center justify-center">
@@ -211,12 +211,21 @@ window.handlePayment = async function handlePayment(id, tipo, monto) {
   }
 };
 
+// Update handleSearchOrdenes to include .eq('activo', true) and ensure no data loss
 window.handleSearchOrdenes = async function handleSearchOrdenes(criteria) {
   try {
-    const [ordenesVentaResponse, ordenesCompraResponse] = await Promise.all([
-      window.electronAPI.searchOrdenesVenta(criteria),
-      window.electronAPI.searchOrdenesCompra(criteria)
-    ]);
+    const { tipo, estatus, ...otherCriteria } = criteria;
+
+    let ordenesVentaResponse = { data: [] };
+    let ordenesCompraResponse = { data: [] };
+
+    if (tipo === 'Venta' || !tipo) {
+      ordenesVentaResponse = await window.electronAPI.searchOrdenesVenta({ ...otherCriteria, activo: true });
+    }
+
+    if (tipo === 'Compra' || !tipo) {
+      ordenesCompraResponse = await window.electronAPI.searchOrdenesCompra({ ...otherCriteria, activo: true });
+    }
 
     if (ordenesVentaResponse.error || ordenesCompraResponse.error) {
       console.error('Error al buscar órdenes:', {
@@ -228,7 +237,13 @@ window.handleSearchOrdenes = async function handleSearchOrdenes(criteria) {
       const ordenesVenta = ordenesVentaResponse.data.map((orden) => ({ ...orden, tipo: 'Venta' }));
       const ordenesCompra = ordenesCompraResponse.data.map((orden) => ({ ...orden, tipo: 'Compra' }));
 
-      const todasOrdenes = [...ordenesVenta, ...ordenesCompra];
+      let todasOrdenes = [...ordenesVenta, ...ordenesCompra];
+
+      // Apply estatus filter if specified
+      if (estatus) {
+        todasOrdenes = todasOrdenes.filter((orden) => orden.estatus?.nombre === estatus);
+      }
+
       renderOrdenes(todasOrdenes);
     }
   } catch (error) {
@@ -236,6 +251,44 @@ window.handleSearchOrdenes = async function handleSearchOrdenes(criteria) {
     mostrarMensaje('Ocurrió un error inesperado al buscar órdenes.', 'error');
   }
 };
+
+// Update filterForm event listener to use `input` and `change` for immediate activation
+const filterForm = document.getElementById('filter-form');
+const btnLimpiarFiltro = document.getElementById('btn-limpiar-filtro');
+
+filterForm.addEventListener('input', async () => {
+  const tipo = document.getElementById('filtro-tipo').value || '';
+  const id = document.getElementById('filtro-id').value;
+  const rif = document.getElementById('filtro-rif').value;
+  const razonSocial = document.getElementById('filtro-razon-social').value;
+  const estatus = document.getElementById('filtro-estatus').value || '';
+  const desde = document.getElementById('filtro-desde').value;
+  const hasta = document.getElementById('filtro-hasta').value;
+
+  const criteria = {
+    tipo,
+    id,
+    rif,
+    razonSocial,
+    estatus,
+    desde,
+    hasta,
+  };
+
+  await handleSearchOrdenes(criteria);
+});
+
+btnLimpiarFiltro.addEventListener('click', () => {
+  document.getElementById('filtro-tipo').value = '';
+  document.getElementById('filtro-id').value = '';
+  document.getElementById('filtro-rif').value = '';
+  document.getElementById('filtro-razon-social').value = '';
+  document.getElementById('filtro-estatus').value = '';
+  document.getElementById('filtro-desde').value = '';
+  document.getElementById('filtro-hasta').value = '';
+
+  filterForm.dispatchEvent(new Event('input'));
+});
 
 function getSelectedProductos() {
   const productos = [];
