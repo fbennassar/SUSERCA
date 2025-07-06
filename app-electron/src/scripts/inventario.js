@@ -27,6 +27,8 @@ async function loadAllProductos() {
   }
 }
 
+
+
 function renderProductos(productos) {
     const container = document.querySelector('#cards-grid'); // Usar el ID único del contenedor de las cards
     container.innerHTML = ''; // Limpia el contenedor antes de renderizar
@@ -62,20 +64,23 @@ function renderProductos(productos) {
 
 function buildProductoSchema(modalId) {
   const modal = document.getElementById(modalId); // Obtén el contenedor del modal dinámicamente
+  const categoriaInput = modal.querySelector("select[name='categoria']").value;
+  
+
+
   const productoSchema = {
     nombre: modal.querySelector("input[name='nombre']").value,
     id: modal.querySelector("input[name='id']").value,
-    descripcion: modal.querySelector("input[name='descripcion']").value,
+    descripcion: modal.querySelector("textarea[name='descripcion']").value,
     precio: modal.querySelector("input[name='precio']").value,
     cantidad: modal.querySelector("input[name='cantidad']").value,
-    categoria: capitalizeCategory(modal.querySelector("input[name='categoria']").value),
+    id_categoria: categoriaInput ? parseInt(categoriaInput) : null, // Asegúrate de que sea un número
     // imagen: modal.querySelector("input[name='imagen']")?.value || "", // Si aplica
   };
 
   // Validar categoría
-  const validCategories = ["Seguridad Vial", "Implementos De Seguridad"];
-  if (!validCategories.includes(productoSchema.categoria)) {
-    mostrarMensaje("Categoría inválida. Las categorías válidas son: Seguridad Vial e Implementos De Seguridad.", "error");
+  if (!productoSchema.id_categoria) {
+    // alert("Categoría inválida. Las categorías válidas son: Seguridad Vial e Implementos De Seguridad.");
     throw new Error("Categoría inválida");
   }
 
@@ -95,31 +100,36 @@ function openEditModal(productId) {
   editModal.classList.remove("hidden");
 
   // Cargar datos del producto en el modal
-  window.electronAPI.getProductoByID(productId).then((result) => {
-    console.log("ID proporcionado desde el frontend:", productId); // Log del ID proporcionado
-    console.log("Resultado de getProductoByID:", result); // Log del resultado obtenido
+  window.electronAPI.getProductoByID(productId).then(async (result) => {
     if (result.error) {
       console.error("Error al obtener producto para editar:", result.error);
       mostrarMensaje("Error al cargar datos del producto.", "error");
     } else {
       const producto = result.data;
+      const categoriaSelect = editModal.querySelector("select[name='categoria']");
 
-      // Asegúrate de que los campos del modal existan antes de asignar valores
-      const nombreInput = editModal.querySelector("input[name='nombre']");
-      const idInput = editModal.querySelector("input[name='id']");
-      const descripcionInput = editModal.querySelector("input[name='descripcion']");
-      const precioInput = editModal.querySelector("input[name='precio']");
-      const cantidadInput = editModal.querySelector("input[name='cantidad']");
-      const categoriaInput = editModal.querySelector("input[name='categoria']");
+      // Poblar el select de categorías del modal de edición
+      categoriaSelect.innerHTML = ''; // Limpiar opciones previas
+      const { categoria: categorias, error } = await window.electronAPI.getCategorias();
+      if (error) {
+        mostrarMensaje('Error al cargar categorías para editar', 'error');
+      } else {
+        categorias.forEach(cat => {
+          const option = document.createElement('option');
+          option.value = cat.id;
+          option.textContent = cat.nombre;
+          categoriaSelect.appendChild(option);
+        });
+      }
 
-      console.log("Datos del producto obtenidos:", producto); // Log para depuración
-
-      if (nombreInput) nombreInput.value = producto.nombre || "";
-      if (idInput) idInput.value = producto.id || "";
-      if (descripcionInput) descripcionInput.value = producto.descripcion || "";
-      if (precioInput) precioInput.value = producto.precio || "";
-      if (cantidadInput) cantidadInput.value = producto.cantidad || "";
-      if (categoriaInput) categoriaInput.value = producto.categoria || "";
+      // Asignar valores del producto a los campos del modal
+      editModal.querySelector("input[name='nombre']").value = producto.nombre || "";
+      editModal.querySelector("input[name='id']").value = producto.id || "";
+      editModal.querySelector("textarea[name='descripcion']").value = producto.descripcion || "";
+      editModal.querySelector("input[name='precio']").value = producto.precio || "";
+      editModal.querySelector("input[name='cantidad']").value = producto.cantidad || "";
+      // Seleccionar la categoría correcta en el <select>
+      if (categoriaSelect) categoriaSelect.value = producto.id_categoria || "";
     }
   }).catch((error) => {
     console.error("Error inesperado al cargar datos del producto:", error);
@@ -164,11 +174,12 @@ function openDeletePopup(productId) {
 window.handleCreateProducto = async function handleCreateProducto() {
   console.log("Iniciando flujo para agregar producto");
   try {
+    debugger
     const productoSchema = buildProductoSchema("add-modal"); // Especifica el modal de origen
     console.log("Producto schema construido:", productoSchema);
 
     // Validaciones básicas
-    if (!productoSchema.nombre || !productoSchema.id || !productoSchema.descripcion || !productoSchema.precio || !productoSchema.cantidad || !productoSchema.categoria) {
+    if (!productoSchema.nombre || !productoSchema.id || !productoSchema.descripcion || !productoSchema.precio || !productoSchema.cantidad || !productoSchema.id_categoria) {
       const errorMessage = "Campos incompletos. Por favor, completa todos los campos.";
       console.error(errorMessage, { productoSchema });
       mostrarMensaje(errorMessage, "error");
@@ -205,7 +216,7 @@ window.handleUpdateProducto = async function handleUpdateProducto() {
     const productoSchema = buildProductoSchema("edit-modal"); // Especifica el modal de origen
 
     // Validaciones básicas
-    if (!productoSchema.nombre || !productoSchema.id || !productoSchema.descripcion || !productoSchema.precio || !productoSchema.cantidad || !productoSchema.categoria) {
+    if (!productoSchema.nombre || !productoSchema.id || !productoSchema.descripcion || !productoSchema.precio || !productoSchema.cantidad || !productoSchema.id_categoria) {
       const errorMessage = "Campos incompletos. Por favor, completa todos los campos.";
       console.error(errorMessage, { productoSchema });
       mostrarMensaje(errorMessage, "error");
@@ -270,6 +281,54 @@ function mostrarMensaje(texto, tipo = 'success') {
         mensajeDiv.style.display = 'none';
     }, 3500);
 }
+
+// ...existing code...
+// Cargar productos automáticamente al abrir la página
+document.addEventListener('DOMContentLoaded', async () => {
+  loadAllProductos(); // Carga inicial de todos los productos
+
+  // --- LÓGICA DE FILTRADO POR CATEGORÍA ---
+  const categorySelect = document.getElementById('category-filter-select');
+  const addProductCategoryInput = document.getElementById('add-product-categoria');
+
+  // Poblar el select con las categorías
+  try {
+    const { categoria: categorias, error } = await window.electronAPI.getCategorias();
+    if (error) {
+      mostrarMensaje('Error al cargar categorías', 'error');
+    } else {
+      categorias.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.id;
+        option.textContent = cat.nombre;
+        categorySelect.appendChild(option);
+        addProductCategoryInput.appendChild(option.cloneNode(true)); // Clonar la opción para el input de agregar producto
+      });
+    }
+  } catch (e) {
+    mostrarMensaje('Error inesperado al cargar categorías.', 'error');
+  }
+
+  // Añadir event listener para el cambio de categoría
+  categorySelect.addEventListener('change', async (event) => {
+    const categoryId = event.target.value;
+    if (categoryId) {
+      // Filtrar por la categoría seleccionada
+      try {
+        const result = await window.electronAPI.getProductosByCategoria(categoryId);
+        if (result.error) {
+          mostrarMensaje(`Error al filtrar: ${result.error}`, 'error');
+        } else {
+          renderProductos(result.data);
+        }
+      } catch (e) {
+        mostrarMensaje('Error inesperado al filtrar productos.', 'error');
+      }
+    } else {
+      // Si se selecciona "Todas las categorías", cargar todos los productos
+      loadAllProductos();
+    }
+  })});
 
 async function exportarExcel() {
   try {

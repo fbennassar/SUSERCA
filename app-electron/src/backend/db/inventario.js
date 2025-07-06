@@ -20,21 +20,32 @@ exports.createProducto = async (productoData) => {
 };
 
 exports.getAllProductos = async () => {
-  console.log("Backend getAllProductos - Solicitando todos los productos");
+  //console.log("Backend getAllProductos - Solicitando todos los productos");
   if (!supabase) {
     throw new Error('Cliente Supabase no inicializado.');
   }
-  const { data, error } = await supabase.supabase
+  const { data: producto, error } = await supabase.supabase
     .from('producto')
-    .select('*')
+    .select(`
+      *,
+      categoria (
+        nombre
+      )
+    `)
     .eq('activo', true);
-  console.log("Backend getAllProductos - Respuesta de Supabase:", { data, error });
+  //console.log("Backend getAllProductos - Respuesta de Supabase:", { producto, error });
   if (error) {
     console.error("Backend getAllProductos - Error al obtener productos:", error);
     throw new Error(error.message);
   }
-  console.log("Backend getAllProductos - Productos obtenidos exitosamente:", data);
-  return { data, error };
+
+  const productosDesempaquetados = producto.map(p => ({
+    ...p,
+    categoria: p.categoria ? p.categoria.nombre : null
+  }));
+
+  //console.log("Backend getAllProductos - Productos obtenidos exitosamente:", productosDesempaquetados);
+  return { data: productosDesempaquetados, error };
 };
 
 exports.getProductoByID = async (id) => {
@@ -43,7 +54,7 @@ exports.getProductoByID = async (id) => {
   }
   const { data, error } = await supabase.supabase
     .from('producto')
-    .select('*')
+    .select('*, categoria(nombre)')
     .eq('id', id)
     .eq('activo', true)
     .single();
@@ -59,7 +70,7 @@ exports.getProductoByName = async (name) => {
   }
   const { data, error } = await supabase.supabase
     .from('producto')
-    .select('*')
+    .select('*, categoria(nombre)')
     .ilike('nombre', `%${name}%`)
     .eq('activo', true)
     .single();
@@ -113,7 +124,7 @@ exports.searchProductos = async (query) => {
   }
   const { data: nameData, error: nameError } = await supabase.supabase
     .from('producto')
-    .select('*')
+    .select('*, categoria(nombre)')
     .ilike('nombre', `%${query}%`)
     .eq('activo', true);
 
@@ -123,7 +134,7 @@ exports.searchProductos = async (query) => {
   if (!isNaN(query)) {
     const { data, error } = await supabase.supabase
       .from('producto')
-      .select('*')
+      .select('*, categoria(nombre)')
       .eq('id', query)
       .eq('activo', true);
     idData = data || [];
@@ -137,4 +148,34 @@ exports.searchProductos = async (query) => {
     throw new Error(error.message);
   }
   return { data, error };
+};
+
+exports.getProductosByCategoria = async (categoriaId) => {
+  if (!supabase) {
+    throw new Error('Cliente Supabase no inicializado.');
+  }
+  try {
+    const { data, error } = await supabase.supabase
+      .from('producto')
+      .select(`
+        *,
+        categoria (
+          nombre
+        )
+      `)
+      .eq('id_categoria', categoriaId);
+
+    if (error) {
+      throw error;
+    }
+    // Mapeamos para mantener la consistencia del objeto producto
+    const productos = data.map(p => ({
+      ...p,
+      categoria: p.categoria.nombre
+    }));
+    return { data: productos, error: null };
+  } catch (error) {
+    console.error('Error en getProductosByCategoria:', error);
+    return { data: null, error };
+  }
 };

@@ -28,7 +28,7 @@ function buildClientSchema(modalId) {
     id: modal.querySelector("input[name='id']").value,
     email: modal.querySelector("input[name='email']").value,
     telefono: modal.querySelector("input[name='telefono']").value,
-    direccion: modal.querySelector("input[name='direccion']").value,
+    direccion: modal.querySelector("textarea[name='direccion']").value,
     // imagen: modal.querySelector("input[name='imagen']")?.value || "", // Si aplica
   };
 
@@ -52,7 +52,7 @@ function renderClients(clients) {
       </div>
       <div class="p-4">
         <h3 class="text-lg font-medium text-gray-800 mb-1">${client.nombre}</h3>
-        <p class="text-base font-semibold text-gray-900 mt-2">${client.id}</p>
+        <p class="text-base font-semibold text-gray-900 mt-2">RIF: ${client.id}</p>
         <div class="flex justify-end gap-3 mt-4">
           <button class="hover:cursor-pointer" onclick="openEditModal('${client.id}')">
             <img class="size-6" src="../assets/icons/general/edit.png" alt="edit" />
@@ -113,7 +113,7 @@ function openEditModal(clientId) {
       const idInput = editModal.querySelector("input[name='id']");
       const emailInput = editModal.querySelector("input[name='email']");
       const telefonoInput = editModal.querySelector("input[name='telefono']");
-      const direccionInput = editModal.querySelector("input[name='direccion']");
+      const direccionInput = editModal.querySelector("textarea[name='direccion']");
 
       console.log("Datos del cliente obtenidos:", client); // Log para depuración
 

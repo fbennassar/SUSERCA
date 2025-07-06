@@ -404,18 +404,24 @@
         style="box-sizing: border-box"
       >
         <div class="overflow-x-auto mt-4 w-full col-span-3">
-          <table class="table-fixed w-full">
-            <thead>
-              <tr class="divide-x divide-gray-300 border-b border-gray-300">
-                <!-- <th class="text-left px-2 py-2">ID</th> -->
-                <th class="text-left px-2 py-2">Nombre</th>
-                <th class="text-left px-2 py-2">Email</th>
-                <th class="text-left px-2 py-2">Rol</th>
-                <th class="text-left px-2 py-2">Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="user-list-body" class="divide-y divide-gray-200"></tbody>
-          </table>
+          <!-- Limita la altura para mostrar solo 5 filas y agrega scroll -->
+          <div class="max-h-[20rem] overflow-y-auto">
+            <table class="table-fixed w-full">
+              <thead>
+                <tr class="divide-x divide-gray-300 border-b border-gray-300">
+                  <!-- <th class="text-left px-2 py-2">ID</th> -->
+                  <th class="text-left px-2 py-2">Nombre</th>
+                  <th class="text-left px-2 py-2">Email</th>
+                  <th class="text-left px-2 py-2">Rol</th>
+                  <th class="text-left px-2 py-2">Acciones</th>
+                </tr>
+              </thead>
+              <tbody
+                id="user-list-body"
+                class="divide-y divide-gray-200"
+              ></tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div
@@ -423,19 +429,13 @@
         class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden"
       >
         <div
-          class="bg-zinc-200 w-full rounded-xl pt-4 pb-4 ml-44 mx-25 mb-3 px-4 max-w-6xl relative"
+          class="bg-white w-150 rounded-xl pt-4 pb-4 ml-44 mx-25 mb-3 px-4 max-w-6xl relative"
           style="box-sizing: border-box"
         >
-          <button
-            onclick="document.getElementById('edit-popup').classList.add('hidden')"
-            class="absolute text-2xl font-extrabold hover:cursor-pointer right-5 top-3"
-          >
-            X
-          </button>
           <h1 class="text-3xl text-center font-bold mb-2.5">Editar Usuario</h1>
-          <div class="bg-white p-5 rounded-2xl">
+          <div class="bg-zinc-200 p-5 rounded-2xl">
             <form class="w-full">
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="flex flex-col gap-3">
                 <div>
                   <h1 class="pl-2 text-base">Nombre</h1>
                   <input
@@ -463,14 +463,21 @@
                     id="selectRolEdit"
                     class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
                     onchange="
-                      this.classList.toggle('text-gray-400', this.value === '');
-                      this.classList.toggle('text-black', this.value !== '');
-                    "
+                this.classList.toggle('text-gray-400', this.value === '');
+                this.classList.toggle('text-black', this.value !== '');
+              "
                   >
                     <option value="" disabled selected>Rol...</option>
                   </select>
                 </div>
-                <div class="col-span-1 sm:col-span-2 flex justify-end mt-1">
+                <div class="flex justify-end gap-3 mt-1">
+                  <button
+                    type="button"
+                    onclick="document.getElementById('edit-popup').classList.add('hidden')"
+                    class="bg-white shadow-md text-black rounded-full px-4 py-1 hover:bg-gray-300 hover:cursor-pointer transition"
+                  >
+                    Cancelar
+                  </button>
                   <button
                     type="submit"
                     class="bg-green-700 shadow-md text-white rounded-full px-4 py-1 font-bold hover:bg-green-800 hover:cursor-pointer transition"
@@ -517,7 +524,7 @@
         class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden"
       >
         <div
-          class="bg-zinc-200 rounded-xl pt-4 pb-4 ml-44 mx-25 mb-3 px-4 max-w-xl relative"
+          class="bg-white rounded-xl pt-4 pb-4 ml-44 mx-25 mb-3 px-4 max-w-xl relative"
         >
           <button
             onclick="document.getElementById('modalCorreo').classList.add('hidden')"
@@ -525,7 +532,7 @@
           >
             X
           </button>
-          <div class="bg-white p-5 rounded-2xl">
+          <div class="bg-zinc-200 p-5 rounded-2xl">
             <p id="correoCompleto" class="text-xl"></p>
           </div>
         </div>
