@@ -1,6 +1,6 @@
 const { ipcMain, dialog } = require('electron');
 const { createProducto, getAllProductos, getProductoByID, getProductoByName, updateProducto, deleteProducto, searchProductos, getProductosByCategoria } = require('../db/inventario');
-const xlsx = require('xlsx');
+const ExcelJS = require('exceljs');
 const fs = require('fs');
 
 ipcMain.handle('productos:create', async (event, productoData) => {
@@ -97,26 +97,14 @@ ipcMain.handle('productos:search', async (event, query) => {
   }
 });
 
-// ... código existente ...
-
 ipcMain.handle('productos:exportarExcel', async () => {
   try {
-    // 1. Obtener todos los productos desde la BD
+    // 1. Obtener los productos
     const productosResult = await getAllProductos();
-
-    if (productosResult.error) {
-      return { error: 'Error al obtener los productos para el reporte.' };
+    if (productosResult.error || !productosResult.data || productosResult.data.length === 0) {
+      return { error: 'No hay productos para exportar o hubo un error.' };
     }
-
     const productos = productosResult.data;
-
-    console.log("Tipo de dato de productos:", typeof productos);
-    console.log("Contenido de productos:", productos);
-
-    if (!Array.isArray(productos)) {
-      console.error('Error: productos no es un array.');
-      return { error: 'Error al generar el reporte: los datos no son válidos.' };
-    }
 
     // 2. Mostrar el diálogo para guardar el archivo
     const { filePath, canceled } = await dialog.showSaveDialog({
@@ -126,30 +114,60 @@ ipcMain.handle('productos:exportarExcel', async () => {
     });
 
     if (canceled || !filePath) {
-      return { success: false, message: 'Operación cancelada por el usuario.' };
+      return { success: false, message: 'Operación cancelada.' };
     }
 
-    const columnasSeleccionadas = productos.map(producto => ({
-      id: producto.id,
-      nombre: producto.nombre,
-      descripcion: producto.descripcion,
-      precio: producto.precio,
-      cantidad: producto.cantidad,
-      categoria: producto.categoria
-    }));
+    // --- Creación del Excel con ExcelJS ---
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = 'SUSERCA App';
+    workbook.created = new Date();
 
-    // 3. Preparar los datos para la hoja de cálculo
-    const worksheet = xlsx.utils.json_to_sheet(columnasSeleccionadas);
-    const workbook = xlsx.utils.book_new();
-    xlsx.utils.book_append_sheet(workbook, worksheet, 'Productos');
+    const worksheet = workbook.addWorksheet('Inventario de Productos');
 
-    // 4. Escribir el archivo en el disco
-    const buffer = xlsx.write(workbook, { bookType: 'xlsx', type: 'buffer' });
-    fs.writeFileSync(filePath, buffer);
+    // 3. Definir las columnas y sus propiedades (ancho, formato, etc.)
+    worksheet.columns = [
+      { header: 'ID', key: 'id', width: 10 },
+      { header: 'Nombre', key: 'nombre', width: 30 },
+      { header: 'Descripción', key: 'descripcion', width: 40 },
+      { header: 'Precio', key: 'precio', width: 15, style: { numFmt: '"$"#,##0.00' } },
+      { header: 'Cantidad', key: 'cantidad', width: 15, style: { numFmt: '#,##0' } },
+      { header: 'Categoría', key: 'categoria', width: 25 }
+    ];
+
+    // 4. Aplicar estilo a la fila de encabezados
+    worksheet.getRow(1).eachCell((cell) => {
+      cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FF4472C4' } // Un color azul
+      };
+      cell.alignment = { vertical: 'middle', horizontal: 'center' };
+    });
+
+    // 5. Añadir los datos de los productos
+    productos.forEach(producto => {
+      worksheet.addRow({
+        id: producto.id,
+        nombre: producto.nombre,
+        descripcion: producto.descripcion,
+        precio: producto.precio,
+        cantidad: producto.cantidad,
+        categoria: producto.categoria
+      });
+    });
+    
+    // 6. Congelar la fila de encabezados
+    worksheet.views = [
+        { state: 'frozen', ySplit: 1 }
+    ];
+
+    // 7. Escribir el archivo en el disco
+    await workbook.xlsx.writeFile(filePath);
 
     return { success: true, path: filePath };
   } catch (error) {
-    console.error('Error al generar el reporte de productos:', error);
+    console.error('Error al generar el reporte de productos con ExcelJS:', error);
     return { error: error.message || 'Un error desconocido ocurrió.' };
   }
 });
