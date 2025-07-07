@@ -23,6 +23,7 @@
     "dotenv": "^16.5.0",
     "exceljs": "^4.4.0",
     "mysql2": "^3.14.1",
+    "pdfmake": "^0.2.20",
     "tailwindcss": "^4.1.8",
     "xlsx": "^0.18.5"
   }
