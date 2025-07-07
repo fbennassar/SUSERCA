@@ -260,3 +260,39 @@ document.addEventListener('DOMContentLoaded', async () => {
     mostrarMensaje('Ocurrió un error inesperado al cargar clientes.', 'error');
   }
 });
+
+async function generarReporteDesdeTabla() {
+  const table = document.getElementById("ordenes-table");
+  const rows = table.querySelectorAll("tbody tr");
+  const data = [];
+
+  rows.forEach((row) => {
+    const cells = row.querySelectorAll("td");
+    const rowData = {
+      id: cells[0].textContent,
+      tipo: cells[1].textContent,
+      rif: cells[2].textContent,
+      razonSocial: cells[3].textContent,
+      montoTotal: cells[4].textContent,
+      montoPagado: cells[5].textContent,
+      montoRestante: cells[6].textContent,
+      fecha: cells[7].textContent,
+      estatus: cells[8].textContent,
+    };
+    console.log("Row data:", rowData); // Log para depuración
+    data.push(rowData);
+  });
+
+  // Envía los datos al proceso principal a través del IPC
+  try {
+    await window.electronAPI.generarReporteOrdenes(data);
+    mostrarMensaje("Reporte generado exitosamente.", "success");
+  } catch (error) {
+    console.error("Error al generar el reporte:", error);
+    mostrarMensaje("Error al generar el reporte.", "error");
+  }
+}
+
+document.getElementById("btn-reporte").addEventListener("click", () => {
+  generarReporteDesdeTabla();
+});
