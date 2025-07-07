@@ -50,6 +50,7 @@ function renderOrdenes(ordenes) {
     row.innerHTML = `
       <td class="text-left px-2 py-2">${orden.id}</td>
       <td class="text-left px-2 py-2">${orden.tipo}</td>
+<<<<<<< HEAD
       <td class="text-left px-2 py-2">${entidad?.id || "N/A"}</td>
       <td class="text-left px-2 py-2">${entidad?.nombre || "N/A"}</td>
       <td class="text-left px-2 py-2">${orden.monto || "N/A"}</td>
@@ -57,6 +58,15 @@ function renderOrdenes(ordenes) {
       <td class="text-left px-2 py-2">${orden.monto_restante || "N/A"}</td>
       <td class="text-left px-2 py-2">${new Date(orden.fecha_ini).toLocaleDateString() || "N/A"}</td>
       <td class="text-left px-2 py-2">${orden.estatus?.nombre || "N/A"}</td>
+=======
+      <td class="text-left px-2 py-2">${entidad?.id || 'N/A'}</td>
+      <td class="text-left px-2 py-2">${entidad?.nombre || 'N/A'}</td>
+      <td class="text-left px-2 py-2">${orden.monto || 'N/A'}</td>
+      <td class="text-left px-2 py-2">${orden.monto_pagado || 'N/A'}</td>
+      <td class="text-left px-2 py-2">${orden.monto_restante || 'N/A'}</td>
+      <td class="text-left px-2 py-2">${new Date(orden.fecha_ini).toISOString().split('T')[0] || 'N/A'}</td>
+      <td class="text-left px-2 py-2">${orden.estatus?.nombre || 'N/A'}</td>
+>>>>>>> d0be6dc7817f63fb33ed657753d2405bfa0abf4a
       <td class="text-left px-2 py-2">
         <div class="flex gap-2 items-center justify-center">
           <button onclick="openEditModal('${orden.id}')" class="hover:cursor-pointer" title="Editar">
@@ -285,10 +295,27 @@ window.handlePayment = async function handlePayment(id, tipo, monto) {
 
 window.handleSearchOrdenes = async function handleSearchOrdenes(criteria) {
   try {
+<<<<<<< HEAD
     const [ordenesVentaResponse, ordenesCompraResponse] = await Promise.all([
       window.electronAPI.searchOrdenesVenta(criteria),
       window.electronAPI.searchOrdenesCompra(criteria),
     ]);
+=======
+
+    const { tipo, estatus, ...otherCriteria } = criteria;
+
+    let ordenesVentaResponse = { data: [] };
+    let ordenesCompraResponse = { data: [] };
+
+    if (tipo === 'Venta' || !tipo) {
+      ordenesVentaResponse = await window.electronAPI.searchOrdenesVenta({ ...otherCriteria, activo: true });
+    }
+
+    if (tipo === 'Compra' || !tipo) {
+      ordenesCompraResponse = await window.electronAPI.searchOrdenesCompra({ ...otherCriteria, activo: true });
+    }
+
+>>>>>>> d0be6dc7817f63fb33ed657753d2405bfa0abf4a
 
     if (ordenesVentaResponse.error || ordenesCompraResponse.error) {
       console.error("Error al buscar órdenes:", {
@@ -750,6 +777,7 @@ async function insertPayment(orderId, orderType, paymentData) {
           );
 
     if (response.error) {
+<<<<<<< HEAD
       console.error(
         `Error inserting payment for order ID ${orderId}:`,
         response.error
@@ -768,6 +796,30 @@ async function insertPayment(orderId, orderType, paymentData) {
       "Ocurrió un error inesperado al registrar el pago.",
       "error"
     );
+=======
+
+      mostrarMensaje('Error al registrar el pago: ' + response.error.message, 'error');
+      return;
+    }
+
+    mostrarMensaje('Pago registrado exitosamente.', 'success');
+
+    // Hide the payment popup
+    const pagosPopup = document.getElementById('pagos-popup');
+    if (pagosPopup) {
+      pagosPopup.classList.add('hidden');
+
+    }
+
+    // Re-render the orders
+    await loadOrdenes();
+  } catch (error) {
+
+
+    console.error('Error al registrar el pago:', error);
+    mostrarMensaje('Ocurrió un error al registrar el pago.', 'error');
+
+>>>>>>> d0be6dc7817f63fb33ed657753d2405bfa0abf4a
   }
 }
 
