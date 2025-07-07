@@ -72,4 +72,5 @@ contextBridge.exposeInMainWorld("electronAPI", {
   insertIntoCuentasPorCobrar: (idOrdenVenta, paymentData) => ipcRenderer.invoke('cuentasPorCobrar:insert', idOrdenVenta, paymentData),
   insertIntoCuentasPorPagar: (idOrdenCompra, paymentData) => ipcRenderer.invoke('cuentasPorPagar:insert', idOrdenCompra, paymentData),
   reporteExcelProductos: () => ipcRenderer.invoke('productos:exportarExcel'),
+  generarReporteOrdenes: (data) => ipcRenderer.invoke("ordenes:generar-reporte-pdf", data),
 });
