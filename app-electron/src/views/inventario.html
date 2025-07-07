@@ -464,12 +464,12 @@
               <div>
                 <h1 class="pl-1">Categoria</h1>
                 <select
-                name="categoria"
-                id="edit-product-categoria"
-                class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
+                  name="categoria"
+                  id="edit-product-categoria"
+                  class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
                 >
                   <option value="">Seleccionar categoría</option>
-              </select>
+                </select>
               </div>
               <div>
                 <h1 class="pl-1">Precio</h1>
@@ -567,5 +567,183 @@
       </div>
     </main>
   </body>
+  <!-- Agrega este popup en blanco al final del <body>, antes del </html> -->
+  <div
+    id="reporte-popup"
+    class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden"
+  >
+    <div class="bg-white rounded-xl p-5 shadow-lg w-220 relative">
+      <h1 class="font-bold text-3xl mb-1.5">Generar Reporte</h1>
+      <div class="bg-zinc-200 rounded-xl p-3">
+        <div class="flex gap-1.5 mb-4">
+          <div class="w-full">
+            <label for="report-razon">Razon Social</label>
+            <input
+              type="text"
+              name="report-razon"
+              placeholder="Ej: Pedro Gonzalez"
+              class="pl-2 bg-white rounded-full w-full border border-black shadow-md"
+            />
+          </div>
+          <div class="w-full">
+            <label for="report-rif">RIF</label>
+            <input
+              type="text"
+              placeholder="Ej: J-1234567-0"
+              name="report-rif"
+              class="pl-2 bg-white rounded-full w-full border border-black shadow-md"
+            />
+          </div>
+          <div class="w-full">
+            <label for="report-date">Fecha</label>
+            <input
+              type="date"
+              name="report-date"
+              class="pl-2 bg-white rounded-full w-full border border-black shadow-md"
+            />
+          </div>
+        </div>
+        <div class="w-full mb-4">
+          <label for="report-description" class="block mb-1"
+            >Descripcion (opcional)</label
+          >
+          <textarea
+            name="report-description"
+            id="report-description"
+            class="bg-white rounded-2xl border border-black shadow-md w-full"
+            rows="3"
+          ></textarea>
+        </div>
+        <div class="flex justify-center gap-10 mx-24">
+          <select
+            id="producto"
+            name="producto"
+            class="border border-black bg-white shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
+            onchange="
+                this.classList.toggle('text-gray-400', this.value === '');
+                this.classList.toggle('text-black', this.value !== '');
+                "
+            required
+          >
+            <option class="text-black font-bold" value="" disabled selected>
+              Seleccione un producto
+            </option>
+            <option class="text-black" value="prod1">Producto 1</option>
+            <option class="text-black" value="prod2">Producto 2</option>
+            <option class="text-black" value="prod3">Producto 3</option>
+          </select>
+          <button
+            class="bg-green-700 hover:bg-green-800 shadow-md rounded-full py-1 font-bold pl-2 align-middle w-full text-white hover:cursor-pointer"
+          >
+            + Agregar Producto
+          </button>
+        </div>
+        <div class="overflow-y-auto mt-3" style="max-height: 250px">
+          <table
+            id="ordenes-table"
+            class="w-full rounded-lg bg-white ordenes-grid"
+          >
+            <thead>
+              <tr class="divide-x divide-gray-300 border-b border-gray-300">
+                <th class="w-1/5 px-4 py-2">POS</th>
+                <th class="w-1/5 px-4 py-2">Descripcion</th>
+                <th class="w-1/5 px-4 py-2">Cantidad</th>
+                <th class="w-1/5 px-4 py-2">Precio/u</th>
+                <th class="w-1/5 px-4 py-2">Precio REF.</th>
+                <th class="w-1/5 px-4 py-2">Total</th>
+              </tr>
+            </thead>
+
+            <tbody class="divide-y divide-gray-200">
+              <tr class="divide-x divide-gray-200">
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+              </tr>
+              <tr class="divide-x divide-gray-200">
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+              </tr>
+              <tr class="divide-x divide-gray-200">
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+              </tr>
+              <tr class="divide-x divide-gray-200">
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+              </tr>
+              <tr class="divide-x divide-gray-200">
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+              </tr>
+              <tr class="divide-x divide-gray-200">
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+              </tr>
+              <tr class="divide-x divide-gray-200">
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+              </tr>
+              <tr class="divide-x divide-gray-200">
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+                <td class="text-left px-2 py-2">.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Contenido en blanco, puedes agregar lo que desees aquí -->
+      <button
+        type="button"
+        onclick="document.getElementById('reporte-popup').classList.add('hidden')"
+        class="absolute top-2 right-4 text-2xl font-bold text-gray-400 hover:text-red-600"
+        title="Cerrar"
+      >
+        &times;
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Abre el popup al presionar el botón de imprimir reporte
+    document
+      .querySelector('button[onclick*="reporteExcelProductos"]')
+      .addEventListener("click", function (e) {
+        e.preventDefault();
+        document.getElementById("reporte-popup").classList.remove("hidden");
+      });
+  </script>
   <script src="../libs/sweetalert2.all.min.js"></script>
 </html>
