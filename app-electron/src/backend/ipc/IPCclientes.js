@@ -1,6 +1,8 @@
-const { ipcMain } = require('electron');
+const { ipcMain, dialog } = require('electron');
 const { createClient, getAllClients, getClientByID, getClientByName, update, delete: deleteClient, searchClients } = require('../db/clientes');
-
+const Pdfmake = require('pdfmake'); // Cambiamos a la importación principal
+const fs = require('fs');
+const path = require('path'); // Necesitaremos path para las fuentes
 // Create
 ipcMain.handle('clientes:create', async (event, clientData) => {
   try {
@@ -104,4 +106,95 @@ ipcMain.handle('clientes:delete', async (event, id) => {
     console.error('Error inesperado en IPC clientes:delete:', error);
     return { error: error.message };
   }
+});
+
+const fonts = {
+    Arial: {
+        normal: path.join(__dirname, '..', '..','assets', 'fonts', 'ARIAL.ttf'),
+        bold: path.join(__dirname, '..', '..','assets', 'fonts', 'ARIALBD.ttf'),
+        italics: path.join(__dirname, '..', '..','assets', 'fonts', 'ARIALI.ttf'),
+        bolditalics: path.join(__dirname, '..', '..','assets', 'fonts', 'ARIALBI.ttf')
+    }
+};
+
+const printer = new Pdfmake(fonts);
+
+
+ipcMain.handle('clientes:generar-reporte-pdf', async (event, clientesData) => {
+  // ... (código de validación y diálogo de guardado sin cambios)
+  if (!clientesData || clientesData.length === 0) {
+    return { error: 'No hay datos para generar el reporte.' };
+  }
+
+  const { filePath, canceled } = await dialog.showSaveDialog({
+    title: 'Guardar Reporte de Clientes',
+    defaultPath: `reporte_clientes_${new Date().toISOString().split('T')[0]}.pdf`,
+    filters: [{ name: 'PDF Files', extensions: ['pdf'] }]
+  });
+
+  if (canceled || !filePath) {
+    return { success: false, message: 'Operación cancelada por el usuario.' };
+  }
+
+
+  const docDefinition = {
+    content: [
+      { text: 'Reporte de Clientes', style: 'header' },
+      {
+        style: 'tableExample',
+        table: {
+          headerRows: 1,
+          widths: ['auto', 'auto', '*', '*', 'auto',],
+          body: [
+            [{ text: 'RIF', style: 'tableHeader' }, { text: 'Razon social', style: 'tableHeader' }, { text: 'Correo', style: 'tableHeader' }, { text: 'Tlf', style: 'tableHeader' }, { text: 'Dirección', style: 'tableHeader' }],
+            ...clientesData.map(item => [item.rif, item.razonSocial, item.email, item.telefono, item.direccion])
+          ]
+        }
+      }
+    ],
+    styles: {
+      header: {
+        fontSize: 18,
+        bold: true,
+        margin: [0, 0, 0, 10]
+      },
+      tableExample: {
+        margin: [0, 5, 0, 15]
+      },
+      tableHeader: {
+        bold: true,
+        fontSize: 13,
+        color: 'black'
+      }
+    },
+    defaultStyle: {
+      font: 'Arial'
+    }
+  };
+
+  return new Promise((resolve, reject) => {
+    try {
+      // --- CORRECCIÓN AQUÍ ---
+      // Usamos printer.createPdfKitDocument que SÍ devuelve un stream con .pipe()
+      const pdfDoc = printer.createPdfKitDocument(docDefinition);
+      
+      const writeStream = fs.createWriteStream(filePath);
+      pdfDoc.pipe(writeStream);
+      pdfDoc.end();
+
+      writeStream.on('finish', () => {
+        console.log(`PDF guardado exitosamente en: ${filePath}`);
+        resolve({ success: true, path: filePath });
+      });
+
+      writeStream.on('error', (err) => {
+        console.error('Error al escribir el archivo PDF:', err);
+        reject({ error: 'No se pudo guardar el archivo PDF.' });
+      });
+
+    } catch (error) {
+      console.error('Error al crear el documento PDF:', error);
+      reject({ error: 'No se pudo generar el documento PDF.' });
+    }
+  });
 });

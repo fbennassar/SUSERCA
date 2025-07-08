@@ -261,31 +261,36 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
-async function generarReporteDesdeTabla() {
-  const table = document.getElementById("ordenes-table");
-  const rows = table.querySelectorAll("tbody tr");
+async function generarReporteClientes() {
+  const cardsContainer = document.querySelector(".grid"); // El contenedor de las cards
+  const cards = cardsContainer.querySelectorAll(".bg-white"); // Selecciona cada card
+
   const data = [];
 
-  rows.forEach((row) => {
-    const cells = row.querySelectorAll("td");
-    const rowData = {
-      id: cells[0].textContent,
-      tipo: cells[1].textContent,
-      rif: cells[2].textContent,
-      razonSocial: cells[3].textContent,
-      montoTotal: cells[4].textContent,
-      montoPagado: cells[5].textContent,
-      montoRestante: cells[6].textContent,
-      fecha: cells[7].textContent,
-      estatus: cells[8].textContent,
+  cards.forEach((card) => {
+    // Extrae la información de cada card
+    const razonSocial = card.querySelector(".text-lg")?.textContent || "N/A";
+    const rif = card.querySelector(".font-semibold:nth-child(2)")?.textContent.replace("RIF: ", "") || "N/A";
+    const email = card.querySelector(".font-semibold:nth-child(3)")?.textContent.replace("Correo: ", "") || "N/A";
+    const telefono = card.querySelector(".font-semibold:nth-child(4)")?.textContent.replace("Tlf: ", "") || "N/A";
+    const direccion = card.querySelector(".font-semibold:nth-child(5)")?.textContent.replace("Dirección fiscal: ", "") || "N/A";
+
+    // Crea un objeto con la información extraída
+    const cardData = {
+      razonSocial: razonSocial,
+      rif: rif,
+      email: email,
+      telefono: telefono,
+      direccion: direccion,
     };
-    console.log("Row data:", rowData); // Log para depuración
-    data.push(rowData);
+
+    console.log("Card data:", cardData); // Log para depuración
+    data.push(cardData);
   });
 
   // Envía los datos al proceso principal a través del IPC
   try {
-    await window.electronAPI.generarReporteOrdenes(data);
+    await window.electronAPI.generarReporteClientes(data);
     mostrarMensaje("Reporte generado exitosamente.", "success");
   } catch (error) {
     console.error("Error al generar el reporte:", error);
@@ -294,5 +299,5 @@ async function generarReporteDesdeTabla() {
 }
 
 document.getElementById("btn-reporte").addEventListener("click", () => {
-  generarReporteDesdeTabla();
+  generarReporteClientes();
 });
