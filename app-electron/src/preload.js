@@ -1,5 +1,13 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
+window.addEventListener('DOMContentLoaded', () => {
+  // Exponemos de forma segura la librería XLSX al script del renderizador (inventario.js)
+  // Ahora estará disponible en `window.xlsxAPI`
+  contextBridge.exposeInMainWorld('xlsxAPI', {
+    writeFile: (workbook, filename) => window.XLSX.writeFile(workbook, filename),
+    utils: window.XLSX.utils // Exponemos todo el objeto utils
+  })});
+
 contextBridge.exposeInMainWorld("electronAPI", {
   login: (email, password) =>
     ipcRenderer.invoke("usuarios:login", { email, password }),
@@ -64,4 +72,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
   insertIntoCuentasPorCobrar: (idOrdenVenta, paymentData) => ipcRenderer.invoke('cuentasPorCobrar:insert', idOrdenVenta, paymentData),
   insertIntoCuentasPorPagar: (idOrdenCompra, paymentData) => ipcRenderer.invoke('cuentasPorPagar:insert', idOrdenCompra, paymentData),
   reporteExcelProductos: () => ipcRenderer.invoke('productos:exportarExcel'),
+  generarReporteOrdenes: (data) => ipcRenderer.invoke("ordenes:generar-reporte-pdf", data),
+  generarReporteClientes: (clientesData) => ipcRenderer.invoke("clientes:generar-reporte-pdf", clientesData),
 });

@@ -550,42 +550,49 @@
 
                 <option class="text-black" value="">Todos</option>
                 <option class="text-black" value="Pendiente">Pendiente</option>
-                <option class="text-black" value="Parcialmente pagada">Parcialmente pagado</option>
+                <option class="text-black" value="Parcialmente pagada">
+                  Parcialmente pagado
+                </option>
                 <option class="text-black" value="Pagada">Pagado</option>
               </select>
             </div>
 
-
             <div>
-              <h1 class="pl-2 text-base">Fecha</h1>
+              <h1 class="pl-2 text-base">Desde</h1>
               <input
                 type="date"
+                id="filtro-desde"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full mr-3"
               />
             </div>
-
+            <!-- <div class="flex items-center h-full pt-4">
                 <span
                   class=" block h-0.5 w-6 bg-gray-400 rounded-full"
                 ></span>
               </div> -->
-
             <div class="w-full">
-              <h1 class="invisible text-base">.</h1>
+              <h1 class="pl-2 text-base">Hasta</h1>
               <input
                 type="date"
-                  id="filtro-hasta"
+                id="filtro-hasta"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
               />
             </div>
 
-
-            <div class="flex justify-end mt-2">
+            <div class="flex justify-end mt-2 space-x-3">
               <button
                 type="button"
                 id="btn-limpiar-filtro"
-                class="bg-red-600 hover:bg-red-700 text-white font-bold px-2 rounded-full shadow transition w-full"
+                class="bg-gray-500 shadow-md text-white rounded-full px-4 py-1 font-bold hover:bg-gray-700 hover:cursor-pointer transition w-full"
               >
                 Limpiar filtro
+              </button>
+              <button
+                type="button"
+                id="btn-reporte"
+                class="bg-green-700 hover:bg-green-800 text-white font-bold px-2 rounded-full shadow hover:cursor-pointer transition w-full"
+              >
+                Reporte
               </button>
             </div>
           </div>
@@ -609,43 +616,42 @@
         class="bg-white w-full rounded-xl pt-4 pb-4 mb-3 px-4 max-w-6xl"
         styles="box-sizing: border-box"
       >
-        <div class="overflow-y-auto" style="max-height: 340px">
-          <table
-            id="ordenes-table"
-            class="w-full rounded-lg bg-white ordenes-grid"
-          >
-            <thead>
-              <tr class="divide-x divide-gray-300 border-b border-gray-300">
-                <th class="w-1/5 px-4 py-2">ID</th>
-                <th class="w-1/5 px-4 py-2">Tipo</th>
-                <th class="w-1/5 px-4 py-2">RIF</th>
-                <th class="w-1/5 px-4 py-2">Razón social</th>
-                <th class="w-1/5 px-4 py-2">Monto total</th>
-                <th class="w-1/5 px-4 py-2">Monto pagado</th>
-                <th class="w-1/5 px-4 py-2">Monto restante</th>
-                <th class="w-1/5 px-4 py-2">Fecha</th>
-                <th class="w-1/5 px-4 py-2">Estatus</th>
-                <th class="w-1/5 px-4 py-2">Acciones</th>
-              </tr>
-            </thead>
+        <div class="overflow-x-auto mt-4 w-full col-span-3">
+          <div class="max-h-[20rem] overflow-y-auto">
+            <table
+              id="ordenes-table"
+              class="w-full border border-gray-300 rounded-lg bg-white ordenes-grid"
+            >
+              <thead>
+                <tr class="divide-x divide-gray-300 border-b border-gray-300">
+                  <th class="w-1/5 px-4 py-2">ID</th>
+                  <th class="w-1/5 px-4 py-2">Tipo</th>
+                  <th class="w-1/5 px-4 py-2">RIF</th>
+                  <th class="w-1/5 px-4 py-2">Razón social</th>
+                  <th class="w-1/5 px-4 py-2">Monto total</th>
+                  <th class="w-1/5 px-4 py-2">Monto pagado</th>
+                  <th class="w-1/5 px-4 py-2">Monto restante</th>
+                  <th class="w-1/5 px-4 py-2">Fecha</th>
+                  <th class="w-1/5 px-4 py-2">Estatus</th>
+                  <th class="w-1/5 px-4 py-2">Acciones</th>
+                </tr>
+              </thead>
 
-            <tbody class="divide-y divide-gray-200">
-              <tr class="divide-x divide-gray-200">
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">
-                  <div class="flex gap-2 items-center justify-center">
-
-                    <button
-                      type="button"
-
+              <tbody class="divide-y divide-gray-200">
+                <tr class="divide-x divide-gray-200">
+                  <td class="text-left px-2 py-2">.</td>
+                  <td class="text-left px-2 py-2">.</td>
+                  <td class="text-left px-2 py-2">.</td>
+                  <td class="text-left px-2 py-2">.</td>
+                  <td class="text-left px-2 py-2">.</td>
+                  <td class="text-left px-2 py-2">.</td>
+                  <td class="text-left px-2 py-2">.</td>
+                  <td class="text-left px-2 py-2">.</td>
+                  <td class="text-left px-2 py-2">.</td>
+                  <td class="text-left px-2 py-2">
+                    <div class="flex gap-2 items-center justify-center">
+                      <!---button
+                      onclick="document.getElementById('edit-popup').classList.remove('hidden')"
                       class="hover:cursor-pointer"
                       title="Editar"
                     >
@@ -656,32 +662,33 @@
                       />
                     </button--->
 
-                    <button
-                      onclick="document.getElementById('delete-popup').classList.remove('hidden')"
-                      class="hover:cursor-pointer"
-                    >
-                      <img
-                        src="../assets/icons/general/delete.png"
-                        alt="delete"
-                        class="w-6 h-6"
-                      />
-                    </button>
+                      <button
+                        onclick="document.getElementById('delete-popup').classList.remove('hidden')"
+                        class="hover:cursor-pointer"
+                      >
+                        <img
+                          src="../assets/icons/general/delete.png"
+                          alt="delete"
+                          class="w-6 h-6"
+                        />
+                      </button>
 
-                    <button
-                      onclick="document.getElementById('pagos-popup').classList.remove('hidden')"
-                      class="hover:cursor-pointer"
-                    >
-                      <img
-                        src="../assets/icons/finanzas/pagos.png"
-                        alt="view"
-                        class="w-8 h-8"
-                      />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                      <button
+                        onclick="document.getElementById('pagos-popup').classList.remove('hidden')"
+                        class="hover:cursor-pointer"
+                      >
+                        <img
+                          src="../assets/icons/finanzas/pagos.png"
+                          alt="view"
+                          class="w-8 h-8"
+                        />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -693,8 +700,15 @@
         <div
           class="bg-white rounded-xl px-6 py-6 shadow-lg max-w-xl w-full relative"
         >
+          <button
+            onclick="document.getElementById('edit-popup').classList.add('hidden')"
+            class="absolute top-2 right-2 text-2xl font-bold text-gray-500 hover:text-red-600"
+          >
+            &times;
+          </button>
+
           <h1 class="text-2xl font-bold mb-4 text-start">Editar Orden</h1>
-          <form class="bg-zinc-200 rounded-2xl p-4">
+          <form>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="flex flex-col gap-4">
                 <div>
@@ -703,7 +717,7 @@
                     id="edit-rif"
                     type="text"
                     placeholder="J-12345678-0"
-                    class="bg-white w-full rounded-xl px-4 py-2 mt-1 shadow-md border border-gray-300"
+                    class="bg-gray-100 w-full rounded-xl px-4 py-2 mt-1 border border-gray-300"
                   />
                 </div>
                 <div>
@@ -714,7 +728,7 @@
                     id="edit-razon"
                     type="text"
                     placeholder="Razón social"
-                    class="bg-white w-full rounded-xl px-4 py-2 mt-1 shadow-md border border-gray-300"
+                    class="bg-gray-100 w-full rounded-xl px-4 py-2 mt-1 border border-gray-300"
                   />
                 </div>
                 <div>
@@ -724,7 +738,7 @@
                   <input
                     id="edit-fecha"
                     type="date"
-                    class="bg-white w-full rounded-xl px-4 py-2 mt-1 shadow-md border border-gray-300"
+                    class="bg-gray-100 w-full rounded-xl px-4 py-2 mt-1 border border-gray-300"
                   />
                 </div>
               </div>
@@ -736,7 +750,7 @@
                   id="edit-descripcion"
                   type="text"
                   placeholder="Descripción de la orden"
-                  class="bg-white w-full rounded-xl px-4 py-2 mt-1 shadow-md border border-gray-300"
+                  class="bg-gray-100 w-full rounded-xl px-4 py-2 mt-1 border border-gray-300"
                 ></textarea>
               </div>
             </div>
@@ -750,7 +764,7 @@
                   <select
                     id="producto"
                     name="producto"
-                    class="border border-black bg-white shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
+                    class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
                     onchange="
                 this.classList.toggle('text-gray-400', this.value === '');
                 this.classList.toggle('text-black', this.value !== '');
@@ -778,7 +792,7 @@
                     type="number"
                     min="1"
                     placeholder="Ej: 20"
-                    class="bg-white w-full rounded-xl px-4 mt-1 shadow-md border border-gray-300"
+                    class="bg-gray-100 w-full rounded-xl px-4 py-2 mt-1 border border-gray-300"
                     required
                   />
                 </div>
@@ -831,9 +845,9 @@
                 <button
                   type="button"
                   onclick="document.getElementById('edit-popup').classList.add('hidden')"
-                  class="bg-white text-black px-4 py-2 rounded-full hover:bg-gray-300 hover:cursor-pointer transition"
+                  class="bg-gray-500 text-white px-4 py-2 rounded-full hover:bg-red-700 transition"
                 >
-                  Cancelar
+                  Cancelar edición
                 </button>
               </div>
             </div>
@@ -1012,31 +1026,4 @@
     </main>
   </body>
   <script src="../libs/sweetalert2.all.min.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      // Delegación de eventos robusta para el botón de editar en la tabla de órdenes
-      var ordenesTable = document.getElementById("ordenes-table");
-      if (ordenesTable) {
-        ordenesTable.addEventListener("click", function (e) {
-          // Buscar si el click fue en un botón de editar o su imagen
-          var target = e.target;
-          // Si se hace click en el <img>, subir al <button>
-          if (
-            target.tagName === "IMG" &&
-            target.closest('button[title="Editar"]')
-          ) {
-            target = target.closest('button[title="Editar"]');
-          }
-          if (
-            target.tagName === "BUTTON" &&
-            target.getAttribute("title") === "Editar"
-          ) {
-            e.preventDefault();
-            var popup = document.getElementById("edit-popup");
-            if (popup) popup.classList.remove("hidden");
-          }
-        });
-      }
-    });
-  </script>
 </html>

@@ -49,13 +49,17 @@ function renderProveedores(proveedores) {
   proveedores.forEach((proveedor) => {
     const card = document.createElement("div");
     card.className = "bg-white rounded-lg shadow-md overflow-hidden border border-gray-200";
+    const getValue = (value, defaultValue = 'Sin información') => (value === null ? defaultValue : value);
     card.innerHTML = `
       <div class="w-full h-35 bg-gray-200 flex items-center justify-center border-b border-gray-300">
         <img src="../assets/img/proveedores/proveedor.jpg" alt="Proveedor" class="w-full h-full object-fill rounded-t-lg" />
       </div>
       <div class="p-4">
-        <h3 class="text-lg font-medium text-gray-800 mb-1">${proveedor.nombre}</h3>
-        <p class="text-base font-semibold text-gray-900 mt-2">RIF: ${proveedor.id}</p>
+        <h3 class="text-lg font-medium text-gray-800 mb-1">${getValue(proveedor.nombre)}</h3>
+        <p class="text-base font-semibold text-gray-900 mt-2">RIF: ${getValue(proveedor.id)}</p>
+        <p class="text-base font-semibold text-gray-900 mt-2">Correo: ${getValue(proveedor.email)}</p>
+        <p class="text-base font-semibold text-gray-900 mt-2">Tlf: ${getValue(proveedor.telefono)}</p>
+        <p class="text-base font-semibold text-gray-900 mt-2">Dirección fiscal: ${getValue(proveedor.direccion)}</p>
         <div class="flex justify-end gap-3 mt-4">
           <button class="hover:cursor-pointer" onclick="openEditModal('${proveedor.id}')">
             <img class="size-6" src="../assets/icons/general/edit.png" alt="edit" />
