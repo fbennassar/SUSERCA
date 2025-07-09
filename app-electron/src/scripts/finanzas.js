@@ -50,15 +50,6 @@ function renderOrdenes(ordenes) {
     row.innerHTML = `
       <td class="text-left px-2 py-2">${orden.id}</td>
       <td class="text-left px-2 py-2">${orden.tipo}</td>
-<<<<<<< HEAD
-      <td class="text-left px-2 py-2">${entidad?.id || "N/A"}</td>
-      <td class="text-left px-2 py-2">${entidad?.nombre || "N/A"}</td>
-      <td class="text-left px-2 py-2">${orden.monto || "N/A"}</td>
-      <td class="text-left px-2 py-2">${orden.monto_pagado || "N/A"}</td>
-      <td class="text-left px-2 py-2">${orden.monto_restante || "N/A"}</td>
-      <td class="text-left px-2 py-2">${new Date(orden.fecha_ini).toLocaleDateString() || "N/A"}</td>
-      <td class="text-left px-2 py-2">${orden.estatus?.nombre || "N/A"}</td>
-=======
       <td class="text-left px-2 py-2">${entidad?.id || 'N/A'}</td>
       <td class="text-left px-2 py-2">${entidad?.nombre || 'N/A'}</td>
       <td class="text-left px-2 py-2">${orden.monto || 'N/A'}</td>
@@ -66,7 +57,6 @@ function renderOrdenes(ordenes) {
       <td class="text-left px-2 py-2">${orden.monto_restante || 'N/A'}</td>
       <td class="text-left px-2 py-2">${new Date(orden.fecha_ini).toISOString().split('T')[0] || 'N/A'}</td>
       <td class="text-left px-2 py-2">${orden.estatus?.nombre || 'N/A'}</td>
->>>>>>> d0be6dc7817f63fb33ed657753d2405bfa0abf4a
       <td class="text-left px-2 py-2">
         <div class="flex gap-2 items-center justify-center">
           <button onclick="openEditModal('${orden.id}')" class="hover:cursor-pointer" title="Editar">
@@ -295,12 +285,6 @@ window.handlePayment = async function handlePayment(id, tipo, monto) {
 
 window.handleSearchOrdenes = async function handleSearchOrdenes(criteria) {
   try {
-<<<<<<< HEAD
-    const [ordenesVentaResponse, ordenesCompraResponse] = await Promise.all([
-      window.electronAPI.searchOrdenesVenta(criteria),
-      window.electronAPI.searchOrdenesCompra(criteria),
-    ]);
-=======
 
     const { tipo, estatus, ...otherCriteria } = criteria;
 
@@ -315,7 +299,6 @@ window.handleSearchOrdenes = async function handleSearchOrdenes(criteria) {
       ordenesCompraResponse = await window.electronAPI.searchOrdenesCompra({ ...otherCriteria, activo: true });
     }
 
->>>>>>> d0be6dc7817f63fb33ed657753d2405bfa0abf4a
 
     if (ordenesVentaResponse.error || ordenesCompraResponse.error) {
       console.error("Error al buscar órdenes:", {
@@ -777,26 +760,6 @@ async function insertPayment(orderId, orderType, paymentData) {
           );
 
     if (response.error) {
-<<<<<<< HEAD
-      console.error(
-        `Error inserting payment for order ID ${orderId}:`,
-        response.error
-      );
-      mostrarMensaje("Error al registrar el pago.", "error");
-    } else {
-      mostrarMensaje("Pago registrado exitosamente.", "success");
-      loadOrdenes();
-    }
-  } catch (error) {
-    console.error(
-      `Unexpected error inserting payment for order ID ${orderId}:`,
-      error
-    );
-    mostrarMensaje(
-      "Ocurrió un error inesperado al registrar el pago.",
-      "error"
-    );
-=======
 
       mostrarMensaje('Error al registrar el pago: ' + response.error.message, 'error');
       return;
@@ -819,7 +782,6 @@ async function insertPayment(orderId, orderType, paymentData) {
     console.error('Error al registrar el pago:', error);
     mostrarMensaje('Ocurrió un error al registrar el pago.', 'error');
 
->>>>>>> d0be6dc7817f63fb33ed657753d2405bfa0abf4a
   }
 }
 
@@ -840,3 +802,108 @@ function unpackPaymentHistory(order) {
     paymentHistoryBody.appendChild(row);
   });
 }
+
+function mostrarMensaje(mensaje, tipo) {
+  const mensajeContainer = document.createElement('div');
+  mensajeContainer.textContent = mensaje;
+  mensajeContainer.className = `mensaje ${tipo}`; // Add classes for styling, e.g., 'mensaje success' or 'mensaje error'
+
+  // Apply basic styles
+  mensajeContainer.style.position = 'fixed';
+  mensajeContainer.style.bottom = '20px';
+  mensajeContainer.style.right = '20px';
+  mensajeContainer.style.padding = '10px 20px';
+  mensajeContainer.style.borderRadius = '5px';
+  mensajeContainer.style.color = '#fff';
+  mensajeContainer.style.backgroundColor = tipo === 'success' ? 'green' : 'red';
+  mensajeContainer.style.zIndex = '1000';
+
+  document.body.appendChild(mensajeContainer);
+
+  // Remove the message after 3 seconds
+  setTimeout(() => {
+    mensajeContainer.remove();
+  }, 3000);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const rifInput = document.querySelector("input[name='rif']");
+  const razonSocialInput = document.querySelector("input[name='razon_social']");
+  const tipoOrdenSelect = document.getElementById('TipoOrden');
+
+  async function buscarEntidadPorRif(rif) {
+    const tipoOrden = tipoOrdenSelect.value;
+    if (!rif || !tipoOrden) return;
+
+    try {
+        const response = tipoOrden === 'Compra'
+            ? await window.electronAPI.getProveedorById(rif)
+            : await window.electronAPI.getClientByID(rif);
+
+        console.log('Respuesta completa de IPC:', response); // Log para depuración
+
+        if (response.error) {
+            console.error('Error al buscar entidad por RIF:', response.error);
+            //mostrarMensaje('No se encontró ninguna entidad con el RIF proporcionado.', 'error');
+            razonSocialInput.value = ''; // Limpiar el campo si no se encuentra
+            return;
+        }
+
+        if (response.data) {
+            razonSocialInput.value = response.data.nombre;
+        } else {
+            //mostrarMensaje('No se encontró ninguna entidad con el RIF proporcionado.', 'error');
+            razonSocialInput.value = ''; // Limpiar el campo si no se encuentra
+        }
+    } catch (error) {
+        console.error('Error inesperado al buscar entidad por RIF:', error);
+        mostrarMensaje('Ocurrió un error inesperado al buscar la entidad.', 'error');
+    }
+  }
+
+  let rifTimeout;
+
+  rifInput.addEventListener('keyup', (event) => {
+    clearTimeout(rifTimeout); // Clear the previous timeout
+    const rif = event.target.value.trim();
+    rifTimeout = setTimeout(() => {
+        buscarEntidadPorRif(rif);
+    }, 500); // Wait for 500ms before triggering the function
+});
+});
+
+async function generarReporteDesdeTabla() {
+  const table = document.getElementById("ordenes-table");
+  const rows = table.querySelectorAll("tbody tr");
+  const data = [];
+
+  rows.forEach((row) => {
+    const cells = row.querySelectorAll("td");
+    const rowData = {
+      id: cells[0].textContent,
+      tipo: cells[1].textContent,
+      rif: cells[2].textContent,
+      razonSocial: cells[3].textContent,
+      montoTotal: cells[4].textContent,
+      montoPagado: cells[5].textContent,
+      montoRestante: cells[6].textContent,
+      fecha: cells[7].textContent,
+      estatus: cells[8].textContent,
+    };
+    console.log("Row data:", rowData); // Log para depuración
+    data.push(rowData);
+  });
+
+  // Envía los datos al proceso principal a través del IPC
+  try {
+    await window.electronAPI.generarReporteOrdenes(data);
+    mostrarMensaje("Reporte generado exitosamente.", "success");
+  } catch (error) {
+    console.error("Error al generar el reporte:", error);
+    mostrarMensaje("Error al generar el reporte.", "error");
+  }
+}
+
+document.getElementById("btn-reporte").addEventListener("click", () => {
+  generarReporteDesdeTabla();
+});

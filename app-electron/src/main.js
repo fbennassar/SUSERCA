@@ -11,6 +11,7 @@ require("./backend/ipc/IPCproveedores.js");
 require("./backend/ipc/IPCclientes.js");
 require("./backend/ipc/IPCordenCompra.js");
 require("./backend/ipc/IPCordenVenta.js");
+require("./backend/ipc/IPCfinanzas.js");
 require("./backend/ipc/IPCrol.js");
 require("./backend/ipc/IPCcategoria.js");
 

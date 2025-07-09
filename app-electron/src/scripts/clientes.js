@@ -46,13 +46,17 @@ function renderClients(clients) {
   clients.forEach((client) => {
     const card = document.createElement("div");
     card.className = "bg-white rounded-lg shadow-md overflow-hidden border border-gray-200";
+    const getValue = (value, defaultValue = 'Sin información') => (value === null ? defaultValue : value);
     card.innerHTML = `
       <div class="w-full h-35 bg-gray-200 flex items-center justify-center border-b border-gray-300">
         <img src="../assets/img/clientes/cliente.jpg" alt="Cliente" class="w-full h-full object-fill rounded-t-lg" />
       </div>
       <div class="p-4">
-        <h3 class="text-lg font-medium text-gray-800 mb-1">${client.nombre}</h3>
-        <p class="text-base font-semibold text-gray-900 mt-2">RIF: ${client.id}</p>
+        <h3 class="text-lg font-medium text-gray-800 mb-1">${getValue(client.nombre)}</h3>
+        <p class="text-base font-semibold text-gray-900 mt-2">RIF: ${getValue(client.id)}</p>
+        <p class="text-base font-semibold text-gray-900 mt-2">Correo: ${getValue(client.email)}</p>
+        <p class="text-base font-semibold text-gray-900 mt-2">Tlf: ${getValue(client.telefono)}</p>
+        <p class="text-base font-semibold text-gray-900 mt-2">Dirección fiscal: ${getValue(client.direccion)}</p>
         <div class="flex justify-end gap-3 mt-4">
           <button class="hover:cursor-pointer" onclick="openEditModal('${client.id}')">
             <img class="size-6" src="../assets/icons/general/edit.png" alt="edit" />
@@ -255,4 +259,45 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error('Error inesperado al cargar clientes:', error);
     mostrarMensaje('Ocurrió un error inesperado al cargar clientes.', 'error');
   }
+});
+
+async function generarReporteClientes() {
+  const cardsContainer = document.querySelector(".grid"); // El contenedor de las cards
+  const cards = cardsContainer.querySelectorAll(".bg-white"); // Selecciona cada card
+
+  const data = [];
+
+  cards.forEach((card) => {
+    // Extrae la información de cada card
+    const razonSocial = card.querySelector(".text-lg")?.textContent || "N/A";
+    const rif = card.querySelector(".font-semibold:nth-child(2)")?.textContent.replace("RIF: ", "") || "N/A";
+    const email = card.querySelector(".font-semibold:nth-child(3)")?.textContent.replace("Correo: ", "") || "N/A";
+    const telefono = card.querySelector(".font-semibold:nth-child(4)")?.textContent.replace("Tlf: ", "") || "N/A";
+    const direccion = card.querySelector(".font-semibold:nth-child(5)")?.textContent.replace("Dirección fiscal: ", "") || "N/A";
+
+    // Crea un objeto con la información extraída
+    const cardData = {
+      razonSocial: razonSocial,
+      rif: rif,
+      email: email,
+      telefono: telefono,
+      direccion: direccion,
+    };
+
+    console.log("Card data:", cardData); // Log para depuración
+    data.push(cardData);
+  });
+
+  // Envía los datos al proceso principal a través del IPC
+  try {
+    await window.electronAPI.generarReporteClientes(data);
+    mostrarMensaje("Reporte generado exitosamente.", "success");
+  } catch (error) {
+    console.error("Error al generar el reporte:", error);
+    mostrarMensaje("Error al generar el reporte.", "error");
+  }
+}
+
+document.getElementById("btn-reporte").addEventListener("click", () => {
+  generarReporteClientes();
 });
