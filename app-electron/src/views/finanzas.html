@@ -487,22 +487,23 @@
         class="bg-white w-full rounded-xl pt-4 pb-4 mb-3 px-4 max-w-6xl"
         styles="box-sizing: border-box"
       >
-        <form class="w-full" id="filter-form">
+        <form class="w-full">
           <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
             <div>
               <h1 class="pl-2 text-base">Tipo</h1>
               <select
-                name="FiltroTipo"
-                id="filtro-tipo"
+                name="FiltroID"
+                id="filtro"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
-                onchange="this.classList.toggle('text-gray-400', this.value === ''); this.classList.toggle('text-black', this.value !== '');"
+                onchange="              
+              this.classList.toggle('text-gray-400', this.value === '');
+              this.classList.toggle('text-black', this.value !== '');"
               >
                 <option class="font-bold text-black" disabled selected>
-                  Seleccione un tipo
+                  Seleccione un ID
                 </option>
-                <option class="text-black" value="">Todos</option>
-                <option class="text-black" value="Compra">Compra</option>
-                <option class="text-black" value="Venta">Venta</option>
+                <option class="text-black" value="">Compra</option>
+                <option class="text-black" value="">Venta</option>
               </select>
             </div>
 
@@ -510,7 +511,6 @@
               <h1 class="pl-2 text-base">ID</h1>
               <input
                 type="text"
-                id="filtro-id"
                 placeholder="Ej: ......"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
               />
@@ -520,17 +520,15 @@
               <h1 class="pl-2 text-base">RIF</h1>
               <input
                 type="text"
-                id="filtro-rif"
                 placeholder="Ej: J-12345678-0"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
               />
             </div>
 
             <div>
-              <h1 class="pl-2 text-base">Razón Social</h1>
+              <h1 class="pl-2 text-base">Razon Social</h1>
               <input
                 type="text"
-                id="filtro-razon-social"
                 placeholder="Ej: Alpeca"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full"
               />
@@ -540,9 +538,11 @@
               <h1 class="pl-2 text-base">Estatus</h1>
               <select
                 name="Estatus"
-                id="filtro-estatus"
+                id="estatus"
                 class="border border-black bg-gray-50 shadow-md rounded-full pl-2 align-middle w-full text-gray-400"
-                onchange="this.classList.toggle('text-gray-400', this.value === ''); this.classList.toggle('text-black', this.value !== '');"
+                onchange="              
+              this.classList.toggle('text-gray-400', this.value === '');
+              this.classList.toggle('text-black', this.value !== '');"
               >
                 <option class="text-black font-bold" value="" disabled selected>
                   Seleccione un estatus
@@ -660,7 +660,7 @@
                         alt="edit"
                         class="w-6 h-6"
                       />
-                    </button--->
+                    </button>
 
                       <button
                         onclick="document.getElementById('delete-popup').classList.remove('hidden')"
