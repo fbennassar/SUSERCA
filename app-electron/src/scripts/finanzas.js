@@ -44,6 +44,7 @@ function renderOrdenes(ordenes) {
   }
   container.innerHTML = ""; // Limpia el contenedor antes de renderizar
   ordenes.forEach((orden) => {
+    
     const row = document.createElement("tr");
     const entidad = orden.tipo === "Venta" ? orden.cliente : orden.proveedor;
     row.className = "divide-x divide-gray-200";
@@ -59,9 +60,9 @@ function renderOrdenes(ordenes) {
       <td class="text-left px-2 py-2">${orden.estatus?.nombre || 'N/A'}</td>
       <td class="text-left px-2 py-2">
         <div class="flex gap-2 items-center justify-center">
-          <button onclick="openEditModal('${orden.id}')" class="hover:cursor-pointer" title="Editar">
+          <!---button onclick="openEditModal('${orden.id}')" class="hover:cursor-pointer" title="Editar">
             <img src="../assets/icons/general/edit.png" alt="edit" class="w-6 h-6" />
-          </button>
+          </button--->
           <button onclick="openDeletePopup('${orden.id}', '${orden.tipo}')" class="hover:cursor-pointer">
             <img src="../assets/icons/general/delete.png" alt="delete" class="w-6 h-6" />
           </button>
@@ -283,6 +284,7 @@ window.handlePayment = async function handlePayment(id, tipo, monto) {
   }
 };
 
+// Update handleSearchOrdenes to include .eq('activo', true) and ensure no data loss
 window.handleSearchOrdenes = async function handleSearchOrdenes(criteria) {
   try {
 
@@ -319,7 +321,13 @@ window.handleSearchOrdenes = async function handleSearchOrdenes(criteria) {
         tipo: "Compra",
       }));
 
-      const todasOrdenes = [...ordenesVenta, ...ordenesCompra];
+      let todasOrdenes = [...ordenesVenta, ...ordenesCompra];
+
+      // Apply estatus filter if specified
+      if (estatus) {
+        todasOrdenes = todasOrdenes.filter((orden) => orden.estatus?.nombre === estatus);
+      }
+
       renderOrdenes(todasOrdenes);
     }
   } catch (error) {
@@ -327,6 +335,44 @@ window.handleSearchOrdenes = async function handleSearchOrdenes(criteria) {
     mostrarMensaje("Ocurrió un error inesperado al buscar órdenes.", "error");
   }
 };
+
+// Update filterForm event listener to use `input` and `change` for immediate activation
+const filterForm = document.getElementById('filter-form');
+const btnLimpiarFiltro = document.getElementById('btn-limpiar-filtro');
+
+filterForm.addEventListener('input', async () => {
+  const tipo = document.getElementById('filtro-tipo').value || '';
+  const id = document.getElementById('filtro-id').value;
+  const rif = document.getElementById('filtro-rif').value;
+  const razonSocial = document.getElementById('filtro-razon-social').value;
+  const estatus = document.getElementById('filtro-estatus').value || '';
+  const desde = document.getElementById('filtro-desde').value;
+  const hasta = document.getElementById('filtro-hasta').value;
+
+  const criteria = {
+    tipo,
+    id,
+    rif,
+    razonSocial,
+    estatus,
+    desde,
+    hasta,
+  };
+
+  await handleSearchOrdenes(criteria);
+});
+
+btnLimpiarFiltro.addEventListener('click', () => {
+  document.getElementById('filtro-tipo').value = '';
+  document.getElementById('filtro-id').value = '';
+  document.getElementById('filtro-rif').value = '';
+  document.getElementById('filtro-razon-social').value = '';
+  document.getElementById('filtro-estatus').value = '';
+  document.getElementById('filtro-desde').value = '';
+  document.getElementById('filtro-hasta').value = '';
+
+  filterForm.dispatchEvent(new Event('input'));
+});
 
 function getSelectedProductos() {
   const productos = [];
