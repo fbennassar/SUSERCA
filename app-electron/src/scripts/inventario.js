@@ -90,20 +90,43 @@ function agregarProductoCotizacion() {
       const newRow = document.createElement('tr');
       newRow.className = 'divide-x divide-gray-200';
       newRow.innerHTML = `
-        <td class="text-left px-2 py-2">${posicion}</td>
+        <td class="text-left px-2 py-2">
+        <button class="hover:cursor-pointer delete-row-btn" onclick=""> 
+        <img class="size-7" src="../assets/icons/general/delete.png" alt="delete" />
+        <button/>
+         ${posicion}</td>
         <td class="text-left px-2 py-2">${productoDescripcion}</td>
         <td class="text-left px-2 py-2"><input type="number" class="cantidad-input" value="1" min="1" /></td>
         <td class="text-left px-2 py-2">
-          <input type="number" class="cantidad-input" value="1" min="1" />
+          <input type="number" class="precio-unitario-input" value="${productoPrecioRef.toFixed(2)}" min="1" step"0.01" />
         </td>
         <td class="text-left px-2 py-2">
-          <input type="number" class="precio-unitario-input" value="${productoPrecioRef.toFixed(2)}" min="0" step="0.01" />
+          ${productoPrecioRef.toFixed(2)}
         </td>
-        <td class="text-left px-2 py-2">
+        <td class="text-left px-2 py-2 total">
           ${(parseFloat(productoPrecioRef) * 1).toFixed(2)} <!-- Valor total calculado -->
         </td>
       `;
       tablaCotizacion.appendChild(newRow);
+
+      // Agregar event listeners para actualizar el total
+      const cantidadInput = newRow.querySelector('.cantidad-input');
+      const precioUnitarioInput = newRow.querySelector('.precio-unitario-input');
+      const deleteRowBtn = newRow.querySelector('.delete-row-btn');
+      cantidadInput.addEventListener('input', actualizarTotal);
+      precioUnitarioInput.addEventListener('input', actualizarTotal);
+      deleteRowBtn.addEventListener('click', eliminarFila);
+
+      function actualizarTotal() {
+        const cantidad = parseFloat(cantidadInput.value) || 0;
+        const precioUnitario = parseFloat(precioUnitarioInput.value) || 0;
+        const total = cantidad * precioUnitario;
+        newRow.querySelector('.total').textContent = total.toFixed(2);
+      }
+
+      function eliminarFila() {
+        tablaCotizacion.removeChild(newRow);
+      }
     } else {
       console.error('No se ha seleccionado un producto válido.');
     }
