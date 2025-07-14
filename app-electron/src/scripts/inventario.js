@@ -58,9 +58,58 @@ function renderProductos(productos) {
         container.appendChild(card);
     });
 
+    const cotizacionSelect = document.getElementById('cotizacion-select');
+    cotizacionSelect.innerHTML = ''; // Limpiar opciones previas
+    cotizacionSelect.innerHTML = '<option class="text-black font-bold" value="" disabled selected>Seleccione un producto</option>';
+    productos.forEach(producto => {
+        const option = document.createElement('option');
+        option.value = producto.id;
+        option.textContent = `${producto.nombre} [${producto.id}]`;
+        option.dataset.descripcion = producto.descripcion || 'Sin descripción';
+        option.dataset.precio = producto.precio || '0.00';
+        cotizacionSelect.appendChild(option);
+    });
+
     // Asegúrate de que el contenedor tenga las clases necesarias para la cuadrícula
     container.classList.add('grid', 'grid-cols-1', 'sm:grid-cols-2', 'lg:grid-cols-3', 'xl:grid-cols-4', 'gap-10', 'py-6', 'max-w-6xl', 'w-full', 'mx-auto');
 }
+
+function agregarProductoCotizacion() {
+  const agregarButton = document.getElementById('agregar-producto-cotizacion');
+  const tablaCotizacion = document.getElementById('tabla-cotizacion');
+  tablaCotizacion.innerHTML = ''; // Limpiar tabla antes de agregar nuevos productos
+  agregarButton.onclick = () => {
+    const cotizacionSelect = document.getElementById('cotizacion-select');
+    const selectedOption = cotizacionSelect.options[cotizacionSelect.selectedIndex];
+    if (selectedOption.value) {
+      const productoDescripcion = selectedOption.dataset.descripcion || 'Sin descripción';
+      const productoPrecioRef = parseFloat(selectedOption.dataset.precio) || 0.00;
+      
+      const posicion = tablaCotizacion.rows.length + 1; // Obtener la posición actual de la fila
+      // Aquí puedes agregar la lógica para agregar el producto a la cotización
+      const newRow = document.createElement('tr');
+      newRow.className = 'divide-x divide-gray-200';
+      newRow.innerHTML = `
+        <td class="text-left px-2 py-2">${posicion}</td>
+        <td class="text-left px-2 py-2">${productoDescripcion}</td>
+        <td class="text-left px-2 py-2"><input type="number" class="cantidad-input" value="1" min="1" /></td>
+        <td class="text-left px-2 py-2">
+          <input type="number" class="cantidad-input" value="1" min="1" />
+        </td>
+        <td class="text-left px-2 py-2">
+          <input type="number" class="precio-unitario-input" value="${productoPrecioRef.toFixed(2)}" min="0" step="0.01" />
+        </td>
+        <td class="text-left px-2 py-2">
+          ${(parseFloat(productoPrecioRef) * 1).toFixed(2)} <!-- Valor total calculado -->
+        </td>
+      `;
+      tablaCotizacion.appendChild(newRow);
+    } else {
+      console.error('No se ha seleccionado un producto válido.');
+    }
+  };
+}
+
 
 function buildProductoSchema(modalId) {
   const modal = document.getElementById(modalId); // Obtén el contenedor del modal dinámicamente
