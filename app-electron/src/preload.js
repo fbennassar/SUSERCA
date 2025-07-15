@@ -74,4 +74,5 @@ contextBridge.exposeInMainWorld("electronAPI", {
   reporteExcelProductos: () => ipcRenderer.invoke('productos:exportarExcel'),
   generarReporteOrdenes: (data) => ipcRenderer.invoke("ordenes:generar-reporte-pdf", data),
   generarReporteClientes: (clientesData) => ipcRenderer.invoke("clientes:generar-reporte-pdf", clientesData),
+  generarCotizacion: (cotizacion) => ipcRenderer.invoke("inventario:generar-cotizacion", cotizacion),
 });

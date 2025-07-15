@@ -197,6 +197,56 @@ function totalResumen() {
   }
 }
 
+async function generarCotizacionDesdeTabla() {
+  const table = document.getElementById("tabla-cotizacion");
+  const rows = table.querySelectorAll("tbody tr");
+  const productos = [];
+
+  rows.forEach((row, index) => {
+    const cells = row.querySelectorAll("td");
+    const rowData = {
+      pos: index + 1, // Posición basada en el índice del array
+      descripcion: cells[1].textContent.trim(),
+      cantidad: cells[2].querySelector('.cantidad-input').value,
+      precioUnitario: cells[3].querySelector('.precio-unitario-input').value,
+      montoTotal: cells[5].textContent.trim(),
+    };
+    productos.push(rowData);
+  });
+
+  // --- NUEVO: Recolectar todos los datos del formulario ---
+  const cotizacionCompleta = {
+    cliente: {
+      razonSocial: document.querySelector('input[name="report-razon"]').value,
+      rif: document.querySelector('input[name="report-rif"]').value,
+      direccion: document.getElementById('report-description').value,
+    },
+    fecha: document.querySelector('input[name="report-date"]').value,
+    tasaBCV: document.getElementById('tasa-bcv').value,
+    resumen: {
+      baseImponible: document.getElementById('base-imponible').textContent,
+      iva: document.getElementById('iva').textContent,
+      montoTotal: document.getElementById('monto-total').textContent,
+    },
+    productos: productos, // El array de productos que ya tenías
+  };
+
+  console.log("Datos completos de la cotización:", cotizacionCompleta); // Log para depuración
+
+  // Envía el objeto completo al proceso principal
+  try {
+    await window.electronAPI.generarCotizacion(cotizacionCompleta);
+    mostrarMensaje("Cotización generada exitosamente.", "success");
+  } catch (error) {
+    console.error("Error al generar la cotización:", error);
+    mostrarMensaje(`Error al generar la cotización: ${error.message}`, "error");
+  }
+}
+
+document.getElementById("btn-cotizacion").addEventListener("click", () => {
+  generarCotizacionDesdeTabla();
+});
+
 function buildProductoSchema(modalId) {
   const modal = document.getElementById(modalId); // Obtén el contenedor del modal dinámicamente
   const categoriaInput = modal.querySelector("select[name='categoria']").value;
