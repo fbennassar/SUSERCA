@@ -568,7 +568,7 @@
         <div class="flex gap-4 mb-4">
           <div class="w-full">
             <label for="report-description" class="block mb-1"
-              >Descripcion (opcional)</label
+              >Dirección fiscal</label
             >
             <textarea
               name="report-description"
@@ -592,11 +592,7 @@
               name="activar-bcv"
               id="activar-bcv"
               class="ml-2 mt-2"
-              onchange="
-      const tasaBCVInput = document.getElementById('tasa-bcv');
-      tasaBCVInput.disabled = !this.checked;
-      tasaBCVInput.style.opacity = this.checked ? '1' : '0.7';
-    "
+              
             />
             <label for="activar-bcv">Cotizar a Tasa BCV</label>
           </div>
@@ -667,9 +663,9 @@
             </button>
           </div>
           <div class="mt-5 bg-white rounded-2xl shadow-md p-2">
-            <h1>Base imponible USD: <span id="base-imponible">0</span></h1>
+            <h1>Base imponible: <span id="base-imponible">0</span></h1>
             <h1>IVA 16%: <span id="iva">0</span></h1>
-            <h1>Monto total USD: <span id="monto-total">0</span></h1>
+            <h1>Monto total: <span id="monto-total">0</span></h1>
           </div>
         </div>
       </div>

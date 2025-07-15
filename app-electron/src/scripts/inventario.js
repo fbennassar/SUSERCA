@@ -73,7 +73,8 @@ function renderProductos(productos) {
     // Asegúrate de que el contenedor tenga las clases necesarias para la cuadrícula
     container.classList.add('grid', 'grid-cols-1', 'sm:grid-cols-2', 'lg:grid-cols-3', 'xl:grid-cols-4', 'gap-10', 'py-6', 'max-w-6xl', 'w-full', 'mx-auto');
 }
-
+let activarBCVCheckbox;
+let tasaBCVInput;
 function agregarProductoCotizacion() {
   const agregarButton = document.getElementById('agregar-producto-cotizacion');
   const tablaCotizacion = document.getElementById('tabla-cotizacion');
@@ -85,7 +86,7 @@ function agregarProductoCotizacion() {
       const productoDescripcion = selectedOption.dataset.descripcion || 'Sin descripción';
       const productoPrecioRef = parseFloat(selectedOption.dataset.precio) || 0.00;
       
-      const posicion = tablaCotizacion.rows.length + 1; // Obtener la posición actual de la fila
+      // const posicion = tablaCotizacion.rows.length + 1; // Obtener la posición actual de la fila
       
       // Aquí puedes agregar la lógica para agregar el producto a la cotización
       const newRow = document.createElement('tr');
@@ -94,8 +95,7 @@ function agregarProductoCotizacion() {
         <td class="text-left px-2 py-2">
         <button class="hover:cursor-pointer delete-row-btn"> 
         <img class="size-7" src="../assets/icons/general/delete.png" alt="delete" />
-        <button/>
-         ${posicion}</td>
+        <button/></td>
         <td class="text-left px-2 py-2">${productoDescripcion}</td>
         <td class="text-left px-2 py-2"><input type="number" class="cantidad-input" value="1" min="1" /></td>
         <td class="text-left px-2 py-2">
@@ -109,7 +109,6 @@ function agregarProductoCotizacion() {
         </td>
       `;
       tablaCotizacion.appendChild(newRow);
-      actualizarPosiciones();
       totalResumen();
         
       //
@@ -135,48 +134,68 @@ function agregarProductoCotizacion() {
         totalResumen();
       }
 
-      function eliminarFila(row) {
-        tablaCotizacion.removeChild(row);
+      function eliminarFila() {
+        tablaCotizacion.removeChild(newRow);
         totalResumen();
-        actualizarPosiciones();
       }
 
-      function totalResumen() {
-        precioTotalRows = document.querySelectorAll('.total');
-        let precioTotal = 0;
-        precioTotalRows.forEach(row => {
-          precioTotal += parseFloat(row.textContent) || 0;
-        });
-        const baseImponible = document.getElementById('base-imponible');
-        baseImponible.innerHTML = `${(precioTotal).toFixed(2)}`;
-        const ivaElement = document.getElementById('iva');
-        const iva = (precioTotal * 0.16);
-        ivaElement.innerHTML = `${(iva).toFixed(2)}`;
-        const montoTotalElement = document.getElementById('monto-total');
-        const montoTotal = precioTotal + iva;
-        montoTotalElement.innerHTML = `${(montoTotal).toFixed(2)}`;
-      }
 
-      function actualizarPosiciones() {
-        const filas = tablaCotizacion.querySelectorAll('tr');
-        filas.forEach((fila, idx) => {
-        // El número de posición está después del botón eliminar
-        const celdaPosicion = fila.querySelector('td');
-        if (celdaPosicion) {
-          // Mantén el botón y actualiza solo el número
-          const btnHTML = celdaPosicion.querySelector('.delete-row-btn').outerHTML;
-          celdaPosicion.innerHTML = `${btnHTML} ${idx + 1}`;
-    }
-    
-  });
-  
-}
+
+
     } else {
       console.error('No se ha seleccionado un producto válido.');
     }
   };
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+  activarBCVCheckbox = document.getElementById('activar-bcv');
+  tasaBCVInput = document.getElementById('tasa-bcv');
+
+  // Initialize the state of the BCV rate input
+  tasaBCVInput.disabled = !activarBCVCheckbox.checked;
+  tasaBCVInput.style.opacity = activarBCVCheckbox.checked ? '1' : '0.7';
+
+  activarBCVCheckbox.addEventListener('change', () => {
+    tasaBCVInput.disabled = !activarBCVCheckbox.checked;
+    tasaBCVInput.style.opacity = activarBCVCheckbox.checked ? '1' : '0.7';
+    totalResumen(); // Call totalResumen to update the values
+  });
+
+  tasaBCVInput.addEventListener('input', () => {
+    totalResumen(); // Call totalResumen to update the values
+  });
+
+  agregarProductoCotizacion(); // Call agregarProductoCotizacion here
+});
+
+function totalResumen() {
+  precioTotalRows = document.querySelectorAll('.total');
+  let precioTotal = 0;
+  precioTotalRows.forEach(row => {
+    precioTotal += parseFloat(row.textContent) || 0;
+  });
+  const baseImponible = document.getElementById('base-imponible');
+  const ivaElement = document.getElementById('iva');
+  const montoTotalElement = document.getElementById('monto-total');
+
+  let iva = (precioTotal * 0.16);
+  let montoTotal = precioTotal + iva;
+
+  const bcvRate = activarBCVCheckbox.checked ? parseFloat(tasaBCVInput.value) : null;
+
+  if (bcvRate) {
+    // Apply BCV rate if available
+    baseImponible.innerHTML = `${(precioTotal * bcvRate).toFixed(2)} Bs`;
+    ivaElement.innerHTML = `${(iva * bcvRate).toFixed(2)} Bs`;
+    montoTotalElement.innerHTML = `${(montoTotal * bcvRate).toFixed(2)} Bs`;
+  } else {
+    // Display in USD if BCV rate is not available
+    baseImponible.innerHTML = `${(precioTotal).toFixed(2)} USD`;
+    ivaElement.innerHTML = `${(iva).toFixed(2)} USD`;
+    montoTotalElement.innerHTML = `${(montoTotal).toFixed(2)} USD`;
+  }
+}
 
 function buildProductoSchema(modalId) {
   const modal = document.getElementById(modalId); // Obtén el contenedor del modal dinámicamente
