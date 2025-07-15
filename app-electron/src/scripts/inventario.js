@@ -86,12 +86,13 @@ function agregarProductoCotizacion() {
       const productoPrecioRef = parseFloat(selectedOption.dataset.precio) || 0.00;
       
       const posicion = tablaCotizacion.rows.length + 1; // Obtener la posición actual de la fila
+      
       // Aquí puedes agregar la lógica para agregar el producto a la cotización
       const newRow = document.createElement('tr');
       newRow.className = 'divide-x divide-gray-200';
       newRow.innerHTML = `
         <td class="text-left px-2 py-2">
-        <button class="hover:cursor-pointer delete-row-btn" onclick=""> 
+        <button class="hover:cursor-pointer delete-row-btn"> 
         <img class="size-7" src="../assets/icons/general/delete.png" alt="delete" />
         <button/>
          ${posicion}</td>
@@ -108,25 +109,68 @@ function agregarProductoCotizacion() {
         </td>
       `;
       tablaCotizacion.appendChild(newRow);
-
+      actualizarPosiciones();
+      totalResumen();
+        
+      //
+      //ATENCION
+      //
+      //Primero, hacer el loading en cada pantalla, despues, quitar el POS
+      // en la tabla de cotizacion y colocarlo al exportar el pdf y con ello
+      // dejar mas simple el eliminar las rows
+      //
       // Agregar event listeners para actualizar el total
       const cantidadInput = newRow.querySelector('.cantidad-input');
       const precioUnitarioInput = newRow.querySelector('.precio-unitario-input');
       const deleteRowBtn = newRow.querySelector('.delete-row-btn');
       cantidadInput.addEventListener('input', actualizarTotal);
       precioUnitarioInput.addEventListener('input', actualizarTotal);
-      deleteRowBtn.addEventListener('click', eliminarFila);
+      deleteRowBtn.addEventListener('click', () => eliminarFila(newRow));
 
       function actualizarTotal() {
         const cantidad = parseFloat(cantidadInput.value) || 0;
         const precioUnitario = parseFloat(precioUnitarioInput.value) || 0;
         const total = cantidad * precioUnitario;
         newRow.querySelector('.total').textContent = total.toFixed(2);
+        totalResumen();
       }
 
-      function eliminarFila() {
-        tablaCotizacion.removeChild(newRow);
+      function eliminarFila(row) {
+        tablaCotizacion.removeChild(row);
+        totalResumen();
+        actualizarPosiciones();
       }
+
+      function totalResumen() {
+        precioTotalRows = document.querySelectorAll('.total');
+        let precioTotal = 0;
+        precioTotalRows.forEach(row => {
+          precioTotal += parseFloat(row.textContent) || 0;
+        });
+        const baseImponible = document.getElementById('base-imponible');
+        baseImponible.innerHTML = `${(precioTotal).toFixed(2)}`;
+        const ivaElement = document.getElementById('iva');
+        const iva = (precioTotal * 0.16);
+        ivaElement.innerHTML = `${(iva).toFixed(2)}`;
+        const montoTotalElement = document.getElementById('monto-total');
+        const montoTotal = precioTotal + iva;
+        montoTotalElement.innerHTML = `${(montoTotal).toFixed(2)}`;
+      }
+
+      function actualizarPosiciones() {
+        const filas = tablaCotizacion.querySelectorAll('tr');
+        filas.forEach((fila, idx) => {
+        // El número de posición está después del botón eliminar
+        const celdaPosicion = fila.querySelector('td');
+        if (celdaPosicion) {
+          // Mantén el botón y actualiza solo el número
+          const btnHTML = celdaPosicion.querySelector('.delete-row-btn').outerHTML;
+          celdaPosicion.innerHTML = `${btnHTML} ${idx + 1}`;
+    }
+    
+  });
+  
+}
     } else {
       console.error('No se ha seleccionado un producto válido.');
     }

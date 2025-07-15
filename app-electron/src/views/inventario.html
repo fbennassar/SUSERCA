@@ -293,54 +293,9 @@
         id="cards-grid"
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 py-6 max-w-6xl w-full mx-auto"
       >
-        <div
-          class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
-        >
+        
           <!-- Contenedor de Imagen -->
-          <div
-            class="w-full h-35 bg-gray-200 flex items-center justify-center border-b border-gray-300"
-          >
-            <img
-              src="../assets/img/inventario/cono.jpg"
-              alt="Inventario icon"
-              class="w-full h-full object-fill rounded-t-lg"
-            />
-          </div>
-          <!-- Información del producto -->
-          <div class="p-4">
-            <h3 class="text-lg font-medium text-gray-800 mb-1">
-              nombre [codigo]
-            </h3>
-            <p class="text-sm text-gray-600">Categoria</p>
-            <p class="text-base font-semibold text-gray-900 mt-2">$Precio</p>
-            <p class="text-sm text-gray-600">Stock</p>
-
-            <!-- Acciones abajo a la derecha -->
-            <div class="flex justify-end gap-3 mt-4">
-              <!-- Icono de Editar -->
-              <button
-                class="hover:cursor-pointer"
-                onclick="document.getElementById('edit-modal').classList.remove('hidden')"
-              >
-                <img
-                  class="size-6"
-                  src="../assets/icons/general/edit.png"
-                  alt="edit"
-                />
-              </button>
-              <!-- Icono de Eliminar -->
-              <button
-                class="hover:cursor-pointer"
-                onclick="document.getElementById('delete-popup').classList.remove('hidden')"
-              >
-                <img
-                  class="size-7"
-                  src="../assets/icons/general/delete.png"
-                  alt="delete"
-                />
-              </button>
-            </div>
-          </div>
+           Cargando
         </div>
       </div>
       <div
@@ -712,9 +667,9 @@
             </button>
           </div>
           <div class="mt-5 bg-white rounded-2xl shadow-md p-2">
-            <h1>Base imponible USD: 105</h1>
-            <h1>IVA 16%: 16,8</h1>
-            <h1>Monto total USD: 121,8</h1>
+            <h1>Base imponible USD: <span id="base-imponible">0</span></h1>
+            <h1>IVA 16%: <span id="iva">0</span></h1>
+            <h1>Monto total USD: <span id="monto-total">0</span></h1>
           </div>
         </div>
       </div>
