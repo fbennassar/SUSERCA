@@ -293,54 +293,9 @@
         id="cards-grid"
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 py-6 max-w-6xl w-full mx-auto"
       >
-        <div
-          class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
-        >
+        
           <!-- Contenedor de Imagen -->
-          <div
-            class="w-full h-35 bg-gray-200 flex items-center justify-center border-b border-gray-300"
-          >
-            <img
-              src="../assets/img/inventario/cono.jpg"
-              alt="Inventario icon"
-              class="w-full h-full object-fill rounded-t-lg"
-            />
-          </div>
-          <!-- Información del producto -->
-          <div class="p-4">
-            <h3 class="text-lg font-medium text-gray-800 mb-1">
-              nombre [codigo]
-            </h3>
-            <p class="text-sm text-gray-600">Categoria</p>
-            <p class="text-base font-semibold text-gray-900 mt-2">$Precio</p>
-            <p class="text-sm text-gray-600">Stock</p>
-
-            <!-- Acciones abajo a la derecha -->
-            <div class="flex justify-end gap-3 mt-4">
-              <!-- Icono de Editar -->
-              <button
-                class="hover:cursor-pointer"
-                onclick="document.getElementById('edit-modal').classList.remove('hidden')"
-              >
-                <img
-                  class="size-6"
-                  src="../assets/icons/general/edit.png"
-                  alt="edit"
-                />
-              </button>
-              <!-- Icono de Eliminar -->
-              <button
-                class="hover:cursor-pointer"
-                onclick="document.getElementById('delete-popup').classList.remove('hidden')"
-              >
-                <img
-                  class="size-7"
-                  src="../assets/icons/general/delete.png"
-                  alt="delete"
-                />
-              </button>
-            </div>
-          </div>
+           Cargando
         </div>
       </div>
       <div
@@ -613,7 +568,7 @@
         <div class="flex gap-4 mb-4">
           <div class="w-full">
             <label for="report-description" class="block mb-1"
-              >Descripcion (opcional)</label
+              >Dirección fiscal</label
             >
             <textarea
               name="report-description"
@@ -637,18 +592,14 @@
               name="activar-bcv"
               id="activar-bcv"
               class="ml-2 mt-2"
-              onchange="
-      const tasaBCVInput = document.getElementById('tasa-bcv');
-      tasaBCVInput.disabled = !this.checked;
-      tasaBCVInput.style.opacity = this.checked ? '1' : '0.7';
-    "
+              
             />
             <label for="activar-bcv">Cotizar a Tasa BCV</label>
           </div>
         </div>
         <div class="flex gap-14">
           <select
-            id="producto"
+            id="cotizacion-select"
             name="producto"
             class="border border-black bg-white shadow-md rounded-full pl-2 align-middle w-1/3 text-gray-400"
             onchange="
@@ -665,6 +616,9 @@
             <option class="text-black" value="prod3">Producto 3</option>
           </select>
           <button
+            id="agregar-producto-cotizacion"
+            onclick="agregarProductoCotizacion()"
+            type="button"
             class="bg-green-700 hover:bg-green-800 shadow-md rounded-full py-1 font-bold pl-2 align-middle w-1/3 text-white hover:cursor-pointer"
           >
             + Agregar Producto
@@ -681,81 +635,18 @@
                 <th class="w-1/5 px-4 py-2">Descripcion</th>
                 <th class="w-1/5 px-4 py-2">Cantidad</th>
                 <th class="w-1/5 px-4 py-2">Precio/u</th>
-                <th class="w-1/5 px-4 py-2">Precio REF.</th>
+                <th class="w-1/5 px-4 py-2">Precio REF</th>
                 <th class="w-1/5 px-4 py-2">Total</th>
               </tr>
             </thead>
 
-            <tbody class="divide-y divide-gray-200">
-              <tr class="divide-x divide-gray-200">
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-              </tr>
-              <tr class="divide-x divide-gray-200">
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-              </tr>
-              <tr class="divide-x divide-gray-200">
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-              </tr>
-              <tr class="divide-x divide-gray-200">
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-              </tr>
-              <tr class="divide-x divide-gray-200">
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-              </tr>
-              <tr class="divide-x divide-gray-200">
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-              </tr>
-              <tr class="divide-x divide-gray-200">
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-              </tr>
-              <tr class="divide-x divide-gray-200">
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-                <td class="text-left px-2 py-2">.</td>
-              </tr>
+            <tbody id="tabla-cotizacion" class="divide-y divide-gray-200">
+             
             </tbody>
           </table>
         </div>
         <div class="flex justify-between">
-          <div class=" mt-20">
+          <div class="mt-20">
             <button
               type="button"
               onclick="document.getElementById('reporte-popup').classList.add('hidden')"
@@ -763,12 +654,19 @@
             >
               Cancelar
             </button>
-            <button type="submit" onclick="" class=" bg-green-700 px-6.5 py-1 rounded-full shadow-md font-bold text-white hover:cursor-pointer hover:bg-green-800">Cotizar</button>
+            <button
+              id="btn-cotizacion"
+              type="submit"
+              onclick=""
+              class="bg-green-700 px-6.5 py-1 rounded-full shadow-md font-bold text-white hover:cursor-pointer hover:bg-green-800"
+            >
+              Cotizar
+            </button>
           </div>
           <div class="mt-5 bg-white rounded-2xl shadow-md p-2">
-            <h1>Base imponible USD: 105</h1>
-            <h1>IVA 16%: 16,8</h1>
-            <h1>Monto total USD: 121,8</h1>
+            <h1>Base imponible: <span id="base-imponible">0</span></h1>
+            <h1>IVA 16%: <span id="iva">0</span></h1>
+            <h1>Monto total: <span id="monto-total">0</span></h1>
           </div>
         </div>
       </div>

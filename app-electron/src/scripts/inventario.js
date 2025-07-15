@@ -58,9 +58,194 @@ function renderProductos(productos) {
         container.appendChild(card);
     });
 
+    const cotizacionSelect = document.getElementById('cotizacion-select');
+    cotizacionSelect.innerHTML = ''; // Limpiar opciones previas
+    cotizacionSelect.innerHTML = '<option class="text-black font-bold" value="" disabled selected>Seleccione un producto</option>';
+    productos.forEach(producto => {
+        const option = document.createElement('option');
+        option.value = producto.id;
+        option.textContent = `${producto.nombre} [${producto.id}]`;
+        option.dataset.descripcion = producto.descripcion || 'Sin descripción';
+        option.dataset.precio = producto.precio || '0.00';
+        cotizacionSelect.appendChild(option);
+    });
+
     // Asegúrate de que el contenedor tenga las clases necesarias para la cuadrícula
     container.classList.add('grid', 'grid-cols-1', 'sm:grid-cols-2', 'lg:grid-cols-3', 'xl:grid-cols-4', 'gap-10', 'py-6', 'max-w-6xl', 'w-full', 'mx-auto');
 }
+let activarBCVCheckbox;
+let tasaBCVInput;
+function agregarProductoCotizacion() {
+  const agregarButton = document.getElementById('agregar-producto-cotizacion');
+  const tablaCotizacion = document.getElementById('tabla-cotizacion');
+  tablaCotizacion.innerHTML = ''; // Limpiar tabla antes de agregar nuevos productos
+  agregarButton.onclick = () => {
+    const cotizacionSelect = document.getElementById('cotizacion-select');
+    const selectedOption = cotizacionSelect.options[cotizacionSelect.selectedIndex];
+    if (selectedOption.value) {
+      const productoDescripcion = selectedOption.dataset.descripcion || 'Sin descripción';
+      const productoPrecioRef = parseFloat(selectedOption.dataset.precio) || 0.00;
+      
+      // const posicion = tablaCotizacion.rows.length + 1; // Obtener la posición actual de la fila
+      
+      // Aquí puedes agregar la lógica para agregar el producto a la cotización
+      const newRow = document.createElement('tr');
+      newRow.className = 'divide-x divide-gray-200';
+      newRow.innerHTML = `
+        <td class="text-left px-2 py-2">
+        <button class="hover:cursor-pointer delete-row-btn"> 
+        <img class="size-7" src="../assets/icons/general/delete.png" alt="delete" />
+        <button/></td>
+        <td class="text-left px-2 py-2">${productoDescripcion}</td>
+        <td class="text-left px-2 py-2"><input type="number" class="cantidad-input" value="1" min="1" /></td>
+        <td class="text-left px-2 py-2">
+          <input type="number" class="precio-unitario-input" value="${productoPrecioRef.toFixed(2)}" min="1" step"0.01" />
+        </td>
+        <td class="text-left px-2 py-2">
+          ${productoPrecioRef.toFixed(2)}
+        </td>
+        <td class="text-left px-2 py-2 total">
+          ${(parseFloat(productoPrecioRef) * 1).toFixed(2)} <!-- Valor total calculado -->
+        </td>
+      `;
+      tablaCotizacion.appendChild(newRow);
+      totalResumen();
+        
+      //
+      //ATENCION
+      //
+      //Primero, hacer el loading en cada pantalla, despues, quitar el POS
+      // en la tabla de cotizacion y colocarlo al exportar el pdf y con ello
+      // dejar mas simple el eliminar las rows
+      //
+      // Agregar event listeners para actualizar el total
+      const cantidadInput = newRow.querySelector('.cantidad-input');
+      const precioUnitarioInput = newRow.querySelector('.precio-unitario-input');
+      const deleteRowBtn = newRow.querySelector('.delete-row-btn');
+      cantidadInput.addEventListener('input', actualizarTotal);
+      precioUnitarioInput.addEventListener('input', actualizarTotal);
+      deleteRowBtn.addEventListener('click', () => eliminarFila(newRow));
+
+      function actualizarTotal() {
+        const cantidad = parseFloat(cantidadInput.value) || 0;
+        const precioUnitario = parseFloat(precioUnitarioInput.value) || 0;
+        const total = cantidad * precioUnitario;
+        newRow.querySelector('.total').textContent = total.toFixed(2);
+        totalResumen();
+      }
+
+      function eliminarFila() {
+        tablaCotizacion.removeChild(newRow);
+        totalResumen();
+      }
+
+
+
+
+    } else {
+      console.error('No se ha seleccionado un producto válido.');
+    }
+  };
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  activarBCVCheckbox = document.getElementById('activar-bcv');
+  tasaBCVInput = document.getElementById('tasa-bcv');
+
+  // Initialize the state of the BCV rate input
+  tasaBCVInput.disabled = !activarBCVCheckbox.checked;
+  tasaBCVInput.style.opacity = activarBCVCheckbox.checked ? '1' : '0.7';
+
+  activarBCVCheckbox.addEventListener('change', () => {
+    tasaBCVInput.disabled = !activarBCVCheckbox.checked;
+    tasaBCVInput.style.opacity = activarBCVCheckbox.checked ? '1' : '0.7';
+    totalResumen(); // Call totalResumen to update the values
+  });
+
+  tasaBCVInput.addEventListener('input', () => {
+    totalResumen(); // Call totalResumen to update the values
+  });
+
+  agregarProductoCotizacion(); // Call agregarProductoCotizacion here
+});
+
+function totalResumen() {
+  precioTotalRows = document.querySelectorAll('.total');
+  let precioTotal = 0;
+  precioTotalRows.forEach(row => {
+    precioTotal += parseFloat(row.textContent) || 0;
+  });
+  const baseImponible = document.getElementById('base-imponible');
+  const ivaElement = document.getElementById('iva');
+  const montoTotalElement = document.getElementById('monto-total');
+
+  let iva = (precioTotal * 0.16);
+  let montoTotal = precioTotal + iva;
+
+  const bcvRate = activarBCVCheckbox.checked ? parseFloat(tasaBCVInput.value) : null;
+
+  if (bcvRate) {
+    // Apply BCV rate if available
+    baseImponible.innerHTML = `${(precioTotal * bcvRate).toFixed(2)} Bs`;
+    ivaElement.innerHTML = `${(iva * bcvRate).toFixed(2)} Bs`;
+    montoTotalElement.innerHTML = `${(montoTotal * bcvRate).toFixed(2)} Bs`;
+  } else {
+    // Display in USD if BCV rate is not available
+    baseImponible.innerHTML = `${(precioTotal).toFixed(2)} USD`;
+    ivaElement.innerHTML = `${(iva).toFixed(2)} USD`;
+    montoTotalElement.innerHTML = `${(montoTotal).toFixed(2)} USD`;
+  }
+}
+
+async function generarCotizacionDesdeTabla() {
+  const table = document.getElementById("tabla-cotizacion");
+  const rows = table.querySelectorAll("tbody tr");
+  const productos = [];
+
+  rows.forEach((row, index) => {
+    const cells = row.querySelectorAll("td");
+    const rowData = {
+      pos: index + 1, // Posición basada en el índice del array
+      descripcion: cells[1].textContent.trim(),
+      cantidad: cells[2].querySelector('.cantidad-input').value,
+      precioUnitario: cells[3].querySelector('.precio-unitario-input').value,
+      montoTotal: cells[5].textContent.trim(),
+    };
+    productos.push(rowData);
+  });
+
+  // --- NUEVO: Recolectar todos los datos del formulario ---
+  const cotizacionCompleta = {
+    cliente: {
+      razonSocial: document.querySelector('input[name="report-razon"]').value,
+      rif: document.querySelector('input[name="report-rif"]').value,
+      direccion: document.getElementById('report-description').value,
+    },
+    fecha: document.querySelector('input[name="report-date"]').value,
+    tasaBCV: document.getElementById('tasa-bcv').value,
+    resumen: {
+      baseImponible: document.getElementById('base-imponible').textContent,
+      iva: document.getElementById('iva').textContent,
+      montoTotal: document.getElementById('monto-total').textContent,
+    },
+    productos: productos, // El array de productos que ya tenías
+  };
+
+  console.log("Datos completos de la cotización:", cotizacionCompleta); // Log para depuración
+
+  // Envía el objeto completo al proceso principal
+  try {
+    await window.electronAPI.generarCotizacion(cotizacionCompleta);
+    mostrarMensaje("Cotización generada exitosamente.", "success");
+  } catch (error) {
+    console.error("Error al generar la cotización:", error);
+    mostrarMensaje(`Error al generar la cotización: ${error.message}`, "error");
+  }
+}
+
+document.getElementById("btn-cotizacion").addEventListener("click", () => {
+  generarCotizacionDesdeTabla();
+});
 
 function buildProductoSchema(modalId) {
   const modal = document.getElementById(modalId); // Obtén el contenedor del modal dinámicamente
