@@ -63,6 +63,7 @@
       <div id="user-modal" class="fixed right-3.5 top-20 hidden z-50">
         <div class="bg-zinc-400 rounded-xl flex flex-col gap-2 p-2 text-xl">
           <button
+            onclick="document.getElementById('userinfo-modal').classList.remove('hidden');"
             class="text-white px-4 py-2 rounded-full bg-green-800 border border-green-700 hover:bg-orange-400 hover:cursor-pointer transition"
           >
             Informacion de Usuario
@@ -535,6 +536,34 @@
                 class="px-4 py-2 rounded-full bg-red-600 text-white hover:bg-red-700 hover:cursor-pointer transition"
               >
                 Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        id="userinfo-modal"
+        class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden"
+      >
+        <div class="bg-white rounded-xl px-4 pb-4 shadow-lg w-150 relative">
+          <h1 class="text-3xl font-bold my-4">Informacion de Usuario</h1>
+          <div class="bg-zinc-200 rounded-xl pb-2 pt-3 px-3">
+            <div class="text-center bg-white rounded-2xl py-1.5 shadow-md">
+              <h1 class="text-2xl font-bold my-4">Nombre: Josue Semeco</h1>
+              <h1 class="text-2xl font-bold my-4">
+                Correo: semecojosue18@gmail.com
+              </h1>
+              <h1 class="text-2xl font-bold my-4">Rol: Empleado de Almacen</h1>
+            </div>
+            <div
+              class="sm:col-span-2 flex flex-col sm:flex-row justify-center pt-2"
+            >
+              <button
+                type="button"
+                onclick="document.getElementById('userinfo-modal').classList.add('hidden')"
+                class="px-4 py-2 rounded-full bg-white shadow-md hover:bg-gray-300 hover:cursor-pointer transition"
+              >
+                Cerrar
               </button>
             </div>
           </div>
