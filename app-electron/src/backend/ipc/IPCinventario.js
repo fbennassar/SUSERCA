@@ -1,9 +1,21 @@
-const { ipcMain, dialog } = require('electron');
+const { ipcMain, dialog, app } = require('electron');
 const { createProducto, getAllProductos, getProductoByID, getProductoByName, updateProducto, deleteProducto, searchProductos, getProductosByCategoria } = require('../db/inventario');
 const ExcelJS = require('exceljs');
 const Pdfmake = require('pdfmake'); // Cambiamos a la importación principal
 const fs = require('fs');
 const path = require('path'); // Necesitaremos path para las fuentes
+
+// --- CORRECCIÓN ---
+// Esta función construye la ruta correcta a los assets, tanto en desarrollo como en producción.
+const getAssetPath = (...paths) => {
+  // Si la app está empaquetada, los assets desempaquetados están en una carpeta especial.
+  // process.resourcesPath apunta a la carpeta 'resources' en producción.
+  const basePath = app.isPackaged
+    ? path.join(process.resourcesPath, 'app.asar.unpacked')
+    : app.getAppPath(); // En desarrollo, la raíz del proyecto.
+
+  return path.join(basePath, 'app-electron', 'src', 'assets', ...paths);
+};
 
 ipcMain.handle('productos:create', async (event, productoData) => {
   console.log("IPC productos:create - Datos recibidos:", productoData);
@@ -188,17 +200,17 @@ ipcMain.handle('productos:getByCategoria', async (event, categoriaId) => {
 
 const fonts = {
     Arial: {
-        normal: path.join(__dirname, '..', '..','assets', 'fonts', 'ARIAL.ttf'),
-        bold: path.join(__dirname, '..', '..','assets', 'fonts', 'ARIALBD.ttf'),
-        italics: path.join(__dirname, '..', '..','assets', 'fonts', 'ARIALI.ttf'),
-        bolditalics: path.join(__dirname, '..', '..','assets', 'fonts', 'ARIALBI.ttf')
+        normal: getAssetPath('fonts', 'ARIAL.ttf'),
+        bold: getAssetPath('fonts', 'ARIALBD.ttf'),
+        italics: getAssetPath('fonts', 'ARIALI.ttf'),
+        bolditalics: getAssetPath('fonts', 'ARIALBI.ttf')
     }
 };
 
 const printer = new Pdfmake(fonts);
 function getLogoBase64() {
   try {
-    const logoPath = path.join(__dirname, '..', '..', 'assets', 'icons', 'general', 'logo.jpg');
+    const logoPath = getAssetPath('icons', 'general', 'logo.jpg');
     return `data:image/jpeg;base64,${fs.readFileSync(logoPath).toString('base64')}`;
   } catch (error) {
     console.error("No se pudo cargar el logo:", error);
@@ -266,7 +278,7 @@ ipcMain.handle('inventario:generar-cotizacion', async (event, cotizacionCompleta
           {
             stack: [
               { text: `FECHA: ${new Date(cotizacionCompleta.fecha).toLocaleDateString('es-VE') || new Date().toLocaleDateString('es-VE')}`, alignment: 'right' },
-              { text: `TASA BCV: ${cotizacionCompleta.tasaBCV || 'N/A'}`, alignment: 'right', style: 'bcvRate' },
+              { text: `TASA BCV: ${cotizacionCompleta.tasaBCV || 'No especificada'}`, alignment: 'right', style: 'bcvRate' },
             ],
             width: 'auto'
           }

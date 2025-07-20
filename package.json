@@ -6,7 +6,8 @@
   "scripts": {
     "start": "electron .",
     "build:styles": "npx @tailwindcss/cli -i ./app-electron/src/views/input.css -o ./app-electron/src/assets/output.css --watch",
-    "dev": "concurrently \"npm run start\" \"npm run build:styles\" "
+    "dev": "concurrently \"npm run start\" \"npm run build:styles\" ",
+    "dist": "cross-env SUPABASE_URL=https://jrgubxunsvsnlwkvxfen.supabase.co SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpyZ3VieHVuc3Zzbmx3a3Z4ZmVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyNjU5MTYsImV4cCI6MjA2NDg0MTkxNn0.KhsYxvf30JJi194Wi_AlujqfiLZvCcZajdVyRni6ulQ SUPABASE_ADMIN_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpyZ3VieHVuc3Zzbmx3a3Z4ZmVuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTI2NTkxNiwiZXhwIjoyMDY0ODQxOTE2fQ.3ZNaD5jyST3Pp24mxvF3B-gDELe74uNIu8CRznnrF2w electron-builder"
   },
   "author": "URBE",
   "license": "ISC",
@@ -14,6 +15,7 @@
     "concurrently": "^9.1.2",
     "cross-env": "^7.0.3",
     "electron": "^36.3.1",
+    "electron-builder": "^26.0.12",
     "electron-reload": "^2.0.0-alpha.1",
     "prettier": "^3.5.3"
   },
@@ -26,5 +28,29 @@
     "pdfmake": "^0.2.20",
     "tailwindcss": "^4.1.8",
     "xlsx": "^0.18.5"
+  },
+  "build": {
+    "appId": "com.suserca.app",
+    "productName": "SUSERCA",
+    "copyright": "Copyright © 2024 Suministros y Servicios de Occidente, C.A.",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "app-electron/src/**/*",
+      "node_modules/**/*"
+    ],
+    "asarUnpack": [
+      "**/app-electron/src/assets/**"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "app-electron/src/assets/icons/general/favicono.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
   }
 }
