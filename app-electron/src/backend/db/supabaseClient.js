@@ -4,7 +4,6 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const SUPABASE_ADMIN_KEY = process.env.SUPABASE_ADMIN_KEY;
 
-
 if (!SUPABASE_URL) {
   throw new Error('Falta la variable de entorno SUPABASE_URL.');
 }

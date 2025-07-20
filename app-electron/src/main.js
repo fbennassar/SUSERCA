@@ -1,9 +1,11 @@
-require("dotenv").config();
 const { app, BrowserWindow } = require("electron/main");
 
-require("electron-reload")(process.cwd(), {
-  electron: require(`${process.cwd()}/node_modules/electron`),
-});
+if (!app.isPackaged) {
+  require("dotenv").config();
+  require('electron-reload')(__dirname, {
+    electron: require('path').join(__dirname, '..', '..', 'node_modules', '.bin', 'electron')
+  });
+}
 
 require("./backend/ipc/IPCusuarios.js");
 require("./backend/ipc/IPCinventario.js");
@@ -30,7 +32,7 @@ const createWindow = () => {
     maxHeight: 1080,
     icon: path.join(__dirname, "../assets/icons/general/icon.ico"), // Usa .ico para Windows
     webPreferences: {
-      preload: path.join(process.cwd(), "./app-electron/src/preload.js"),
+      preload: path.join(__dirname, "preload.js"),
     },
   });
 
