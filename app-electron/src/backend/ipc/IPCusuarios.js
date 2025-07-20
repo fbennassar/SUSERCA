@@ -37,7 +37,7 @@ ipcMain.handle('usuarios:login', async (event, { email, password }) => {
 
     return { user, profile, error: null };
   } catch (error) {
-    console.error('Error en IPC usuarios:login', error);
+    console.error('Error en IPC usuarios:login', error.message);
     return { user: null, profile: null, error: error.message };
   }
 });

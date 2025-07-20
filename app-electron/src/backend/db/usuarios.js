@@ -23,6 +23,23 @@ exports.login = async (email, password) => {
       body: { email, password },
     });
 
+    if (error) {
+      console.error('Error al invocar Edge Function de login:', error);
+      let errorMessage = 'Error en el servicio de inicio de sesión. Intente más tarde.';
+      
+      // El `context` es un objeto Response. Necesitamos leer el body.
+      if (error.context && typeof error.context.json === 'function') {
+        try {
+          const errorBody = await error.context.json();
+          if (errorBody && errorBody.error) {
+            errorMessage = errorBody.error;
+          }
+        } catch (e) {
+          console.error('No se pudo parsear el cuerpo de la respuesta de error JSON:', e);
+        }
+      }
+      throw new Error(errorMessage);
+    }
 
     let response = data;
     if (typeof data === 'string') {
@@ -31,12 +48,6 @@ exports.login = async (email, password) => {
       } catch (parseError) {
         throw new Error('Respuesta inválida de la Edge Function.');
       }
-    }
-
-    if (error) {
-      console.error('Error al invocar Edge Function de login:', error);
-      const errorMessage = response && response.error ? response.error.message : error.message;
-      throw new Error(errorMessage || 'Error en el servicio de inicio de sesión.');
     }
 
     if (!response || !response.user) {

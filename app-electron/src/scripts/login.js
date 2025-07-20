@@ -22,9 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
         Swal.fire('Error', result.error, 'error');
       } else {
         Swal.fire('Login exitoso', '', 'success').then(() => {
-          if (result.profile) {
+          if (result.profile && result.profile.nombre) {
             localStorage.setItem('user', result.profile.nombre);
-          } else {
+          } else if (result.user && result.user.email) {
             localStorage.setItem('user', result.user.email);
           }
           window.location.href = '../views/dashboard.html';
