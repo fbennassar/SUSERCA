@@ -1,4 +1,4 @@
-const { ipcMain, dialog } = require('electron');
+const { ipcMain, dialog, app } = require('electron');
 const { createClient, getAllClients, getClientByID, getClientByName, update, delete: deleteClient, searchClients } = require('../db/clientes');
 const Pdfmake = require('pdfmake'); // Cambiamos a la importación principal
 const fs = require('fs');
@@ -108,12 +108,24 @@ ipcMain.handle('clientes:delete', async (event, id) => {
   }
 });
 
+// --- CORRECCIÓN ---
+// Esta función construye la ruta correcta a los assets, tanto en desarrollo como en producción.
+const getAssetPath = (...paths) => {
+  // Si la app está empaquetada, los assets desempaquetados están en una carpeta especial.
+  // process.resourcesPath apunta a la carpeta 'resources' en producción.
+  const basePath = app.isPackaged
+    ? path.join(process.resourcesPath, 'app.asar.unpacked')
+    : app.getAppPath(); // En desarrollo, la raíz del proyecto.
+
+  return path.join(basePath, 'app-electron', 'src', 'assets', ...paths);
+};
+
 const fonts = {
     Arial: {
-        normal: path.join(__dirname, '..', '..','assets', 'fonts', 'ARIAL.ttf'),
-        bold: path.join(__dirname, '..', '..','assets', 'fonts', 'ARIALBD.ttf'),
-        italics: path.join(__dirname, '..', '..','assets', 'fonts', 'ARIALI.ttf'),
-        bolditalics: path.join(__dirname, '..', '..','assets', 'fonts', 'ARIALBI.ttf')
+        normal: getAssetPath('fonts', 'ARIAL.ttf'),
+        bold: getAssetPath('fonts', 'ARIALBD.ttf'),
+        italics: getAssetPath('fonts', 'ARIALI.ttf'),
+        bolditalics: getAssetPath('fonts', 'ARIALBI.ttf')
     }
 };
 

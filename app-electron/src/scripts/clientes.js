@@ -189,7 +189,7 @@ window.handleCreateClient = async function handleCreateClient() {
     document.getElementById("add-modal").querySelectorAll("input, textarea").forEach(input => input.value = "");
     if (result.error) {
       console.error("Error al crear cliente en Supabase", { error: result.error, clienteSchema });
-      mostrarMensaje("Error al crear cliente");
+      mostrarMensaje("Error al crear cliente", 'error');
     } else {
       console.log("Cliente creado exitosamente:", result.data);
       mostrarMensaje("Cliente creado exitosamente.", 'success');

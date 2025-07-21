@@ -111,7 +111,7 @@ function agregarProductoCotizacion() {
       //
       //ATENCION
       //
-      //Primero, hacer el loading en cada pantalla, despues, quitar el POS
+      // Primero, hacer el loading en cada pantalla, despues, quitar el POS
       // en la tabla de cotizacion y colocarlo al exportar el pdf y con ello
       // dejar mas simple el eliminar las rows
       //
@@ -341,7 +341,7 @@ function openDeletePopup(productId) {
         console.log("Productos cargados después de eliminar:", productos);
         if (productos.error) {
           console.error('Error al cargar productos después de eliminar:', productos.error);
-            mostrarMensaje('Error al cargar productos después de eliminar. Revisa la consola para más detalles.', 'error');
+            mostrarMensaje('Error al cargar productos después de eliminar', 'error');
         }
         renderProductos(productos.data);
       }
@@ -374,7 +374,7 @@ window.handleCreateProducto = async function handleCreateProducto() {
 
     if (result.error) {
       console.error("Error al crear producto en Supabase", { error: result.error, productoSchema });
-      mostrarMensaje("Error al crear producto: " + result.error, "error");
+      mostrarMensaje("Error al crear producto", "error");
     } else {
       console.log("Producto creado exitosamente:", result.data);
       mostrarMensaje("Producto creado exitosamente.", "success");
@@ -410,7 +410,7 @@ window.handleUpdateProducto = async function handleUpdateProducto() {
 
     if (result.error) {
       console.error("Error al actualizar producto en Supabase", { error: result.error, productoSchema });
-      mostrarMensaje("Error al actualizar producto: " + result.error, "error");
+      mostrarMensaje("Error al actualizar producto", "error");
     } else {
       console.log("Producto actualizado exitosamente:", result.data);
       mostrarMensaje("Producto actualizado exitosamente.", "success");
@@ -422,7 +422,7 @@ window.handleUpdateProducto = async function handleUpdateProducto() {
     }
   } catch (error) {
     console.error("Error inesperado en handleUpdateProducto:", error);
-    mostrarMensaje("Ocurrió un error inesperado. Revisa la consola para más detalles.", "error");
+    mostrarMensaje("Ocurrió un error inesperado.", "error");
   }
 };
 
@@ -432,7 +432,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const productos = await window.electronAPI.getAllProductos();
     if (productos.error) {
       console.error('Error al cargar productos:', productos.error);
-      mostrarMensaje('Error al cargar productos. Revisa la consola para más detalles.', 'error');
+      mostrarMensaje('Error al cargar productos', 'error');
     } else {
       renderProductos(productos.data);
     }
@@ -555,7 +555,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     if (result.error) {
-      Swal.fire('Error', `No se pudo guardar la categoría: ${result.error}`, 'error');
+      Swal.fire('Error', `No se pudo guardar la categoría`, 'error');
     } else {
       Swal.fire('¡Éxito!', 'Categoría guardada correctamente.', 'success');
       resetCategoryForm();
@@ -605,7 +605,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (result.isConfirmed) {
         const deleteResult = await window.electronAPI.deleteCategoria(selectedId);
         if (deleteResult.error) {
-          Swal.fire('Error', `No se pudo eliminar: ${deleteResult.error}`, 'error');
+          Swal.fire('Error', `No se pudo eliminar, debe eliminar o cambiar la categoría de los productos asociados`, 'error');
         } else {
           Swal.fire('¡Eliminada!', 'La categoría ha sido eliminada.', 'success');
           try {
@@ -646,7 +646,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       try {
         const result = await window.electronAPI.getProductosByCategoria(categoryId);
         if (result.error) {
-          mostrarMensaje(`Error al filtrar: ${result.error}`, 'error');
+          mostrarMensaje(`Error al filtrar.`, 'error');
         } else {
           renderProductos(result.data);
         }

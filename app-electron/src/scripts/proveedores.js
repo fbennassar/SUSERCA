@@ -179,7 +179,7 @@ window.handleCreateProveedor = async function handleCreateProveedor() {
 
     if (result.error) {
       console.error("Error al crear proveedor en Supabase", { error: result.error, proveedorSchema });
-      mostrarMensaje('Error al crear proveedor: ' + result.error, 'error');
+      mostrarMensaje('Error al crear proveedor', 'error');
     } else {
       console.log("Proveedor creado exitosamente:", result.data);
       mostrarMensaje('Proveedor creado exitosamente.', 'success');
@@ -217,7 +217,7 @@ window.handleUpdateProveedor = async function handleUpdateProveedor() {
 
     if (result.error) {
       console.error("Error al actualizar proveedor en Supabase", { error: result.error, proveedorSchema });
-      mostrarMensaje('Error al actualizar proveedor: ' + result.error, 'error');
+      mostrarMensaje('Error al actualizar proveedor', 'error');
     } else {
       console.log("Proveedor actualizado exitosamente:", result.data);
       mostrarMensaje('Proveedor actualizado exitosamente.', 'success');
