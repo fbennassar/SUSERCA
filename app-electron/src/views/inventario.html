@@ -252,6 +252,20 @@
             </div>
             <div class="col-span-1 sm:col-span-2 flex gap-5 justify-end mt-1">
               <button
+                onclick="document.getElementById('add-modal').classList.remove('hidden');"
+                type="button"
+                class="bg-green-700 shadow-md text-white rounded-full px-4 py-1 font-bold hover:bg-green-800 hover:cursor-pointer transition"
+              >
+                Editar categoria
+              </button>
+              <button
+                onclick="document.getElementById('add-modal').classList.remove('hidden');"
+                type="button"
+                class="bg-green-700 shadow-md text-white rounded-full px-4 py-1 font-bold hover:bg-green-800 hover:cursor-pointer transition"
+              >
+                Crear categoria
+              </button>
+              <button
                 type="reset"
                 onclick="document.querySelector('form').reset(); loadAllProductos()"
                 class="bg-gray-500 shadow-md text-white rounded-full px-4 py-1 font-bold hover:bg-gray-700 hover:cursor-pointer transition"
@@ -352,25 +366,7 @@
                   style="min-height: 80px"
                 ></textarea>
               </div>
-              <div>
-                <div class="pl-1 flex flex-row items-center">
-                  <h1>Cargar Imagen</h1>
-                  <button class="hover:cursor-pointer ml-5">
-                    <img
-                      class="size-6 mb-1 pl-2"
-                      src="../assets/icons/general/folder.png"
-                      alt="folder"
-                    />
-                  </button>
-                </div>
-                <input
-                  type="file"
-                  accept="image/*"
-                  name="imagen"
-                  id="add-product-image"
-                  class="border border-black shadow-md rounded-full bg-white w-full mt-2"
-                />
-              </div>
+              
               <div
                 class="sm:col-span-2 flex flex-col sm:flex-row justify-center gap-4 pb-2 my-2"
               >
@@ -452,25 +448,7 @@
                   style="min-height: 80px"
                 ></textarea>
               </div>
-              <div>
-                <div class="pl-1 flex flex-row items-center">
-                  <h1>Cargar Nueva Imagen</h1>
-                  <button class="hover:cursor-pointer ml-5">
-                    <img
-                      class="size-6 mb-1 pl-2"
-                      src="../assets/icons/general/folder.png"
-                      alt="folder"
-                    />
-                  </button>
-                </div>
-                <input
-                  type="file"
-                  accept="image/*"
-                  name="imagen"
-                  id="edit-product-image"
-                  class="border border-black shadow-md rounded-full bg-white w-full mt-2"
-                />
-              </div>
+              
               <div
                 class="sm:col-span-2 flex flex-col sm:flex-row justify-center gap-4 pb-2 my-2"
               >

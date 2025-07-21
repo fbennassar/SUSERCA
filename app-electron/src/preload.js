@@ -58,6 +58,10 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.invoke("productos:update", { id, updates: producto }),
   deleteProducto: (id) => ipcRenderer.invoke("productos:delete", id),
   getCategorias: () => ipcRenderer.invoke("categoria:getCategoria"),
+  createCategoria: (categoriaData) =>
+    ipcRenderer.invoke("categoria:createCategoria", categoriaData),
+  editCategoria: (id, categoriaData) =>
+    ipcRenderer.invoke("categoria:editCategoria", id, categoriaData),
   getProductoByID: (id) => ipcRenderer.invoke("productos:getByID", id),
   getProductoByName: (name) => ipcRenderer.invoke("productos:getByName", name),
   createOrdenVenta: (ordenVentaData, productos) =>
