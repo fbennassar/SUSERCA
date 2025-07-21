@@ -253,6 +253,7 @@
             <span class="text-center break-words flex-1">Acerca De</span>
           </button>
           <button
+            onclick="document.getElementById('faq-modal').classList.remove('hidden');"
             class="border border-black flex items-center md:text-xs lg:text-lg xl:text-xl p-2 pr-8 rounded-xl hover:cursor-pointer w-full"
           >
             <img
@@ -318,6 +319,88 @@
           </div>
         </div>
       </div>
+
+      <div
+        id="faq-modal"
+        class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden"
+      >
+        <div
+          class="bg-white rounded-xl px-4 pb-4 shadow-lg w-150 relative max-h-96"
+        >
+          <div class="flex justify-between items-center my-4">
+            <h1 class="text-3xl font-bold">Preguntas Frecuentes</h1>
+            <button
+              type="button"
+              onclick="document.getElementById('faq-modal').classList.add('hidden')"
+              class="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+            >
+              ×
+            </button>
+          </div>
+          <div class="bg-zinc-200 rounded-xl p-3">
+            <div
+              class="bg-white rounded-2xl py-4 px-4 shadow-md max-h-72 overflow-y-auto"
+            >
+              <h1 class="text-2xl font-bold my-4">
+                ●¿Cómo puedo recuperar o cambiar mi contraseña?
+              </h1>
+              <p class="text-lg mb-4 text-justify">
+                En caso de recuperar la contraseña, en la pestaña inicial del
+                Login se verá un mensaje de “¿Olvido su contraseña?”, ahí se le
+                pedirán sus datos, una vez ingresados le llegará un correo a su
+                bandeja de entrada con un link, ahí se le pedirá ingresar su
+                nueva contraseña. En caso de que se desee cambiar la contraseña
+                desde adentro, se debe dirigir a configuraciones->Cambiar
+                contraseña y seguir los mismos pasos.
+              </p>
+              <h1 class="text-2xl font-bold my-4">
+                ●¿Puedo invitar a un usuario únicamente con el correo?
+              </h1>
+              <p class="text-lg mb-4 text-justify">
+                Sí, en el apartado de usuarios, solo se necesitara el correo de
+                la persona que será invitada, a esta persona le llegara un
+                correo en su bandeja de entrada con un link, se le pedirá una
+                información y será creado su usuario
+              </p>
+              <h1 class="text-2xl font-bold my-4">
+                ● ¿Cómo puedo registrar pagos?
+              </h1>
+              <p class="text-lg mb-4 text-justify">
+                Para poder registrar pagos, ya sea de una compra o de una venta,
+                se debe ubicar en Finanzas -> Lista de órdenes -> "$". En este
+                apartado se le pedirá rellenar una información como el monto del
+                pago, la fecha del pago, el tipo de pago, ya sea una cuota o un
+                pago completo y el historial de la orden, de igual manera un
+                botón para poder registrar el pago.
+              </p>
+              <h1 class="text-2xl font-bold my-4">
+                ●¿El software permite establecer diferentes niveles de acceso y
+                permisos para los usuarios?
+              </h1>
+              <p class="text-lg mb-4 text-justify">
+                Sí, el software entiende los niveles de acceso, los cuales son:
+                Gerente, Supervisor y empleado de almacén. Estos tienen
+                distintos permisos y capacidades dentro del software, estos se
+                pueden otorgar creando un usuario ya sea por invitación o
+                manualmente.
+              </p>
+              <h1 class="text-2xl font-bold my-4">
+                ●¿Qué tipo de capacitación se requiere para que un nuevo usuario
+                aprenda a usar el software de inventario?
+              </h1>
+              <p class="text-lg mb-4 text-justify">
+                Sería necesario una capacitación básica, ya que el software
+                tiene interfaces y una lógica bastante amigable para usuarios de
+                primer uso, por lo que una capacitación de este nivel es
+                suficiente para el aprendizaje de creación de usuario, registro
+                de pagos y ordenes, administración de proveedores, clientes y
+                usuarios y la creación de reportes.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div
         id="userinfo-modal"
         class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden"
@@ -326,11 +409,15 @@
           <h1 class="text-3xl font-bold my-4">Informacion de Usuario</h1>
           <div class="bg-zinc-200 rounded-xl pb-2 pt-3 px-3">
             <div class="text-center bg-white rounded-2xl py-1.5 shadow-md">
-              <h1 id="user-name" class="text-2xl font-bold my-4">Nombre: Josue Semeco</h1>
+              <h1 id="user-name" class="text-2xl font-bold my-4">
+                Nombre: Josue Semeco
+              </h1>
               <h1 id="user-email" class="text-2xl font-bold my-4">
                 Correo: semecojosue18@gmail.com
               </h1>
-              <h1 id="user-role" class="text-2xl font-bold my-4">Rol: Empleado de Almacen</h1>
+              <h1 id="user-role" class="text-2xl font-bold my-4">
+                Rol: Empleado de Almacen
+              </h1>
             </div>
             <div
               class="sm:col-span-2 flex flex-col sm:flex-row justify-center pt-2"
