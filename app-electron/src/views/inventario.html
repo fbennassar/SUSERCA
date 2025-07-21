@@ -251,19 +251,13 @@
               </select>
             </div>
             <div class="col-span-1 sm:col-span-2 flex gap-5 justify-end mt-1">
+              
               <button
-                onclick="document.getElementById('add-modal').classList.remove('hidden');"
+                onclick="openCategoryModal()"
                 type="button"
                 class="bg-green-700 shadow-md text-white rounded-full px-4 py-1 font-bold hover:bg-green-800 hover:cursor-pointer transition"
               >
-                Editar categoria
-              </button>
-              <button
-                onclick="document.getElementById('add-modal').classList.remove('hidden');"
-                type="button"
-                class="bg-green-700 shadow-md text-white rounded-full px-4 py-1 font-bold hover:bg-green-800 hover:cursor-pointer transition"
-              >
-                Crear categoria
+                Gestionar categorias
               </button>
               <button
                 type="reset"
@@ -671,7 +665,58 @@
       </div>
     </div>
   </div>
+<!-- ================================================== -->
+  <!-- ===== MODAL PARA GESTIONAR CATEGORÍAS (NUEVO) ==== -->
+  <!-- ================================================== -->
+  <div id="category-modal" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-xl p-5 shadow-lg w-full max-w-md relative">
+      
+      <h1 class="font-bold text-3xl mb-4">Gestionar Categorías</h1>
+      
+      <div class="bg-zinc-200 rounded-xl p-4">
+        
+        <!-- SECCIÓN PARA CREAR O EDITAR -->
+        <form id="category-form" class="mb-6">
+          <label for="category-name-input" class="block font-medium mb-1">Nombre de la Categoría:</label>
+          <div class="flex gap-3">
+            <!-- CAMBIO: Añadimos un input oculto para guardar el ID a editar -->
+            <input type="hidden" id="category-id-input">
+            <input 
+              type="text" 
+              id="category-name-input" 
+              placeholder="Escriba aquí para crear o editar"
+              class="border border-black shadow-md rounded-full bg-white w-full pl-3"
+              required
+            >
+            <!-- CAMBIO: El botón ahora dice "Guardar" -->
+            <button type="submit" class="bg-green-700 text-white font-bold rounded-full px-5 py-1.5 shadow-md hover:bg-green-800 transition">
+              Guardar
+            </button>
+          </div>
+        </form>
 
+        <!-- SECCIÓN PARA SELECCIONAR Y BORRAR -->
+        <div>
+          <label for="category-select" class="block font-medium mb-1">Seleccionar para Editar o Eliminar:</label>
+          <div class="flex gap-3">
+            <select id="category-select" class="border border-black shadow-md rounded-full bg-white w-full pl-2">
+              <option value="">-- Elija una categoría --</option>
+            </select>
+            <button type="button" onclick="handleDeleteCategory()" class="bg-red-600 text-white font-bold rounded-full px-5 py-1.5 shadow-md hover:bg-red-700 transition">
+              Eliminar
+            </button>
+          </div>
+        </div>
+
+      </div>
+       <!-- Botón de Cerrar Modal -->
+       <div class="flex justify-center mt-4">
+          <button type="button" onclick="closeCategoryModal()" class="bg-white px-6 py-1.5 rounded-full shadow-md hover:bg-gray-300 transition">
+            Cerrar
+          </button>
+       </div>
+    </div>
+  </div>
   <!-- Ya no es necesario el script de delegación, el popup se abre directamente con el onclick del botón -->
    <script src="../scripts/informacionUsuario.js"></script>
   <script src="../libs/sweetalert2.all.min.js"></script>

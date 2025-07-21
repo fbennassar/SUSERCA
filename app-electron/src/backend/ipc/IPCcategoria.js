@@ -32,17 +32,30 @@ ipcMain.handle('categoria:createCategoria', async (event, categoriaData) => {
   }
 });
 
-ipcMain.handle('categoria:editCategoria', async (event, id, categoriaData) => {
+// CORRECCIÓN: Aceptar un solo objeto como argumento
+ipcMain.handle('categoria:editCategoria', async (event, { id, nombre }) => {
+  if (!supabase) {
+    return { data: null, error: 'Cliente no inicializado.' };
+  }
+  try {
+    const data = await rol.editCategoria(id, { nombre });
+    return { data, error: null }; // Estandarizado
+  } catch (error) {
+    return { data: null, error: error.message };
+  }
+});
+
+ipcMain.handle('categoria:deleteCategoria', async (event, id) => {
   if (!supabase) {
     console.error('El cliente no ha sido inicializado');
     return { categoria: null, error: 'Cliente no inicializado por falta de credenciales.' };
   }
   try {
-    const data = await rol.editCategoria(id, categoriaData);
-    console.log('Categoria editada:', data);
+    const data = await rol.deleteCategoria(id);
+    console.log('Categoria eliminada:', data);
     return { categoria: data, error: null };
   } catch (error) {
-    console.error('Error al editar la categoria:', error);
+    console.error('Error al eliminar la categoria:', error);
     return { categoria: null, error: error.message };
   }
 });
