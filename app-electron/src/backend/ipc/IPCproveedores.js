@@ -153,7 +153,7 @@ ipcMain.handle('proveedores:generar-reporte-pdf', async (event, proveedoresData)
         style: 'tableExample',
         table: {
           headerRows: 1,
-          widths: ['auto', 'auto', '*', '*', 'auto',],
+          widths: ['auto', 'auto', 'auto', 'auto', '*'],
           body: [
             [{ text: 'RIF', style: 'tableHeader' }, { text: 'Razon social', style: 'tableHeader' }, { text: 'Correo', style: 'tableHeader' }, { text: 'Tlf', style: 'tableHeader' }, { text: 'Dirección', style: 'tableHeader' }],
             ...proveedoresData.map(item => [item.rif, item.razonSocial, item.email, item.telefono, item.direccion])
