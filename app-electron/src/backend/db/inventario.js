@@ -163,7 +163,8 @@ exports.getProductosByCategoria = async (categoriaId) => {
           nombre
         )
       `)
-      .eq('id_categoria', categoriaId);
+      .eq('id_categoria', categoriaId)
+      .eq('activo', true);
 
     if (error) {
       throw error;
