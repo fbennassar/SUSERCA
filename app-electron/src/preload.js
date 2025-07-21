@@ -87,6 +87,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.invoke("ordenes:generar-reporte-pdf", data),
   generarReporteClientes: (clientesData) =>
     ipcRenderer.invoke("clientes:generar-reporte-pdf", clientesData),
+  generarReporteProveedores: (proveedoresData) =>
+    ipcRenderer.invoke("proveedores:generar-reporte-pdf", proveedoresData),
   generarCotizacion: (cotizacion) =>
     ipcRenderer.invoke("inventario:generar-cotizacion", cotizacion),
 });

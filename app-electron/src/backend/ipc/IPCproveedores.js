@@ -1,7 +1,10 @@
-const { ipcMain } = require('electron');
+const { ipcMain, dialog } = require('electron');
 const { createProveedor, getAllProveedores, getProveedorByID, 
         getProveedorByName, updateProveedor, deleteProveedor, searchProveedores } 
         = require('../db/proveedores');
+const Pdfmake = require('pdfmake'); // Cambiamos a la importación principal
+const fs = require('fs');
+const path = require('path'); // Necesitaremos path para las fuentes
 // Create
 ipcMain.handle('proveedores:create', async (event, proveedorData) => {
   try { 
@@ -103,3 +106,92 @@ ipcMain.handle('proveedores:search', async (event, query) => {
     }
 });
 
+const fonts = {
+    Arial: {
+        normal: path.join(__dirname, '..', '..','assets', 'fonts', 'ARIAL.ttf'),
+        bold: path.join(__dirname, '..', '..','assets', 'fonts', 'ARIALBD.ttf'),
+        italics: path.join(__dirname, '..', '..','assets', 'fonts', 'ARIALI.ttf'),
+        bolditalics: path.join(__dirname, '..', '..','assets', 'fonts', 'ARIALBI.ttf')
+    }
+};
+
+const printer = new Pdfmake(fonts);
+
+ipcMain.handle('proveedores:generar-reporte-pdf', async (event, proveedoresData) => {
+  // ... (código de validación y diálogo de guardado sin cambios)
+  if (!proveedoresData || proveedoresData.length === 0) {
+    return { error: 'No hay datos para generar el reporte.' };
+  }
+
+  const { filePath, canceled } = await dialog.showSaveDialog({
+    title: 'Guardar Reporte de Proveedores',
+    defaultPath: `reporte_proveedores_${new Date().toISOString().split('T')[0]}.pdf`,
+    filters: [{ name: 'PDF Files', extensions: ['pdf'] }]
+  });
+
+  if (canceled || !filePath) {
+    return { success: false, message: 'Operación cancelada por el usuario.' };
+  }
+
+
+  const docDefinition = {
+    content: [
+      { text: 'Reporte de Proveedores', style: 'header' },
+      {
+        style: 'tableExample',
+        table: {
+          headerRows: 1,
+          widths: ['auto', 'auto', '*', '*', 'auto',],
+          body: [
+            [{ text: 'RIF', style: 'tableHeader' }, { text: 'Razon social', style: 'tableHeader' }, { text: 'Correo', style: 'tableHeader' }, { text: 'Tlf', style: 'tableHeader' }, { text: 'Dirección', style: 'tableHeader' }],
+            ...proveedoresData.map(item => [item.rif, item.razonSocial, item.email, item.telefono, item.direccion])
+          ]
+        }
+      }
+    ],
+    styles: {
+      header: {
+        fontSize: 18,
+        bold: true,
+        margin: [0, 0, 0, 10]
+      },
+      tableExample: {
+        margin: [0, 5, 0, 15]
+      },
+      tableHeader: {
+        bold: true,
+        fontSize: 13,
+        color: 'black'
+      }
+    },
+    defaultStyle: {
+      font: 'Arial'
+    }
+  };
+
+  return new Promise((resolve, reject) => {
+    try {
+      // --- CORRECCIÓN AQUÍ ---
+      // Usamos printer.createPdfKitDocument que SÍ devuelve un stream con .pipe()
+      const pdfDoc = printer.createPdfKitDocument(docDefinition);
+      
+      const writeStream = fs.createWriteStream(filePath);
+      pdfDoc.pipe(writeStream);
+      pdfDoc.end();
+
+      writeStream.on('finish', () => {
+        console.log(`PDF guardado exitosamente en: ${filePath}`);
+        resolve({ success: true, path: filePath });
+      });
+
+      writeStream.on('error', (err) => {
+        console.error('Error al escribir el archivo PDF:', err);
+        reject({ error: 'No se pudo guardar el archivo PDF.' });
+      });
+
+    } catch (error) {
+      console.error('Error al crear el documento PDF:', error);
+      reject({ error: 'No se pudo generar el documento PDF.' });
+    }
+  });
+});

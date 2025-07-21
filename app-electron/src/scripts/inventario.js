@@ -37,9 +37,6 @@ function renderProductos(productos) {
         const card = document.createElement('div');
         card.className = 'bg-white rounded-lg shadow-md overflow-hidden border border-gray-200';
         card.innerHTML = `
-            <div class="w-full h-35 bg-gray-200 flex items-center justify-center border-b border-gray-300">
-                <img src="../assets/img/inventario/cono.jpg" alt="Inventario icon" class="w-full h-full object-fill rounded-t-lg" />
-            </div>
             <div class="p-4">
                 <h3 class="text-lg font-medium text-gray-800 mb-1">${producto.nombre} [${producto.id}]</h3>
                 <p class="text-sm text-gray-600">${producto.categoria}</p>
