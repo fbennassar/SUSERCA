@@ -37,9 +37,6 @@ function renderProductos(productos) {
         const card = document.createElement('div');
         card.className = 'bg-white rounded-lg shadow-md overflow-hidden border border-gray-200';
         card.innerHTML = `
-            <div class="w-full h-35 bg-gray-200 flex items-center justify-center border-b border-gray-300">
-                <img src="../assets/img/inventario/cono.jpg" alt="Inventario icon" class="w-full h-full object-fill rounded-t-lg" />
-            </div>
             <div class="p-4">
                 <h3 class="text-lg font-medium text-gray-800 mb-1">${producto.nombre} [${producto.id}]</h3>
                 <p class="text-sm text-gray-600">${producto.categoria}</p>
@@ -467,6 +464,8 @@ function mostrarMensaje(texto, tipo = 'success') {
     }, 3500);
 }
 
+
+
 // ...existing code...
 // Cargar productos automáticamente al abrir la página
 document.addEventListener('DOMContentLoaded', async () => {
@@ -475,6 +474,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // --- LÓGICA DE FILTRADO POR CATEGORÍA ---
   const categorySelect = document.getElementById('category-filter-select');
   const addProductCategoryInput = document.getElementById('add-product-categoria');
+  const categoryCrudSelect = document.getElementById('category-select');
 
   // Poblar el select con las categorías
   try {
@@ -488,7 +488,151 @@ document.addEventListener('DOMContentLoaded', async () => {
         option.textContent = cat.nombre;
         categorySelect.appendChild(option);
         addProductCategoryInput.appendChild(option.cloneNode(true)); // Clonar la opción para el input de agregar producto
+        categoryCrudSelect.appendChild(option.cloneNode(true)); // Clonar la opción para el CRUD de categorías
       });
+
+          const categoryModal = document.getElementById('category-modal');
+  const categoryForm = document.getElementById('category-form');
+  const categoryIdInput = document.getElementById('category-id-input');
+  const categoryNameInput = document.getElementById('category-name-input');
+
+  // --- MANEJO DEL MODAL ---
+  window.openCategoryModal = () => {
+    categoryModal.classList.remove('hidden');
+    resetCategoryForm();
+  };
+
+    window.closeCategoryModal = () => {
+    categoryModal.classList.add('hidden');
+  };
+
+  // --- LÓGICA DEL FORMULARIO ---
+  const resetCategoryForm = () => {
+    categoryForm.reset();
+    categoryIdInput.value = '';
+    categoryNameInput.placeholder = 'Escriba aquí para crear';
+    categoryCrudSelect.value = ''; // Deseleccionar el select
+  };
+
+  // --- LÓGICA DE EDICIÓN ---
+  // Cuando se selecciona una categoría, se prepara el formulario para editarla
+  categoryCrudSelect.addEventListener('change', () => {
+    const selectedId = categoryCrudSelect.value;
+
+    // Si el usuario deselecciona (elige la opción por defecto)
+    if (!selectedId) {
+      resetCategoryForm();
+      return;
+    }
+
+    const selectedName = categoryCrudSelect.options[categoryCrudSelect.selectedIndex].text;
+
+    // Llenar el formulario con los datos de la categoría seleccionada
+    categoryIdInput.value = selectedId;
+    categoryNameInput.value = selectedName;
+    categoryNameInput.placeholder = 'Edite el nombre y guarde';
+  });
+
+   // --- LÓGICA DE GUARDADO (UNIFICADA Y CORREGIDA) ---
+  // Este es el ÚNICO listener para el submit del formulario.
+  categoryForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = categoryIdInput.value;
+    const nombre = categoryNameInput.value.trim();
+
+    if (!nombre) {
+      Swal.fire('Error', 'El nombre no puede estar vacío.', 'error');
+      return;
+    }
+
+    let result;
+    // Si hay un ID en el input oculto, estamos editando.
+    if (id) {
+      result = await window.electronAPI.editCategoria({ id, nombre });
+    } else {
+      // Si no hay ID, estamos creando.
+      result = await window.electronAPI.createCategoria({ nombre });
+    }
+
+    if (result.error) {
+      Swal.fire('Error', `No se pudo guardar la categoría: ${result.error}`, 'error');
+    } else {
+      Swal.fire('¡Éxito!', 'Categoría guardada correctamente.', 'success');
+      resetCategoryForm();
+      try {
+        const { categoria: categorias, error } = await window.electronAPI.getCategorias();
+        if (error) {
+          mostrarMensaje('Error al recargar categorías', 'error');
+        } else {
+          // Limpiar los selects y volver a poblarlos
+          categorySelect.innerHTML = '';
+          addProductCategoryInput.innerHTML = '';
+          categoryCrudSelect.innerHTML = '';
+          categorias.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat.id;
+            option.textContent = cat.nombre;
+            categorySelect.appendChild(option);
+            addProductCategoryInput.appendChild(option.cloneNode(true));
+            categoryCrudSelect.appendChild(option.cloneNode(true));
+          });
+        }
+      } catch (error) {
+        mostrarMensaje('Error inesperado al recargar categorías.', 'error');
+      }
+    }
+  });
+
+
+
+  // --- ELIMINAR CATEGORÍA ---
+  window.handleDeleteCategory = () => {
+    const selectedId = categoryCrudSelect.value;
+    if (!selectedId) {
+      Swal.fire('Atención', 'Por favor, seleccione una categoría para eliminar.', 'info');
+      return;
+    }
+
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "Esta acción no se puede revertir.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Sí, ¡eliminar!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const deleteResult = await window.electronAPI.deleteCategoria(selectedId);
+        if (deleteResult.error) {
+          Swal.fire('Error', `No se pudo eliminar: ${deleteResult.error}`, 'error');
+        } else {
+          Swal.fire('¡Eliminada!', 'La categoría ha sido eliminada.', 'success');
+          try {
+            const { categoria: categorias, error } = await window.electronAPI.getCategorias();
+            if (error) {
+              mostrarMensaje('Error al recargar categorías', 'error');
+            } else {
+              // Limpiar los selects y volver a poblarlos
+              categorySelect.innerHTML = '';
+              addProductCategoryInput.innerHTML = '';
+              categoryCrudSelect.innerHTML = '';
+              categorias.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat.id;
+                option.textContent = cat.nombre;
+                categorySelect.appendChild(option);
+                addProductCategoryInput.appendChild(option.cloneNode(true));
+                categoryCrudSelect.appendChild(option.cloneNode(true));
+              });
+            }
+          } catch (error) {
+            mostrarMensaje('Error inesperado al recargar categorías.', 'error');
+          }
+        }
+      }
+    });
+  };
     }
   } catch (e) {
     mostrarMensaje('Error inesperado al cargar categorías.', 'error');
@@ -515,66 +659,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   })});
 
-// async function exportarExcel() {
-//   try {
-//     // Muestra un mensaje de que el proceso ha comenzado
-//     mostrarMensaje("Generando reporte de inventario...", "info");
 
-//     // 1. Obtener todos los productos de la base de datos
-//     const result = await window.electronAPI.getAllProductos();
-
-//     // Validar si hubo un error o no hay datos
-//     if (result.error) {
-//       console.error('Error al obtener datos para el reporte:', result.error);
-//       mostrarMensaje('No se pudieron obtener los datos para el reporte.', 'error');
-//       return;
-//     }
-
-//     const productos = result.data;
-
-//     if (!productos || productos.length === 0) {
-//       mostrarMensaje('No hay productos en el inventario para generar un reporte.', 'info');
-//       return;
-//     }
-
-//     // 2. Formatear los datos para el reporte (opcional pero recomendado)
-//     // Seleccionamos y renombramos las columnas que queremos en el Excel.
-//     const datosParaReporte = productos.map(p => ({
-//       'ID Producto': p.id,
-//       'Nombre': p.nombre,
-//       'Categoría': p.categoria,
-//       'Descripción': p.descripcion,
-//       'Precio (USD)': p.precio,
-//       'Cantidad en Stock': p.cantidad,
-//       'Valor Total (USD)': p.precio * p.cantidad // Columna calculada
-//     }));
-
-//     // 3. Crear la hoja de cálculo y el libro de trabajo con SheetJS
-//     const worksheet = window.XLSX.utils.json_to_sheet(datosParaReporte);
-//     const workbook = window.XLSX.utils.book_new();
-//     window.xlsxAPI.utils.book_append_sheet(workbook, worksheet, 'Inventario'); // Nombramos la pestaña "Inventario"
-
-//     // Ajustar el ancho de las columnas (opcional, pero mejora la apariencia)
-//     worksheet['!cols'] = [
-//       { wch: 15 }, // ID Producto
-//       { wch: 30 }, // Nombre
-//       { wch: 25 }, // Categoría
-//       { wch: 40 }, // Descripción
-//       { wch: 15 }, // Precio (USD)
-//       { wch: 20 }, // Cantidad en Stock
-//       { wch: 20 }  // Valor Total (USD)
-//     ];
-
-//     // 4. Generar el archivo y disparar la descarga
-//     // El nombre del archivo incluirá la fecha y hora actual.
-//     const fecha = new Date().toISOString().slice(0, 10); // Formato YYYY-MM-DD
-//     window.xlsxAPI.writeFile(workbook, `Reporte_Inventario_SUSERCA_${fecha}.xlsx`);
-
-//     // Muestra un mensaje de éxito
-//     mostrarMensaje("Reporte de inventario generado exitosamente.", "success");
-
-//   } catch (error) {
-//     console.error('Error inesperado al generar el reporte de Excel:', error);
-//     mostrarMensaje('Ocurrió un error crítico al generar el reporte.', 'error');
-//   }
-// }

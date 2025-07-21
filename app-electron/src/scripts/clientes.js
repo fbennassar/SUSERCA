@@ -48,9 +48,6 @@ function renderClients(clients) {
     card.className = "bg-white rounded-lg shadow-md overflow-hidden border border-gray-200";
     const getValue = (value, defaultValue = 'Sin información') => (value === null ? defaultValue : value);
     card.innerHTML = `
-      <div class="w-full h-35 bg-gray-200 flex items-center justify-center border-b border-gray-300">
-        <img src="../assets/img/clientes/cliente.jpg" alt="Cliente" class="w-full h-full object-fill rounded-t-lg" />
-      </div>
       <div class="p-4">
         <h3 class="text-lg font-medium text-gray-800 mb-1">${getValue(client.nombre)}</h3>
         <p class="text-base font-semibold text-gray-900 mt-2">RIF: ${getValue(client.id)}</p>
@@ -300,4 +297,26 @@ async function generarReporteClientes() {
 
 document.getElementById("btn-reporte").addEventListener("click", () => {
   generarReporteClientes();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Selecciona el input del teléfono en el modal de "Agregar"
+  const telefonoInputAgregar = document.getElementById('telefono');
+  // Selecciona el input del teléfono en el modal de "Editar"
+  const telefonoInputEditar = document.getElementById('edit-telefono');
+
+  // Función reutilizable para limpiar el input
+  const limpiarInputTelefono = (event) => {
+    // Reemplaza cualquier caracter que NO sea un número (0-9) con nada.
+    event.target.value = event.target.value.replace(/[^0-9]/g, '');
+  };
+
+  // Aplica el escuchador de eventos si los campos existen
+  if (telefonoInputAgregar) {
+    telefonoInputAgregar.addEventListener('input', limpiarInputTelefono);
+  }
+  
+  if (telefonoInputEditar) {
+    telefonoInputEditar.addEventListener('input', limpiarInputTelefono);
+  }
 });

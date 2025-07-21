@@ -2,6 +2,7 @@ const { ipcMain, dialog } = require('electron');
 const Pdfmake = require('pdfmake'); // Cambiamos a la importación principal
 const fs = require('fs');
 const path = require('path'); // Necesitaremos path para las fuentes
+const { text } = require('stream/consumers');
 
 // --- Definición de Fuentes ---
 // Aunque usemos Roboto, es más robusto definirlo explícitamente para el printer.
@@ -42,10 +43,10 @@ ipcMain.handle('ordenes:generar-reporte-pdf', async (event, ordenesData) => {
         style: 'tableExample',
         table: {
           headerRows: 1,
-          widths: ['auto', 'auto', '*', '*', 'auto', 'auto'],
+          widths: ['auto', 'auto', '*', '*', 'auto', 'auto', 'auto', 'auto'],
           body: [
-            [{ text: 'ID', style: 'tableHeader' }, { text: 'Tipo', style: 'tableHeader' }, { text: 'Razón Social', style: 'tableHeader' }, { text: 'Fecha', style: 'tableHeader' }, { text: 'Monto Total', style: 'tableHeader' }, { text: 'Estatus', style: 'tableHeader' }],
-            ...ordenesData.map(item => [item.id, item.tipo, item.razonSocial, item.fecha, item.montoTotal, item.estatus])
+            [{ text: 'ID', style: 'tableHeader' }, { text: 'Tipo', style: 'tableHeader' }, { text: 'Razón Social', style: 'tableHeader' }, { text: 'Fecha', style: 'tableHeader' }, { text: 'Monto Pagado', style: 'tableHeader' }, { text: 'Monto Total', style: 'tableHeader' }, { text: 'Monto Restante', style: 'tableHeader' }, { text: 'Estatus', style: 'tableHeader' }],
+            ...ordenesData.map(item => [item.id, item.tipo, item.razonSocial, item.fecha, item.montoPagado, item.montoTotal, item.montoRestante, item.estatus])
           ]
         }
       }

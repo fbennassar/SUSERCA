@@ -58,6 +58,11 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.invoke("productos:update", { id, updates: producto }),
   deleteProducto: (id) => ipcRenderer.invoke("productos:delete", id),
   getCategorias: () => ipcRenderer.invoke("categoria:getCategoria"),
+  createCategoria: (categoriaData) =>
+    ipcRenderer.invoke("categoria:createCategoria", categoriaData),
+  editCategoria: (categoriaData) =>
+    ipcRenderer.invoke("categoria:editCategoria", categoriaData),
+  deleteCategoria: (id) => ipcRenderer.invoke("categoria:deleteCategoria", id),
   getProductoByID: (id) => ipcRenderer.invoke("productos:getByID", id),
   getProductoByName: (name) => ipcRenderer.invoke("productos:getByName", name),
   createOrdenVenta: (ordenVentaData, productos) =>
@@ -87,6 +92,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.invoke("ordenes:generar-reporte-pdf", data),
   generarReporteClientes: (clientesData) =>
     ipcRenderer.invoke("clientes:generar-reporte-pdf", clientesData),
+  generarReporteProveedores: (proveedoresData) =>
+    ipcRenderer.invoke("proveedores:generar-reporte-pdf", proveedoresData),
   generarCotizacion: (cotizacion) =>
     ipcRenderer.invoke("inventario:generar-cotizacion", cotizacion),
 });
