@@ -16,6 +16,7 @@ require("./backend/ipc/IPCordenVenta.js");
 require("./backend/ipc/IPCfinanzas.js");
 require("./backend/ipc/IPCrol.js");
 require("./backend/ipc/IPCcategoria.js");
+require("./backend/ipc/IPCutils.js");
 
 const db = require("./backend/db/supabaseClient.js");
 const path = require("path");

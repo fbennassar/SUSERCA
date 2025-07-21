@@ -45,15 +45,17 @@ function renderClients(clients) {
   }
   clients.forEach((client) => {
     const card = document.createElement("div");
-    card.className = "bg-white rounded-lg shadow-md overflow-hidden border border-gray-200";
+    card.className = "bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 flex"; // Añadido 'flex' para que el hijo ocupe toda la altura
     const getValue = (value, defaultValue = 'Sin información') => (value === null ? defaultValue : value);
     card.innerHTML = `
-      <div class="p-4">
-        <h3 class="text-lg font-medium text-gray-800 mb-1">${getValue(client.nombre)}</h3>
-        <p class="text-base font-semibold text-gray-900 mt-2">RIF: ${getValue(client.id)}</p>
-        <p class="text-base font-semibold text-gray-900 mt-2">Correo: ${getValue(client.email)}</p>
-        <p class="text-base font-semibold text-gray-900 mt-2">Tlf: ${getValue(client.telefono)}</p>
-        <p class="text-base font-semibold text-gray-900 mt-2">Dirección fiscal: ${getValue(client.direccion)}</p>
+      <div class="p-4 flex flex-col w-full">
+        <div class="flex-grow">
+          <h3 class="text-lg font-medium text-gray-800 mb-1">${getValue(client.nombre)}</h3>
+          <p class="text-base font-semibold text-gray-900 mt-2">RIF: ${getValue(client.id)}</p>
+          <p class="text-base font-semibold text-gray-900 mt-2">Correo: ${getValue(client.email)}</p>
+          <p class="text-base font-semibold text-gray-900 mt-2">Tlf: ${getValue(client.telefono)}</p>
+          <p class="text-base font-semibold text-gray-900 mt-2">Dirección fiscal: ${getValue(client.direccion)}</p>
+        </div>
         <div class="flex justify-end gap-3 mt-4">
           <button class="hover:cursor-pointer" onclick="openEditModal('${client.id}')">
             <img class="size-6" src="../assets/icons/general/edit.png" alt="edit" />
@@ -179,12 +181,15 @@ window.handleCreateClient = async function handleCreateClient() {
       return;
     }
 
+
     console.log("Datos enviados al backend:", clienteSchema);
     const result = await window.electronAPI.createClient(clienteSchema);
 
+    // limpiar campos del modal
+    document.getElementById("add-modal").querySelectorAll("input, textarea").forEach(input => input.value = "");
     if (result.error) {
       console.error("Error al crear cliente en Supabase", { error: result.error, clienteSchema });
-      mostrarMensaje("Error al crear cliente: " + result.error, 'error');
+      mostrarMensaje("Error al crear cliente", 'error');
     } else {
       console.log("Cliente creado exitosamente:", result.data);
       mostrarMensaje("Cliente creado exitosamente.", 'success');
@@ -196,7 +201,7 @@ window.handleCreateClient = async function handleCreateClient() {
     }
   } catch (error) {
     console.error("Error inesperado en handleCreateClient:", error);
-    mostrarMensaje("Ocurrió un error. Revisa la consola para más detalles.", 'error');
+    mostrarMensaje("Ocurrió un error.", 'error');
   }
 };
 
