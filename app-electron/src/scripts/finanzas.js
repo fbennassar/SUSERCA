@@ -707,6 +707,10 @@ function openPagosPopup(orderId, orderType) {
         console.warn("No payment records found for the order.");
       }
 
+      // AÑADIDO: Calcular y almacenar el monto restante
+      const montoPagado = payments.reduce((acc, pago) => acc + pago.monto, 0);
+      const montoRestante = order.monto - montoPagado;
+
       // Update labels with order details
       razonSocialLabel.textContent = `Razón social: ${order.proveedor?.nombre || order.cliente?.nombre || "N/A"}`;
       montoTotalLabel.textContent = `Monto total: ${order.monto || "N/A"}`;
@@ -715,6 +719,7 @@ function openPagosPopup(orderId, orderType) {
 
       console.log("Labels updated with order details."); // Log for confirming label updates
 
+      unpackPaymentHistory(order, orderType);
       // Show the popup
       pagosPopup.classList.remove("hidden");
 
@@ -729,6 +734,14 @@ function openPagosPopup(orderId, orderType) {
         const paymentDate = document.getElementById("pago-fecha").value;
         const paymentMethod = document.getElementById("pago-tipo").value;
 
+        if (paymentMethod === "Pago completo" && paymentAmount !== montoRestante) {
+          mostrarMensaje(
+            "Para 'Pago completo', el monto debe ser igual al monto restante.",
+            "error"
+          );
+          return; // Detener la ejecución
+        }
+        
         if (
           isNaN(paymentAmount) ||
           paymentAmount <= 0 ||
@@ -748,6 +761,10 @@ function openPagosPopup(orderId, orderType) {
           metodo: paymentMethod,
         };
 
+        // paymentAmount = parseFloat(paymentAmount.toFixed(2)); // Ensure the amount is a number with two decimal places
+        //limpiar campos del popup
+        document.getElementById("pago-monto").value = "";
+        document.getElementById("pago-fecha").value = "";
         await insertPayment(orderId, orderType, paymentData);
       };
     })
@@ -831,20 +848,22 @@ async function insertPayment(orderId, orderType, paymentData) {
   }
 }
 
-function unpackPaymentHistory(order) {
+function unpackPaymentHistory(order, orderType) {
   const paymentHistoryBody = document.getElementById("historial-pagos-body");
   paymentHistoryBody.innerHTML = "";
 
   const payments =
-    order.tipo === "Venta" ? order.cuentas_por_cobrar : order.cuentas_por_pagar;
+    orderType === "Venta" ? order.cuentas_por_cobrar : order.cuentas_por_pagar;
+    console.log("Payments data:", orderType, payments); // Log for debugging
 
   payments.forEach((payment) => {
     const row = document.createElement("tr");
     row.innerHTML = `
-      <td class="px-4 py-2">${new Date(payment.fecha).toLocaleDateString()}</td>
+      <td class="px-4 py-2">${new Date(payment.fecha_realizacion).toLocaleDateString()}</td>
       <td class="px-4 py-2">${payment.monto}</td>
       <td class="px-4 py-2">${payment.metodo}</td>
     `;
+    console.log("Payment row data:", row.innerHTML); // Log for debugging
     paymentHistoryBody.appendChild(row);
   });
 }
